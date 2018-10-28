@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace FastTextProcess.Tests
 {
@@ -15,7 +14,7 @@ namespace FastTextProcess.Tests
         public WordToVectDbRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
-        public void procCreateDbEn()
+        public void ProcCreateDbEn()
         {
             var fvec = "./../../../../../../data.arc/cc.en.300.vec";
             AssertFileExists(fvec, "FastText file of vectors");
@@ -23,7 +22,7 @@ namespace FastTextProcess.Tests
             var dbf = "w2v_en.db";
             WordToVectDb.CreateDB(dbf);
             WordToVectDb.ControlWordsIndex(dbf, is_enabled: false);
-            using (var dbx = new WordToVectDb(dbf))
+            using (var dbx = new WordToVectDb(dbf, WordToVectDb.DictDb.Main))
             {
                 var trans = dbx.BeginTransaction();
                 using (var sr = new StreamReader(fvec))
@@ -49,10 +48,6 @@ namespace FastTextProcess.Tests
             WordToVectDb.ControlWordsIndex(dbf, is_enabled: true);
         }
 
-        void AssertFileExists(string fpath, string descr = null)
-        {
-            fpath = Path.GetFullPath(fpath);
-            Assert.True(File.Exists(fpath), $"'{fpath}' is not exist ({descr})");
-        }
+      
     }
 }

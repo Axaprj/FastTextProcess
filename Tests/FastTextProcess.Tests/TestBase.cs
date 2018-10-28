@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace FastTextProcess.Tests
 {
@@ -16,17 +17,16 @@ namespace FastTextProcess.Tests
             _output = output;
         }
 
-        public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases)
-            where TTestCase : ITestCase
-        {
-            return testCases.ToList();  // Run them in discovery order
-        }
-
         protected void WriteConsole(string msg)
         {
             msg = DateTime.Now.ToShortTimeString() + ": " + msg;
-            if (_output != null)
-                _output.WriteLine(msg);
+            _output.WriteLine(msg);
+        }
+
+        protected void AssertFileExists(string fpath, string descr = null)
+        {
+            fpath = Path.GetFullPath(fpath);
+            Assert.True(File.Exists(fpath), $"'{fpath}' is not exist ({descr})");
         }
     }
 }

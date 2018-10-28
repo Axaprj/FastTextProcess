@@ -11,12 +11,12 @@ namespace FastTextProcess.Tests
         public WordToVectDbTests(ITestOutputHelper output) : base(output) { }
 
         [Fact]
-        public void testCreateInsert()
+        public void TestCreateInsert()
         {
             var dbf = "w2v_test.db";
             WordToVectDb.CreateDB(dbf);
             var w2v = new Word2Vect { Word = "test", Vect = new byte[] { 1, 2, 3 } };
-            using (var dbx = new WordToVectDb(dbf))
+            using (var dbx = new WordToVectDb(dbf, WordToVectDb.DictDb.Main))
             {
                 dbx.Insert(w2v);
                 var id1 = w2v.Id;

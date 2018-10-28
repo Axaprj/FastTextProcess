@@ -6,15 +6,19 @@ namespace FastTextProcess.Context
 {
     public class WordToVectDb : IDisposable
     {
+        public enum DictDb { Main, Addin }
+
         const string FLDN_Word = "Word";
         const string FLDN_Vect = "Vect";
         readonly SQLiteConnection _conn;
+        readonly string _table;
         SQLiteCommand _cmdInsert;
-
-        public WordToVectDb(string db_file)
+        
+        public WordToVectDb(string db_file, DictDb db_kind)
         {
             _conn = new SQLiteConnection($"Data Source=\"{db_file}\";Version=3;");
             _conn.Open();
+            _table = db_kind == DictDb.Main ? "Dict" : "DictAddins";
         }
 
         public void Dispose()
@@ -28,7 +32,7 @@ namespace FastTextProcess.Context
             {
                 if (_cmdInsert == null)
                 {
-                    var sql = $"INSERT INTO [Dict] ([{FLDN_Word}], [{FLDN_Vect}]) VALUES (${FLDN_Word}, ${FLDN_Vect})";
+                    var sql = $"INSERT INTO {_table} ([{FLDN_Word}], [{FLDN_Vect}]) VALUES (${FLDN_Word}, ${FLDN_Vect})";
                     _cmdInsert = new SQLiteCommand(sql, _conn);
                     _cmdInsert.Parameters.Add(FLDN_Word, System.Data.DbType.String);
                     _cmdInsert.Parameters.Add(FLDN_Vect, System.Data.DbType.Binary);
@@ -56,8 +60,8 @@ namespace FastTextProcess.Context
             {
                 conn.Open();
                 var sql = is_enabled
-                    ? "CREATE INDEX IF NOT EXISTS inxWord ON Dict (Word)"
-                    : "DROP INDEX inxWord";
+                    ? "CREATE INDEX IF NOT EXISTS inxWord ON {_table} (Word)"
+                    : "DROP INDEX inxWord{_table}";
                 var cmd = new SQLiteCommand(sql, conn);
                 return cmd.ExecuteNonQuery();
             }
