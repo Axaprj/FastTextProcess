@@ -10,18 +10,9 @@ using Xunit.Sdk;
 
 namespace FastTextProcess.Tests
 {
-    public class WordToVectDbRoutines
+    public class WordToVectDbRoutines : TestBase
     {
-        ITestOutputHelper _output;
-        public WordToVectDbRoutines(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
-        protected void WriteConsole(string msg)
-        {
-            _output.WriteLine(DateTime.Now.ToShortTimeString() + ":" + msg);
-        }
+        public WordToVectDbRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         public void procCreateDbEn()

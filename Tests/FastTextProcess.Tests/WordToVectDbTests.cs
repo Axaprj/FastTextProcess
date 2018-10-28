@@ -6,13 +6,9 @@ using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
-    public class WordToVectDbTests
+    public class WordToVectDbTests : TestBase
     {
-        ITestOutputHelper _output;
-        public WordToVectDbTests(ITestOutputHelper output)
-        {
-            _output = output; 
-        }
+        public WordToVectDbTests(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         public void testCreateInsert()
@@ -29,7 +25,7 @@ namespace FastTextProcess.Tests
                 dbx.Insert(w2v);
                 Assert.True(w2v.Id > id1);
             }
-            _output.WriteLine("done");
+            WriteConsole("done");
         }
     }
 }
