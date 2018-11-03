@@ -28,6 +28,12 @@ namespace FastTextProcess.Tests
             fpath = Path.GetFullPath(fpath);
             Assert.True(File.Exists(fpath), $"'{fpath}' is not exist ({descr})");
         }
+
+        protected void AssertFileNotExists(string fpath, string descr = null)
+        {
+            fpath = Path.GetFullPath(fpath);
+            Assert.False(File.Exists(fpath), $"'{fpath}' is exist ({descr})");
+        }
     }
 }
 

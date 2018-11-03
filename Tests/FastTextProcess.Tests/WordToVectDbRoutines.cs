@@ -1,5 +1,6 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Tests.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,15 +17,18 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcCreateDbEn()
         {
-            var fvec = "./../../../../../../data.arc/cc.en.300.vec";
+            var fvec = Resources.DataArcDir + "cc.en.300.vec";
             AssertFileExists(fvec, "FastText file of vectors");
 
             var dbf = "w2v_en.db";
-            WordToVectDb.CreateDB(dbf);
-            WordToVectDb.ControlWordsIndex(dbf, is_enabled: false);
-            using (var dbx = new WordToVectDb(dbf, WordToVectDb.DictDb.Main))
+            AssertFileNotExists(dbf, "word2vect DB");
+            FastTextProcessDB.CreateDB(dbf);
+
+            using (var dbx = new FastTextProcessDB(dbf))
             {
+                var w2v_tbl = dbx.WordToVect(WordToVectDbSet.DictDb.Main);
                 var trans = dbx.BeginTransaction();
+                w2v_tbl.ControlWordsIndex(is_enabled: false);
                 using (var sr = new StreamReader(fvec))
                 {
                     // header
@@ -39,15 +43,14 @@ namespace FastTextProcess.Tests
                         if (string.IsNullOrEmpty(line))
                             continue;
                         var w2v = Word2Vect.Create(line);
-                        dbx.Insert(w2v);
+                        w2v_tbl.Insert(w2v);
                     }
                 }
+                WriteConsole("ControlWordsIndex create...");
+                w2v_tbl.ControlWordsIndex(is_enabled: true);
+                WriteConsole("Done");
                 trans.Commit();
             }
-            WriteConsole("ControlWordsIndex create...");
-            WordToVectDb.ControlWordsIndex(dbf, is_enabled: true);
         }
-
-      
     }
 }

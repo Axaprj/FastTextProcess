@@ -14,15 +14,16 @@ namespace FastTextProcess.Tests
         public void TestCreateInsert()
         {
             var dbf = "w2v_test.db";
-            WordToVectDb.CreateDB(dbf);
+            FastTextProcessDB.CreateDB(dbf);
             var w2v = new Word2Vect { Word = "test", Vect = new byte[] { 1, 2, 3 } };
-            using (var dbx = new WordToVectDb(dbf, WordToVectDb.DictDb.Main))
+            using (var dbx = new FastTextProcessDB(dbf))
             {
-                dbx.Insert(w2v);
+                var w2v_tbl = dbx.WordToVect(WordToVectDbSet.DictDb.Main);
+                w2v_tbl.Insert(w2v);
                 var id1 = w2v.Id;
                 Assert.True(id1 > 0);
                 w2v.Word = "Test";
-                dbx.Insert(w2v);
+                w2v_tbl.Insert(w2v);
                 Assert.True(w2v.Id > id1);
             }
             WriteConsole("done");
