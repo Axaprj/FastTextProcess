@@ -4,17 +4,19 @@ using System.Data.SQLite;
 
 namespace FastTextProcess.Context
 {
-    public class WordToVectDbSet
+    /// <summary>
+    /// FastText dictionary DB: Dict/DictAddins DbSet
+    /// </summary>
+    public class DictDbSet
     {
         public enum DictDb { Main, Addin }
 
-        const string FLDN_Word = "Word";
-        const string FLDN_Vect = "Vect";
         readonly string _table;
+        readonly DbContext _ctx;
         SQLiteCommand _cmdInsert;
-        DbContext _ctx;
+        
 
-        public WordToVectDbSet(DbContext ctx, DictDb db_kind)
+        public DictDbSet(DbContext ctx, DictDb db_kind)
         {
             _ctx = ctx;
             _table = db_kind == DictDb.Main ? "Dict" : "DictAddins";
@@ -26,20 +28,21 @@ namespace FastTextProcess.Context
             {
                 if (_cmdInsert == null)
                 {
-                    var sql = $"INSERT INTO {_table} ([{FLDN_Word}], [{FLDN_Vect}]) VALUES (${FLDN_Word}, ${FLDN_Vect})";
+                    var sql = $"INSERT INTO {_table} ([{Dict.FldnWord}], [{Dict.FldnVect}])" 
+                        +$" VALUES (${Dict.FldnWord}, ${Dict.FldnVect})";
                     _cmdInsert = _ctx.CreateCmd(sql);
-                    _cmdInsert.Parameters.Add(FLDN_Word, System.Data.DbType.String);
-                    _cmdInsert.Parameters.Add(FLDN_Vect, System.Data.DbType.Binary);
+                    _cmdInsert.Parameters.Add(Dict.FldnWord, System.Data.DbType.String);
+                    _cmdInsert.Parameters.Add(Dict.FldnVect, System.Data.DbType.Binary);
                     _cmdInsert.Prepare();
                 }
                 return _cmdInsert;
             }
         }
 
-        public int Insert(Word2Vect w2v)
+        public int Insert(Dict w2v)
         {
-            CmdInsert.Parameters[FLDN_Word].Value = w2v.Word;
-            CmdInsert.Parameters[FLDN_Vect].Value = w2v.Vect;
+            CmdInsert.Parameters[Dict.FldnWord].Value = w2v.Word;
+            CmdInsert.Parameters[Dict.FldnVect].Value = w2v.Vect;
             var res = CmdInsert.ExecuteNonQuery();
             w2v.Id = _ctx.LastInsertRowId;
             return res;
@@ -48,7 +51,7 @@ namespace FastTextProcess.Context
         public int ControlWordsIndex(bool is_enabled)
         {
             var sql = is_enabled
-                ? $"CREATE INDEX IF NOT EXISTS inxWord{_table} ON {_table} ({FLDN_Word})"
+                ? $"CREATE INDEX IF NOT EXISTS inxWord{_table} ON {_table} ({Dict.FldnWord})"
                 : $"DROP INDEX inxWord{_table}";
             var cmd = _ctx.CreateCmd(sql);
             return cmd.ExecuteNonQuery();

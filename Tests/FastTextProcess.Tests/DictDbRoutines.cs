@@ -10,9 +10,9 @@ using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
-    public class WordToVectDbRoutines : TestBase
+    public class DictDbRoutines : TestBase
     {
-        public WordToVectDbRoutines(ITestOutputHelper output) : base(output) { }
+        public DictDbRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         public void ProcCreateDbEn()
@@ -26,7 +26,7 @@ namespace FastTextProcess.Tests
 
             using (var dbx = new FastTextProcessDB(dbf))
             {
-                var w2v_tbl = dbx.WordToVect(WordToVectDbSet.DictDb.Main);
+                var w2v_tbl = dbx.Dict(DictDbSet.DictDb.Main);
                 var trans = dbx.BeginTransaction();
                 w2v_tbl.ControlWordsIndex(is_enabled: false);
                 using (var sr = new StreamReader(fvec))
@@ -35,20 +35,20 @@ namespace FastTextProcess.Tests
                     var line = sr.ReadLine();
                     var harr = line.Split(' ');
                     Assert.Equal(2, harr.Length);
-                    WriteConsole($"'{fvec}': {harr[0]} - samples count, {harr[1]} - sample dim.");
+                    Log($"'{fvec}': {harr[0]} - samples count, {harr[1]} - sample dim.");
                     // data
                     while (!sr.EndOfStream)
                     {
                         line = sr.ReadLine();
                         if (string.IsNullOrEmpty(line))
                             continue;
-                        var w2v = Word2Vect.Create(line);
+                        var w2v = Dict.Create(line);
                         w2v_tbl.Insert(w2v);
                     }
                 }
-                WriteConsole("ControlWordsIndex create...");
+                Log("ControlWordsIndex create...");
                 w2v_tbl.ControlWordsIndex(is_enabled: true);
-                WriteConsole("Done");
+                Log("Done");
                 trans.Commit();
             }
         }

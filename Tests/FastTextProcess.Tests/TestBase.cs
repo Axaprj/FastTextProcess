@@ -17,7 +17,7 @@ namespace FastTextProcess.Tests
             _output = output;
         }
 
-        protected void WriteConsole(string msg)
+        protected void Log(string msg)
         {
             msg = DateTime.Now.ToShortTimeString() + ": " + msg;
             _output.WriteLine(msg);

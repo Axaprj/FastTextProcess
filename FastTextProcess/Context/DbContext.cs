@@ -5,7 +5,10 @@ using System.Text;
 
 namespace FastTextProcess.Context
 {
-    public class DbContext:IDisposable
+    /// <summary>
+    /// Abstract DB context (base class)
+    /// </summary>
+    public abstract class DbContext:IDisposable
     {
         readonly SQLiteConnection _conn;
 
