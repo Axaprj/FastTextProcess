@@ -5,14 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
-    public class DictDbRoutines : TestBase
+    public class FastTextRoutines : TestBase
     {
-        public DictDbRoutines(ITestOutputHelper output) : base(output) { }
+        public FastTextRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         public void ProcCreateDbEn()
@@ -21,7 +22,7 @@ namespace FastTextProcess.Tests
             AssertFileExists(fvec, "FastText file of vectors");
 
             var dbf = "w2v_en.db";
-            AssertFileNotExists(dbf, "word2vect DB");
+            AssertFileNotExists(dbf, "db word2vect");
             FastTextProcessDB.CreateDB(dbf);
 
             using (var dbx = new FastTextProcessDB(dbf))
@@ -51,6 +52,28 @@ namespace FastTextProcess.Tests
                 Log("Done");
                 trans.Commit();
             }
+        }
+
+        [Fact]
+        public void ProcAclImdb()
+        {
+            var proc = new TextProcessor();
+            var path = Path.GetFullPath(Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
+            foreach (var strm in 
+                (new DirectoryInfo(path))
+                .EnumerateFiles("*.txt")
+                .Select(fi => fi.OpenText())
+                )
+            {
+                proc.ProcessItem(strm);
+            }
+            /*
+            foreach (var file_path in Directory.EnumerateFiles(path, "*.txt")
+                .Select(f => File.ReadAllText(f)))
+            {
+                proc.ProcessItem(file_path);
+            }
+            */
         }
     }
 }

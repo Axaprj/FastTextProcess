@@ -7,42 +7,21 @@ namespace FastTextProcess.Context
     /// <summary>
     /// FastText dictionary DB: EmbedDict DbSet
     /// </summary>
-    public class EmbedDictDbSet
+    public class EmbedDictDbSet : DbSet
     {
-        readonly DbContext _ctx;
-        SQLiteCommand _cmdInsert;
-
-        public EmbedDictDbSet(DbContext ctx)
-        {
-            _ctx = ctx;
-        }
-        
-        SQLiteCommand CmdInsert
-        {
-            get
-            {
-                if (_cmdInsert == null)
-                {
-                    var sql = $"INSERT INTO EmbedDict ({EmbedDict.FldnInx}, {EmbedDict.FldnDictId}, {EmbedDict.FldnDictAddinsId}, {EmbedDict.FldnFreq})"
-                        +$" VALUES (${EmbedDict.FldnInx}, ${EmbedDict.FldnDictId}, ${EmbedDict.FldnDictAddinsId}, ${EmbedDict.FldnFreq})";
-                    _cmdInsert = _ctx.CreateCmd(sql);
-                    _cmdInsert.Parameters.Add(EmbedDict.FldnInx, System.Data.DbType.Int64);
-                    _cmdInsert.Parameters.Add(EmbedDict.FldnDictId, System.Data.DbType.Int64);
-                    _cmdInsert.Parameters.Add(EmbedDict.FldnDictAddinsId, System.Data.DbType.Int64);
-                    _cmdInsert.Parameters.Add(EmbedDict.FldnFreq, System.Data.DbType.Int64);
-                    _cmdInsert.Prepare();
-                }
-                return _cmdInsert;
-            }
-        }
+        public EmbedDictDbSet(DbContext ctx) : base(ctx) { }
 
         public int Insert(EmbedDict ed)
         {
-            CmdInsert.Parameters[EmbedDict.FldnInx].Value = ed.Inx;
-            CmdInsert.Parameters[EmbedDict.FldnDictId].Value = ed.DictId;
-            CmdInsert.Parameters[EmbedDict.FldnDictAddinsId].Value = ed.DictAddinsId;
-            CmdInsert.Parameters[EmbedDict.FldnFreq].Value = ed.Freq;
-            var res = CmdInsert.ExecuteNonQuery();
+            var sql = string.Format(
+                "INSERT INTO EmbedDict ({0}, {1}, {2}, {3}) VALUES (${0}, ${1}, ${2}, ${3})",
+                 EmbedDict.FldnInx, EmbedDict.FldnDictId, EmbedDict.FldnDictAddinsId, EmbedDict.FldnFreq);
+            var cmd = Ctx.CreateCmd(sql);
+            cmd.Parameters.AddWithValue(EmbedDict.FldnInx, ed.Inx);
+            cmd.Parameters.AddWithValue(EmbedDict.FldnDictId, ed.DictId);
+            cmd.Parameters.AddWithValue(EmbedDict.FldnDictAddinsId, ed.DictAddinsId);
+            cmd.Parameters.AddWithValue(EmbedDict.FldnFreq, ed.Freq);
+            var res = cmd.ExecuteNonQuery();
             return res;
         }
     }
