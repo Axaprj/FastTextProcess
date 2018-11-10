@@ -6,6 +6,7 @@ namespace FastTextProcess.Entities
 {
     public class Dict
     {
+        internal const string FldnId = "Id";
         internal const string FldnWord = "Word";
         internal const string FldnVect = "Vect";
 

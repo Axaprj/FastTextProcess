@@ -10,16 +10,20 @@ namespace FastTextProcess.Context
     /// </summary>
     public class DictDbSet : DbSet
     {
-        public enum DictDb { Main, Addin }
+        /// <summary>
+        /// Dictionary tables enumeration 
+        /// </summary>
+        public enum DictKind { Main, Addin }
 
         readonly string _table;
         SQLiteCommand _cmdInsert;
+        SQLiteCommand _cmdFindIdByWord;
 
-        public DictDbSet(DbContext ctx, DictDb db_kind) : base(ctx)
+        public DictDbSet(DbContext ctx, DictKind db_kind) : base(ctx)
         {
-            _table = db_kind == DictDb.Main ? "Dict" : "DictAddins";
+            _table = db_kind == DictKind.Main ? "Dict" : "DictAddins";
         }
-
+        #region SQL Commands
         SQLiteCommand CmdInsert
         {
             get
@@ -38,6 +42,24 @@ namespace FastTextProcess.Context
             }
         }
 
+        SQLiteCommand CmdFindIdByWord
+        {
+            get
+            {
+                if (_cmdFindIdByWord == null)
+                {
+                    var sql = string.Format(
+                        "SELECT {1} FROM {0} WHERE {2} = ${2}",
+                        _table, Dict.FldnId, Dict.FldnWord);
+                    _cmdFindIdByWord = Ctx.CreateCmd(sql);
+                    _cmdFindIdByWord.Parameters.Add(Dict.FldnWord, DbType.String);
+                    _cmdFindIdByWord.Prepare();
+                }
+                return _cmdFindIdByWord;
+            }
+        }
+        #endregion
+
         public int Insert(Dict w2v)
         {
             CmdInsert.Parameters[Dict.FldnWord].Value = w2v.Word;
@@ -45,6 +67,13 @@ namespace FastTextProcess.Context
             var res = CmdInsert.ExecuteNonQuery();
             w2v.Id = Ctx.LastInsertRowId;
             return res;
+        }
+
+        public long? FindIdByWord(string word)
+        {
+            CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
+            var res = CmdFindIdByWord.ExecuteScalar();
+            return res == null ? (long?)null : Convert.ToInt64(res);
         }
 
         public int ControlWordsIndex(bool is_enabled)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
 
-namespace FastTextProcess.Context
+namespace FastTextProcess
 {
     /// <summary>
     /// Abstract DB context (base class)

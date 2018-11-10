@@ -14,6 +14,7 @@ namespace FastTextProcess.Tests
 {
     public class FastTextRoutines : TestBase
     {
+        const string DBF_W2V_EN = "w2v_en.db";
         public FastTextRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
@@ -22,13 +23,12 @@ namespace FastTextProcess.Tests
             var fvec = Resources.DataArcDir + "cc.en.300.vec";
             AssertFileExists(fvec, "FastText file of vectors");
 
-            var dbf = "w2v_en.db";
-            AssertFileNotExists(dbf, "db word2vect");
-            FastTextProcessDB.CreateDB(dbf);
+            AssertFileNotExists(DBF_W2V_EN, "db word2vect");
+            FastTextProcessDB.CreateDB(DBF_W2V_EN);
 
-            using (var dbx = new FastTextProcessDB(dbf))
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
             {
-                var w2v_tbl = dbx.Dict(DictDbSet.DictDb.Main);
+                var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
                 var trans = dbx.BeginTransaction();
                 w2v_tbl.ControlWordsIndex(is_enabled: false);
                 using (var sr = new StreamReader(fvec))
@@ -58,19 +58,19 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcAclImdb()
         {
-            using (var proc = new TextProcessor())
+            using (var proc = new TextProcessor(DBF_W2V_EN))
             {
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
                 var dir = new DirectoryInfo(path);
                 Assert.True(dir.Exists,
-                    "Source files directory is not exists: " + path);
+                    $"source folder does not exist: '{path}'");
                 var files = dir.GetFiles("*.txt").AsParallel();
                 Parallel.ForEach(files, (file) =>
                     {
                         using (var strm = file.OpenText())
                         {
-                            proc.QueuePreprocess.Add(strm.ReadToEnd());
+                            proc.QueueProcess.Add(strm.ReadToEnd());
                         }
                     }
                 );

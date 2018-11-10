@@ -2,7 +2,7 @@
 using System;
 using System.Data.SQLite;
 
-namespace FastTextProcess.Context
+namespace FastTextProcess
 {
     /// <summary>
     /// Abstract DbSet

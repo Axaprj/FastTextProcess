@@ -18,7 +18,7 @@ namespace FastTextProcess.Tests
             var w2v = new Dict { Word = "test", Vect = new byte[] { 1, 2, 3 } };
             using (var dbx = new FastTextProcessDB(dbf))
             {
-                var w2v_tbl = dbx.Dict(DictDbSet.DictDb.Main);
+                var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
                 w2v_tbl.Insert(w2v);
                 var id1 = w2v.Id;
                 Assert.True(id1 > 0);

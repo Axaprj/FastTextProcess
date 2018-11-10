@@ -14,7 +14,7 @@ namespace FastTextProcess.Context
 
         public static void CreateDB(string db_file) => CreateDB(db_file, Resources.word2vect_create);
 
-        public DictDbSet Dict(DictDbSet.DictDb db_kind) => new DictDbSet(this, db_kind);
+        public DictDbSet Dict(DictDbSet.DictKind db_kind) => new DictDbSet(this, db_kind);
 
         public EmbedDictDbSet EmbedDict() => new EmbedDictDbSet(this);
     }
