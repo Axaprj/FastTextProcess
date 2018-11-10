@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -57,23 +58,23 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcAclImdb()
         {
-            var proc = new TextProcessor();
-            var path = Path.GetFullPath(Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
-            foreach (var strm in 
-                (new DirectoryInfo(path))
-                .EnumerateFiles("*.txt")
-                .Select(fi => fi.OpenText())
-                )
+            using (var proc = new TextProcessor())
             {
-                proc.ProcessItem(strm);
+                var path = Path.GetFullPath(
+                    Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
+                var dir = new DirectoryInfo(path);
+                Assert.True(dir.Exists,
+                    "Source files directory is not exists: " + path);
+                var files = dir.GetFiles("*.txt").AsParallel();
+                Parallel.ForEach(files, (file) =>
+                    {
+                        using (var strm = file.OpenText())
+                        {
+                            proc.QueuePreprocess.Add(strm.ReadToEnd());
+                        }
+                    }
+                );
             }
-            /*
-            foreach (var file_path in Directory.EnumerateFiles(path, "*.txt")
-                .Select(f => File.ReadAllText(f)))
-            {
-                proc.ProcessItem(file_path);
-            }
-            */
         }
     }
 }
