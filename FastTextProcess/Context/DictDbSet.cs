@@ -16,14 +16,16 @@ namespace FastTextProcess.Context
         public enum DictKind { Main, Addin }
 
         readonly string _table;
-        SQLiteCommand _cmdInsert;
-        SQLiteCommand _cmdFindIdByWord;
 
         public DictDbSet(DbContext ctx, DictKind db_kind) : base(ctx)
         {
             _table = db_kind == DictKind.Main ? "Dict" : "DictAddins";
         }
+
         #region SQL Commands
+        SQLiteCommand _cmdInsert;
+        SQLiteCommand _cmdFindIdByWord;
+
         SQLiteCommand CmdInsert
         {
             get
@@ -73,7 +75,7 @@ namespace FastTextProcess.Context
         {
             CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
             var res = CmdFindIdByWord.ExecuteScalar();
-            return res == null ? (long?)null : Convert.ToInt64(res);
+            return DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
         }
 
         public int ControlWordsIndex(bool is_enabled)

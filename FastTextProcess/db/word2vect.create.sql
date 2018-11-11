@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Вс ноя 4 13:54:21 2018
+-- File generated with SQLiteStudio v3.2.1 on Сб ноя 10 20:17:12 2018
 --
 -- Text encoding used: System
 --
@@ -10,7 +10,7 @@ BEGIN TRANSACTION;
 CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
 
 -- Table: DictAddins
-CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
+CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB);
 
 -- Table: EmbedDict
 CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTEGER REFERENCES Dict (Id) ON DELETE SET NULL ON UPDATE CASCADE, DictAddinsId INTEGER REFERENCES DictAddins (Id) ON DELETE SET NULL ON UPDATE CASCADE, Freq INTEGER NOT NULL);
@@ -19,9 +19,7 @@ CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTEGER 
 CREATE INDEX inxWordDict ON Dict (Word);
 
 -- Index: inxWordDictAddins
-CREATE INDEX inxWordDictAddins ON DictAddins (
-    Word
-);
+CREATE INDEX inxWordDictAddins ON DictAddins (Word);
 
 -- View: EmbedJoin
 CREATE VIEW EmbedJoin AS SELECT * FROM 

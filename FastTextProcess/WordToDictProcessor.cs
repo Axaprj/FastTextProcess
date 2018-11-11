@@ -1,6 +1,9 @@
-﻿using System;
+﻿using FastTextProcess.Context;
+using FastTextProcess.Entities;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using FastTextProcess.Context;
+using System.Threading;
 
 namespace FastTextProcess
 {
@@ -8,41 +11,102 @@ namespace FastTextProcess
     {
         readonly FastTextProcessDB ProcessDB;
 
+        struct NewItem
+        {
+            public long Inx;
+            public long Freq;
+            public long? DictId;
+            public DictDbSet.DictKind DictKind;
+        }
+        long? _curEmbedInx = null;
+        readonly object SetOfNewLock = new object();
+        readonly Dictionary<string, NewItem> SetOfNew = new Dictionary<string, NewItem>();
+        struct ExistingItem
+        {
+            public long FreqAdd;
+        }
+        readonly object SetOfDirtyLock = new object();
+        readonly Dictionary<long, ExistingItem> SetOfDirty = new Dictionary<long, ExistingItem>();
+
+
         public WordToDictProcessor(string dbf_w2v)
         {
             ProcessDB = new FastTextProcessDB(dbf_w2v);
         }
 
-        public List<long[]> Process(List<string[]> words_list)
+        public long[] WordsToInxs(string[] words)
         {
             var dict = ProcessDB.Dict(DictDbSet.DictKind.Main);
             var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
-            var res = new List<long[]>(words_list.Count);
-            foreach (var words in words_list)
-            {
-                res.Add(Process(dict, dict_addins, words));
-            }
-            return res;
-        }
-
-        public long[] Process(string[] words)
-        {
-            var dict = ProcessDB.Dict(DictDbSet.DictKind.Main);
-            var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
-            return Process(dict, dict_addins, words);
-        }
-
-        static long[] Process(DictDbSet dict, DictDbSet dict_addins, string[] words)
-        {
-            var res_ids = new long[words.Length];
+            var embed = ProcessDB.EmbedDict();
+            var embed_inxs = new long[words.Length];
             for (int inx = 0; inx < words.Length; inx++)
             {
-                long? cur_id = dict_addins.FindIdByWord(words[inx]);
-                if (!cur_id.HasValue)
-                    cur_id = dict.FindIdByWord(words[inx]);
-                res_ids[inx] = cur_id.HasValue ? cur_id.Value : 0;
+                embed_inxs[inx] = WordToInx(words[inx], dict, dict_addins, embed);
             }
-            return res_ids;
+            return embed_inxs;
+        }
+
+        long WordToInx(string word, DictDbSet dict, DictDbSet dict_addins, EmbedDictDbSet embed)
+        {
+            long embed_inx;
+            long? cur_id = dict.FindIdByWord(word);
+            if (cur_id.HasValue)
+            {
+                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Main, word);
+            }
+            else
+            {
+                cur_id = dict_addins.FindIdByWord(word);
+                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Addin, word);
+            }
+            return embed_inx;
+        }
+
+        long GetOrAddEmbed(EmbedDictDbSet embed, long? dict_id, DictDbSet.DictKind dict_kind, string word)
+        {
+            long? inx = null;
+            if (dict_id.HasValue)
+                inx = embed.FindInxById(dict_id.Value, dict_kind);
+
+            if (inx.HasValue)
+            {
+                var item = new ExistingItem { FreqAdd = 0 };
+                lock (SetOfDirtyLock)
+                {
+                    if (SetOfDirty.ContainsKey(inx.Value))
+                        item = SetOfDirty[inx.Value];
+                    item.FreqAdd++;
+                    SetOfDirty[inx.Value] = item;
+                }
+            }
+            else
+            {
+                var item = new NewItem { DictKind = dict_kind, DictId = dict_id, Freq = 0 };
+                lock (SetOfNewLock)
+                {
+                    if (SetOfNew.ContainsKey(word))
+                        item = SetOfNew[word];
+                    else
+                        item.Inx = GetNextEmbedInx(embed);
+                    inx = item.Inx;
+                    item.Freq++;
+                    SetOfNew[word] = item;
+                }
+            }
+            return inx.Value;
+        }
+
+        long GetNextEmbedInx(EmbedDictDbSet embed)
+        {
+            if (!_curEmbedInx.HasValue)
+            {
+                _curEmbedInx = embed.SelectInxMax();
+                if (!_curEmbedInx.HasValue)
+                    _curEmbedInx = -1;
+            }
+            _curEmbedInx = _curEmbedInx.Value + 1;
+            return _curEmbedInx.Value;
         }
 
         public void Dispose()

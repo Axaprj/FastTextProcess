@@ -38,14 +38,11 @@ namespace FastTextProcess
                                 QueueWordToDict.Add(preproc.Process(txt), preprocess_token);
                             }
                         );
+                        QueueWordToDict.CompleteAdding();
                     }
                     catch
                     {
                         QueueProcess.Dispose();
-                    }
-                    finally
-                    {
-                        QueueWordToDict.CompleteAdding();
                     }
                 }, preprocess_token
             );
@@ -81,7 +78,7 @@ namespace FastTextProcess
                             //Task.WaitAll(tasks.ToArray());
 
                             Parallel.ForEach(QueueWordToDict.GetConsumingEnumerable()
-                                , (words) => wordToDict.Process(words)
+                                , (words) => wordToDict.WordsToInxs(words)
                             );
                         }
                     }
@@ -96,7 +93,11 @@ namespace FastTextProcess
 
         void WaitForFinalize()
         {
-            QueueProcess.CompleteAdding();
+            try
+            {
+                QueueProcess.CompleteAdding();
+            }
+            catch (ObjectDisposedException) { /* terminated abnormally*/ }
             taskWordToDict.Wait();
             taskPreprocess.Wait();
         }
