@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FastTextProcess
 {
@@ -28,13 +29,12 @@ namespace FastTextProcess
         readonly object SetOfDirtyLock = new object();
         readonly Dictionary<long, ExistingItem> SetOfDirty = new Dictionary<long, ExistingItem>();
 
-
         public WordToDictProcessor(string dbf_w2v)
         {
             ProcessDB = new FastTextProcessDB(dbf_w2v);
         }
 
-        public long[] WordsToInxs(string[] words)
+        public long[] WordsToInxsForParallel(string[] words)
         {
             var dict = ProcessDB.Dict(DictDbSet.DictKind.Main);
             var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
@@ -109,9 +109,49 @@ namespace FastTextProcess
             return _curEmbedInx.Value;
         }
 
+        public void StoreEmbed()
+        {
+            var trans = ProcessDB.BeginTransaction();
+            try
+            {
+                var embed = ProcessDB.EmbedDict();
+                foreach (long inx in SetOfDirty.Keys)
+                {
+                    var item = SetOfDirty[inx];
+                    embed.IncrementFreq(inx: inx, add_freq: item.FreqAdd);
+                }
+                var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
+                foreach (string word in SetOfNew.Keys)
+                {
+                    var item = SetOfNew[word];
+                    if (!item.DictId.HasValue)
+                    {
+                        Dict w2v = new Dict { Word = word };
+                        dict_addins.Insert(w2v);
+                        item.DictId = w2v.Id;
+                    }
+                    var ed = new EmbedDict
+                    {
+                        Inx = item.Inx,
+                        DictId = item.DictKind == DictDbSet.DictKind.Main ? item.DictId : null,
+                        DictAddinsId = item.DictKind == DictDbSet.DictKind.Addin ? item.DictId : null,
+                        Freq = item.Freq
+                    };
+                    embed.Insert(ed);
+                }
+                trans.Commit();
+            }
+            catch
+            {
+                trans.Rollback();
+                throw;
+            }
+        }
+
         public void Dispose()
         {
             ProcessDB.Dispose();
         }
+
     }
 }

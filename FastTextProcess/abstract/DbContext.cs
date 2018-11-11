@@ -20,6 +20,7 @@ namespace FastTextProcess
 
         public void Dispose()
         {
+            _conn.Close();
             _conn.Dispose();
         }
 

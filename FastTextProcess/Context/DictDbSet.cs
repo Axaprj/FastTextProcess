@@ -75,7 +75,7 @@ namespace FastTextProcess.Context
         {
             CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
             var res = CmdFindIdByWord.ExecuteScalar();
-            return DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
+            return res == null || DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
         }
 
         public int ControlWordsIndex(bool is_enabled)
