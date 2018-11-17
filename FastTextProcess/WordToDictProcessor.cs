@@ -31,7 +31,7 @@ namespace FastTextProcess
 
         public WordToDictProcessor(string dbf_w2v)
         {
-            ProcessDB = new FastTextProcessDB(dbf_w2v);
+            ProcessDB = new FastTextProcessDB(dbf_w2v);//, foreign_keys:false);
         }
 
         public long[] WordsToInxsForParallel(string[] words)

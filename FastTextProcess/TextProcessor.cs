@@ -41,6 +41,7 @@ namespace FastTextProcess
                 }
                 catch
                 {
+                    QueueProcess.Dispose();
                     cancel_token_src.Cancel();
                     throw;
                 }

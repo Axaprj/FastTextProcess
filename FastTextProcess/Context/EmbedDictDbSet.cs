@@ -14,22 +14,39 @@ namespace FastTextProcess.Context
         public EmbedDictDbSet(DbContext ctx) : base(ctx) { }
 
         #region SQL Commands
-        SQLiteCommand _cmdFindInxById;
-        SQLiteCommand CmdFindInxById
+        SQLiteCommand _cmdFindInxByDictId;
+        SQLiteCommand CmdFindInxByDictId
         {
             get
             {
-                if (_cmdFindInxById == null)
+                if (_cmdFindInxByDictId == null)
                 {
                     var sql = string.Format(
-                        "SELECT {1} FROM {0} WHERE {2} = ${2} OR {3} = ${3}",
-                        EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnDictId, EmbedDict.FldnDictAddinsId);
-                    _cmdFindInxById = Ctx.CreateCmd(sql);
-                    _cmdFindInxById.Parameters.Add(EmbedDict.FldnDictId, DbType.Int64);
-                    _cmdFindInxById.Parameters.Add(EmbedDict.FldnDictAddinsId, DbType.Int64);
-                    _cmdFindInxById.Prepare();
+                        "SELECT {1} FROM {0} WHERE {2} = ${2}",
+                        EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnDictId);
+                    _cmdFindInxByDictId = Ctx.CreateCmd(sql);
+                    _cmdFindInxByDictId.Parameters.Add(EmbedDict.FldnDictId, DbType.Int64);
+                    _cmdFindInxByDictId.Prepare();
                 }
-                return _cmdFindInxById;
+                return _cmdFindInxByDictId;
+            }
+        }
+
+        SQLiteCommand _cmdFindInxByDictAddinsId;
+        SQLiteCommand CmdFindInxByDictAddinsId
+        {
+            get
+            {
+                if (_cmdFindInxByDictAddinsId == null)
+                {
+                    var sql = string.Format(
+                        "SELECT {1} FROM {0} WHERE {2} = ${2}",
+                        EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnDictAddinsId);
+                    _cmdFindInxByDictAddinsId = Ctx.CreateCmd(sql);
+                    _cmdFindInxByDictAddinsId.Parameters.Add(EmbedDict.FldnDictAddinsId, DbType.Int64);
+                    _cmdFindInxByDictAddinsId.Prepare();
+                }
+                return _cmdFindInxByDictAddinsId;
             }
         }
 
@@ -86,9 +103,9 @@ namespace FastTextProcess.Context
 
         public int IncrementFreq(long inx, long add_freq)
         {
-            CmdInsert.Parameters[EmbedDict.FldnInx].Value = inx;
-            CmdInsert.Parameters[EmbedDict.FldnFreq].Value = add_freq;
-            return CmdInsert.ExecuteNonQuery();
+            CmdIncrementFreq.Parameters[EmbedDict.FldnInx].Value = inx;
+            CmdIncrementFreq.Parameters[EmbedDict.FldnFreq].Value = add_freq;
+            return CmdIncrementFreq.ExecuteNonQuery();
         }
 
         public long? SelectInxMax()
@@ -102,11 +119,18 @@ namespace FastTextProcess.Context
 
         public long? FindInxById(long id, DictDbSet.DictKind dict_kind)
         {
-            CmdFindInxById.Parameters[EmbedDict.FldnDictId].Value =
-                dict_kind == DictDbSet.DictKind.Main ? id : -1;
-            CmdFindInxById.Parameters[EmbedDict.FldnDictAddinsId].Value =
-                dict_kind == DictDbSet.DictKind.Addin ? id : -1;
-            var res = CmdFindInxById.ExecuteScalar();
+            object res = null;
+            if (dict_kind == DictDbSet.DictKind.Main)
+            {
+                CmdFindInxByDictId.Parameters[EmbedDict.FldnDictId].Value = id;
+                res = CmdFindInxByDictId.ExecuteScalar();
+            }
+            else if (dict_kind == DictDbSet.DictKind.Addin)
+            {
+                CmdFindInxByDictAddinsId.Parameters[EmbedDict.FldnDictAddinsId].Value = id;
+                res = CmdFindInxByDictAddinsId.ExecuteScalar();
+            }
+            else throw new NotSupportedException($"{dict_kind} not supported");
             return res == null || DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
         }
 

@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on бс эюџ 10 20:17:12 2018
+-- File generated with SQLiteStudio v3.2.1 on бс эюџ 17 17:04:02 2018
 --
 -- Text encoding used: System
 --
@@ -13,7 +13,13 @@ CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NU
 CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB);
 
 -- Table: EmbedDict
-CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTEGER REFERENCES Dict (Id) ON DELETE SET NULL ON UPDATE CASCADE, DictAddinsId INTEGER REFERENCES DictAddins (Id) ON DELETE SET NULL ON UPDATE CASCADE, Freq INTEGER NOT NULL);
+CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTEGER REFERENCES Dict (Id) ON DELETE CASCADE ON UPDATE CASCADE, DictAddinsId INTEGER REFERENCES DictAddins (Id) ON DELETE CASCADE ON UPDATE CASCADE, Freq INTEGER NOT NULL);
+
+-- Index: inxIdDictAddinsEmbedDict
+CREATE INDEX inxIdDictAddinsEmbedDict ON EmbedDict (DictAddinsId);
+
+-- Index: inxIdDictEmbedDict
+CREATE INDEX inxIdDictEmbedDict ON EmbedDict (DictId);
 
 -- Index: inxWordDict
 CREATE INDEX inxWordDict ON Dict (Word);

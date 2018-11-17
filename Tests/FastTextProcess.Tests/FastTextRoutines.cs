@@ -26,7 +26,7 @@ namespace FastTextProcess.Tests
             AssertFileNotExists(DBF_W2V_EN, "db word2vect");
             FastTextProcessDB.CreateDB(DBF_W2V_EN);
 
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys:false))
             {
                 var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
                 var trans = dbx.BeginTransaction();
