@@ -11,24 +11,34 @@ namespace FastTextProcess
 {
     public class TextProcessor : IDisposable
     {
-        public readonly BlockingCollection<string> QueueProcess;
+        class ProcessItem
+        {
+            public string Src;
+            public string SrcOriginalId;
+            public string[] Preprocessed;
+            public long[] Embedded;
+        }
+
+        readonly BlockingCollection<ProcessItem> QueueProcess;
         readonly Task taskPreprocess;
 
-        readonly BlockingCollection<string[]> QueueWordToDict;
+        readonly BlockingCollection<ProcessItem> QueueWordToDict;
         readonly Task taskWordToDict;
 
-        readonly BlockingCollection<long[]> QueueStoreResult;
+        readonly BlockingCollection<ProcessItem> QueueStoreResult;
         readonly Task taskStoreResult;
+
+        readonly CancellationTokenSource CancelTokenSrc;
 
         public TextProcessor(string dbf_w2v
             , Preprocessor.ITextPreprocess preprocessor
             , int boundedCapacity = 10000)
         {
-            QueueProcess = new BlockingCollection<string>(boundedCapacity);
-            QueueWordToDict = new BlockingCollection<string[]>(boundedCapacity);
-            QueueStoreResult = new BlockingCollection<long[]>(boundedCapacity);
-            var cancel_token_src = new CancellationTokenSource();
-            var cancel_token = cancel_token_src.Token;
+            QueueProcess = new BlockingCollection<ProcessItem>(boundedCapacity);
+            QueueWordToDict = new BlockingCollection<ProcessItem>(boundedCapacity);
+            QueueStoreResult = new BlockingCollection<ProcessItem>(boundedCapacity);
+            CancelTokenSrc = new CancellationTokenSource();
+            var cancel_token = CancelTokenSrc.Token;
 
             taskPreprocess = Task.Run(() =>
             {
@@ -36,14 +46,17 @@ namespace FastTextProcess
                 {
                     Parallel.ForEach(
                         QueueProcess.GetConsumingEnumerable(cancel_token)
-                        , (txt) => QueueWordToDict.Add(preprocessor.Process(txt), cancel_token)
+                        , (itm) =>
+                        {
+                            itm.Preprocessed = preprocessor.Process(itm.Src);
+                            QueueWordToDict.Add(itm, cancel_token);
+                        }
                     );
                     QueueWordToDict.CompleteAdding();
                 }
                 catch
                 {
-                    QueueProcess.Dispose();
-                    cancel_token_src.Cancel();
+                    CancelTokenSrc.Cancel();
                     throw;
                 }
             }, cancel_token
@@ -84,14 +97,17 @@ namespace FastTextProcess
                         Parallel.ForEach(
                             QueueWordToDict.GetConsumingEnumerable(cancel_token)
                             , opt
-                            , (words) => wordToDict.WordsToInxsForParallel(words)
+                            , (itm) =>
+                            {
+                                itm.Embedded = wordToDict.WordsToInxsForParallel(itm.Preprocessed);
+                            }
                         );
                         wordToDict.StoreEmbed();
                     }
                 }
                 catch
                 {
-                    cancel_token_src.Cancel();
+                    CancelTokenSrc.Cancel();
                     throw;
                 }
             }, cancel_token
@@ -104,11 +120,20 @@ namespace FastTextProcess
                 }
                 catch
                 {
-                    cancel_token_src.Cancel();
+                    CancelTokenSrc.Cancel();
                     throw;
                 }
             }, cancel_token
             );
+        }
+
+        public void Process(string src, string src_id)
+        {
+            if (CancelTokenSrc.IsCancellationRequested)
+                throw new InvalidOperationException(
+                    $"Processing was canceled. Terminated before process '{src_id}' source.");
+            var item = new ProcessItem { Src = src, SrcOriginalId = src_id };
+            QueueProcess.Add(item);
         }
 
         void WaitForFinalize()

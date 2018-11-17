@@ -26,7 +26,7 @@ namespace FastTextProcess.Tests
             AssertFileNotExists(DBF_W2V_EN, "db word2vect");
             FastTextProcessDB.CreateDB(DBF_W2V_EN);
 
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys:false))
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys: false))
             {
                 var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
                 var trans = dbx.BeginTransaction();
@@ -58,8 +58,8 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcAclImdb()
         {
-            using (var proc = new TextProcessor(DBF_W2V_EN
-                , new Preprocessor.CommonEn()))
+            using (var proc = new TextProcessor(
+                DBF_W2V_EN, new Preprocessor.CommonEn()))
             {
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
@@ -71,7 +71,7 @@ namespace FastTextProcess.Tests
                     {
                         using (var strm = file.OpenText())
                         {
-                            proc.QueueProcess.Add(strm.ReadToEnd());
+                            proc.Process(strm.ReadToEnd(), src_id: file.Name);
                         }
                     }
                 );
