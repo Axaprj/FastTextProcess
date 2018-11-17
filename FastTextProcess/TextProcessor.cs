@@ -32,7 +32,7 @@ namespace FastTextProcess
             {
                 try
                 {
-                    var preproc = new TextPreprocess();
+                    var preproc = new Preprocessor.TextCommonEnPreprocess();
                     Parallel.ForEach(
                         QueueProcess.GetConsumingEnumerable(cancel_token)
                         , (txt) => QueueWordToDict.Add(preproc.Process(txt), cancel_token)
