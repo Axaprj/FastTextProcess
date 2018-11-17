@@ -58,7 +58,8 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcAclImdb()
         {
-            using (var proc = new TextProcessor(DBF_W2V_EN))
+            using (var proc = new TextProcessor(DBF_W2V_EN
+                , new Preprocessor.CommonEn()))
             {
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));

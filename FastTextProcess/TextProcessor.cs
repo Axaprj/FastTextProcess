@@ -20,7 +20,9 @@ namespace FastTextProcess
         readonly BlockingCollection<long[]> QueueStoreResult;
         readonly Task taskStoreResult;
 
-        public TextProcessor(string dbf_w2v, int boundedCapacity = 10000)
+        public TextProcessor(string dbf_w2v
+            , Preprocessor.ITextPreprocess preprocessor
+            , int boundedCapacity = 10000)
         {
             QueueProcess = new BlockingCollection<string>(boundedCapacity);
             QueueWordToDict = new BlockingCollection<string[]>(boundedCapacity);
@@ -32,10 +34,9 @@ namespace FastTextProcess
             {
                 try
                 {
-                    var preproc = new Preprocessor.TextCommonEnPreprocess();
                     Parallel.ForEach(
                         QueueProcess.GetConsumingEnumerable(cancel_token)
-                        , (txt) => QueueWordToDict.Add(preproc.Process(txt), cancel_token)
+                        , (txt) => QueueWordToDict.Add(preprocessor.Process(txt), cancel_token)
                     );
                     QueueWordToDict.CompleteAdding();
                 }

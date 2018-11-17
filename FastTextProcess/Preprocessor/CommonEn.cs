@@ -6,24 +6,20 @@ using System.Text.RegularExpressions;
 
 namespace FastTextProcess.Preprocessor
 {
-    public class TextCommonEnPreprocess
+    public class CommonEn: ITextPreprocess
     {
         Regex rexClnCommonEn = new Regex("[^A-Za-z0-9(),.!?\'`\"]", RegexOptions.Compiled);
-        Regex rexVe = new Regex(    "(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
-        Regex rexRe = new Regex(    "(?<lett>[A-Za-z]) ' re", RegexOptions.Compiled);
-        Regex rexD = new Regex(     "(?<lett>[A-Za-z]) ' d", RegexOptions.Compiled);
-        Regex rexLL = new Regex(    "(?<lett>[A-Za-z]) ' ll", RegexOptions.Compiled);
-        Regex rexS = new Regex(     "(?<lett>[A-Za-z]) ' s", RegexOptions.Compiled);
-        
+        Regex rexVe = new Regex("(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
+        Regex rexRe = new Regex("(?<lett>[A-Za-z]) ' re", RegexOptions.Compiled);
+        Regex rexD = new Regex("(?<lett>[A-Za-z]) ' d", RegexOptions.Compiled);
+        Regex rexLL = new Regex("(?<lett>[A-Za-z]) ' ll", RegexOptions.Compiled);
+        Regex rexS = new Regex("(?<lett>[A-Za-z]) ' s", RegexOptions.Compiled);
+
         Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
-        
+
         public string[] Process(string txt)
         {
             txt = CleanCommonEn(txt);
-            if (txt.IndexOf("'dough") >= 0)
-            {
-                var t = "";
-            }
             var warr = txt.Split(' ');
             return warr;
         }
