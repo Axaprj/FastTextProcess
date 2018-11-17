@@ -10,7 +10,8 @@ namespace FastTextProcess.Context
     /// </summary>
     public class FastTextProcessDB : DbContext
     {
-        public FastTextProcessDB(string db_file) : base(db_file) { }
+        public FastTextProcessDB(string db_file, bool foreign_keys = true)
+            : base(db_file, foreign_keys) { }
 
         public static void CreateDB(string db_file) => CreateDB(db_file, Resources.word2vect_create);
 

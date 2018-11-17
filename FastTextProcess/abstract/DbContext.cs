@@ -12,9 +12,12 @@ namespace FastTextProcess
     {
         readonly SQLiteConnection _conn;
 
-        public DbContext(string db_file)
+        public DbContext(string db_file, bool foreign_keys=true)
         {
-            _conn = new SQLiteConnection($"Data Source=\"{db_file}\";Version=3;");
+            var conn_str = $"Data Source=\"{db_file}\";Version=3;";
+            if(foreign_keys)
+                conn_str += "foreign keys=true;";
+            _conn = new SQLiteConnection(conn_str);
             _conn.Open();
         }
 
