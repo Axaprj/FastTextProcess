@@ -11,7 +11,7 @@ namespace FastTextProcess.Context
     /// </summary>
     public class EmbedDictDbSet : DbSet
     {
-        public EmbedDictDbSet(DbContext ctx) : base(ctx) { }
+        internal EmbedDictDbSet(DbContext ctx) : base(ctx, "EmbedDict") { }
 
         #region SQL Commands
         SQLiteCommand _cmdFindInxByDictId;
@@ -23,7 +23,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "SELECT {1} FROM {0} WHERE {2} = ${2}",
-                        EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnDictId);
+                        TableName, EmbedDict.FldnInx, EmbedDict.FldnDictId);
                     _cmdFindInxByDictId = Ctx.CreateCmd(sql);
                     _cmdFindInxByDictId.Parameters.Add(EmbedDict.FldnDictId, DbType.Int64);
                     _cmdFindInxByDictId.Prepare();
@@ -41,7 +41,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "SELECT {1} FROM {0} WHERE {2} = ${2}",
-                        EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnDictAddinsId);
+                        TableName, EmbedDict.FldnInx, EmbedDict.FldnDictAddinsId);
                     _cmdFindInxByDictAddinsId = Ctx.CreateCmd(sql);
                     _cmdFindInxByDictAddinsId.Parameters.Add(EmbedDict.FldnDictAddinsId, DbType.Int64);
                     _cmdFindInxByDictAddinsId.Prepare();
@@ -59,7 +59,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "INSERT INTO {0} ({1}, {2}, {3}, {4}) VALUES (${1}, ${2}, ${3}, ${4})",
-                         EmbedDict.Tbln, 
+                         TableName, 
                          EmbedDict.FldnInx, EmbedDict.FldnDictId, EmbedDict.FldnDictAddinsId, EmbedDict.FldnFreq);
                     _cmdInsert = Ctx.CreateCmd(sql);
                     _cmdInsert.Parameters.Add(EmbedDict.FldnInx,  DbType.Int64);
@@ -81,7 +81,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "UPDATE {0} SET {2} = {2} + ${2} WHERE {1} = ${1}",
-                         EmbedDict.Tbln, EmbedDict.FldnInx, EmbedDict.FldnFreq);
+                         TableName, EmbedDict.FldnInx, EmbedDict.FldnFreq);
                     _cmdIncrementFreq = Ctx.CreateCmd(sql);
                     _cmdIncrementFreq.Parameters.Add(EmbedDict.FldnInx, DbType.Int64);
                     _cmdIncrementFreq.Parameters.Add(EmbedDict.FldnFreq, DbType.Int64);
@@ -111,7 +111,7 @@ namespace FastTextProcess.Context
         public long? SelectInxMax()
         {
             var sql = string.Format("SELECT MAX({1}) FROM {0}",
-                        EmbedDict.Tbln, EmbedDict.FldnInx);
+                        TableName, EmbedDict.FldnInx);
             var cmd = Ctx.CreateCmd(sql);
             var res = cmd.ExecuteScalar();
             return res == null || DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);

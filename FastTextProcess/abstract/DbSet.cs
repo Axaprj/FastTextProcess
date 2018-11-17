@@ -10,7 +10,18 @@ namespace FastTextProcess
     public abstract class DbSet
     {
         protected readonly DbContext Ctx;
+        protected internal readonly string TableName;
 
-        public DbSet(DbContext ctx) { Ctx = ctx; }
+        internal DbSet(DbContext ctx, string table_name)
+        {
+            Ctx = ctx;
+            TableName = table_name;
+        }
+
+        public int DeleteAll()
+        {
+            var cmd = Ctx.CreateCmd($"DELETE FROM {TableName}");
+            return cmd.ExecuteNonQuery();
+        }
     }
 }

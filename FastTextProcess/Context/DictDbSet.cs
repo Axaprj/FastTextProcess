@@ -15,12 +15,9 @@ namespace FastTextProcess.Context
         /// </summary>
         public enum DictKind { Main, Addin }
 
-        readonly string _table;
-
-        public DictDbSet(DbContext ctx, DictKind db_kind) : base(ctx)
-        {
-            _table = db_kind == DictKind.Main ? "Dict" : "DictAddins";
-        }
+        internal DictDbSet(DbContext ctx, DictKind db_kind)
+            : base(ctx, db_kind == DictKind.Main ? "Dict" : "DictAddins")
+        { }
 
         #region SQL Commands
         SQLiteCommand _cmdInsert;
@@ -34,7 +31,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "INSERT INTO {0} ({1}, {2}) VALUES (${1}, ${2})",
-                        _table, Dict.FldnWord, Dict.FldnVect);
+                        TableName, Dict.FldnWord, Dict.FldnVect);
                     _cmdInsert = Ctx.CreateCmd(sql);
                     _cmdInsert.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdInsert.Parameters.Add(Dict.FldnVect, DbType.Binary);
@@ -52,7 +49,7 @@ namespace FastTextProcess.Context
                 {
                     var sql = string.Format(
                         "SELECT {1} FROM {0} WHERE {2} = ${2}",
-                        _table, Dict.FldnId, Dict.FldnWord);
+                        TableName, Dict.FldnId, Dict.FldnWord);
                     _cmdFindIdByWord = Ctx.CreateCmd(sql);
                     _cmdFindIdByWord.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdFindIdByWord.Prepare();
@@ -81,8 +78,8 @@ namespace FastTextProcess.Context
         public int ControlWordsIndex(bool is_enabled)
         {
             var sql = is_enabled
-                ? $"CREATE INDEX IF NOT EXISTS inxWord{_table} ON {_table} ({Dict.FldnWord})"
-                : $"DROP INDEX inxWord{_table}";
+                ? $"CREATE INDEX IF NOT EXISTS inxWord{TableName} ON {TableName} ({Dict.FldnWord})"
+                : $"DROP INDEX inxWord{TableName}";
             var cmd = Ctx.CreateCmd(sql);
             return cmd.ExecuteNonQuery();
         }

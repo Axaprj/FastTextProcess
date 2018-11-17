@@ -62,7 +62,7 @@ namespace FastTextProcess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to --
-        ///-- File generated with SQLiteStudio v3.2.1 on Сб окт 27 20:58:33 2018
+        ///-- File generated with SQLiteStudio v3.2.1 on Сб ноя 17 20:24:53 2018
         ///--
         ///-- Text encoding used: System
         ///--
@@ -70,17 +70,37 @@ namespace FastTextProcess.Properties {
         ///BEGIN TRANSACTION;
         ///
         ///-- Table: Dict
-        ///CREATE TABLE Dict (&quot;Id&quot; INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
+        ///CREATE TABLE Dict (Inx INTEGER PRIMARY KEY, VectStr TEXT NOT NULL);
         ///
-        ///-- Id: inxIndex
-        ///CREATE INDEX inxIndex ON Dict (&quot;Id&quot;);
+        ///-- Table: Src
+        ///CREATE TABLE Src (Id INTEGER PRIMARY KEY AUTOINCREMENT, OriginalId TEXT NOT NULL UNIQUE, ProcInfo TEXT, DbgInfo TEXT);
         ///
-        ///-- Id: inxWord
-        ///CREATE UNIQUE INDEX inxWord ON Dict (Word COLLATE NOCASE);
+        ///-- Table: SrcData
+        ///CREATE TABLE SrcData (SrcId INTEGER REFERENCES Src (Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL, Src [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string vect_result_create {
+            get {
+                return ResourceManager.GetString("vect_result_create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --
+        ///-- File generated with SQLiteStudio v3.2.1 on Сб ноя 17 17:04:02 2018
+        ///--
+        ///-- Text encoding used: System
+        ///--
+        ///PRAGMA foreign_keys = off;
+        ///BEGIN TRANSACTION;
         ///
-        ///COMMIT TRANSACTION;
-        ///PRAGMA foreign_keys = on;
-        ///.
+        ///-- Table: Dict
+        ///CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
+        ///
+        ///-- Table: DictAddins
+        ///CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB);
+        ///
+        ///-- Table: EmbedDict
+        ///CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTE [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string word2vect_create {
             get {

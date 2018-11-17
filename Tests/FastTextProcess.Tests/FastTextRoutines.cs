@@ -71,7 +71,7 @@ namespace FastTextProcess.Tests
                     {
                         using (var strm = file.OpenText())
                         {
-                            proc.Process(strm.ReadToEnd(), src_id: file.Name);
+                            proc.Process(strm.ReadToEnd(), src_id: file.Name, proc_info: "neg");
                         }
                     }
                 );

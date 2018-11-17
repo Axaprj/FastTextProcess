@@ -6,7 +6,6 @@ namespace FastTextProcess.Entities
 {
     public class EmbedDict
     {
-        internal const string Tbln = "EmbedDict";
         internal const string FldnInx = "Inx";
         internal const string FldnDictId = "DictId";
         internal const string FldnDictAddinsId = "DictAddinsId";

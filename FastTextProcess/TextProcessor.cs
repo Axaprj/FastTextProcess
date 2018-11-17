@@ -15,6 +15,7 @@ namespace FastTextProcess
         {
             public string Src;
             public string SrcOriginalId;
+            public string SrcProcInfo;
             public string[] Preprocessed;
             public long[] Embedded;
         }
@@ -127,12 +128,17 @@ namespace FastTextProcess
             );
         }
 
-        public void Process(string src, string src_id)
+        public void Process(string src, string src_id, string proc_info)
         {
             if (CancelTokenSrc.IsCancellationRequested)
                 throw new InvalidOperationException(
                     $"Processing was canceled. Terminated before process '{src_id}' source.");
-            var item = new ProcessItem { Src = src, SrcOriginalId = src_id };
+            var item = new ProcessItem
+            {
+                Src = src,
+                SrcOriginalId = src_id,
+                SrcProcInfo = proc_info
+            };
             QueueProcess.Add(item);
         }
 
