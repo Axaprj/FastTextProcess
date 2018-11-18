@@ -57,18 +57,54 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
+        public void ProcFillEmptyVectDictEn()
+        {
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
+                if (words.Any())
+                {
+                    var fmod = Resources.DataArcDir + "cc.en.300.bin";
+                    AssertFileExists(fmod, "FastText model file");
+                    var fexe = Resources.DataArcDir + "fasttext.exe";
+                    AssertFileExists(fexe, "FastText executable");
+                    var trans = dbx.BeginTransaction();
+                    try
+                    {
+                        var dict = dbx.Dict(DictDbSet.DictKind.Addin);
+                        using (var ftl = new FastTextLauncher(fexe, fmod))
+                        {
+                            ftl.RunAsync((w2v) => dict.UpdateVectOfWord(w2v));
+                            foreach (var w in words)
+                                ftl.Push(w);
+                        }
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void ProcAclImdb()
         {
             using (var proc = new TextProcessor(
                 DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
             {
+                Log("Process Negative samples ...");
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
                 ProcAclImdbDir(proc, path, proc_info: "neg");
+                Log("Process Positive samples ...");
                 path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/pos/"));
                 ProcAclImdbDir(proc, path, proc_info: "pos");
             }
+            Log("Done");
         }
 
         void ProcAclImdbDir(TextProcessor proc, string path, string proc_info)

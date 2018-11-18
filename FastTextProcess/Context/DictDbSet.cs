@@ -1,5 +1,6 @@
 ﻿using FastTextProcess.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
@@ -22,6 +23,7 @@ namespace FastTextProcess.Context
         #region SQL Commands
         SQLiteCommand _cmdInsert;
         SQLiteCommand _cmdFindIdByWord;
+        SQLiteCommand _cmdUpdateVectOfWord;
 
         SQLiteCommand CmdInsert
         {
@@ -38,6 +40,24 @@ namespace FastTextProcess.Context
                     _cmdInsert.Prepare();
                 }
                 return _cmdInsert;
+            }
+        }
+
+        SQLiteCommand CmdUpdateVectOfWord
+        {
+            get
+            {
+                if (_cmdUpdateVectOfWord == null)
+                {
+                    var sql = string.Format(
+                        "UPDATE {0} SET {2}=${2} WHERE {1}=${1}",
+                        TableName, Dict.FldnWord, Dict.FldnVect);
+                    _cmdUpdateVectOfWord = Ctx.CreateCmd(sql);
+                    _cmdUpdateVectOfWord.Parameters.Add(Dict.FldnWord, DbType.String);
+                    _cmdUpdateVectOfWord.Parameters.Add(Dict.FldnVect, DbType.Binary);
+                    _cmdUpdateVectOfWord.Prepare();
+                }
+                return _cmdUpdateVectOfWord;
             }
         }
 
@@ -68,6 +88,14 @@ namespace FastTextProcess.Context
             return res;
         }
 
+        public int UpdateVectOfWord(Dict w2v)
+        {
+            CmdUpdateVectOfWord.Parameters[Dict.FldnWord].Value = w2v.Word;
+            CmdUpdateVectOfWord.Parameters[Dict.FldnVect].Value = w2v.Vect;
+            var res = CmdUpdateVectOfWord.ExecuteNonQuery();
+            return res;
+        }
+
         public long? FindIdByWord(string word)
         {
             CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
@@ -82,6 +110,19 @@ namespace FastTextProcess.Context
                 : $"DROP INDEX inxWord{TableName}";
             var cmd = Ctx.CreateCmd(sql);
             return cmd.ExecuteNonQuery();
+        }
+
+        public IEnumerable<string> GetWordsWithEmptyVect()
+        {
+            var sql = string.Format(
+                       "SELECT {1} FROM {0} WHERE {2} IS NULL",
+                       TableName, Dict.FldnWord, Dict.FldnVect);
+            var cmd = Ctx.CreateCmd(sql);
+            using (var rd = cmd.ExecuteReader())
+            {
+                while (rd.Read())
+                    yield return rd.GetString(0);
+            }
         }
     }
 }
