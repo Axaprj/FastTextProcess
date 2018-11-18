@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FastTextProcess.Context;
+using FastTextProcess.Entities;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -11,15 +13,6 @@ namespace FastTextProcess
 {
     public class TextProcessor : IDisposable
     {
-        class ProcessItem
-        {
-            public string Src;
-            public string SrcOriginalId;
-            public string SrcProcInfo;
-            public string[] Preprocessed;
-            public long[] Embedded;
-        }
-
         readonly BlockingCollection<ProcessItem> QueueProcess;
         readonly Task taskPreprocess;
 
@@ -31,7 +24,7 @@ namespace FastTextProcess
 
         readonly CancellationTokenSource CancelTokenSrc;
 
-        public TextProcessor(string dbf_w2v
+        public TextProcessor(string dbf_w2v, string dbf_res
             , Preprocessor.ITextPreprocess preprocessor
             , int boundedCapacity = 10000)
         {
@@ -101,9 +94,11 @@ namespace FastTextProcess
                             , (itm) =>
                             {
                                 itm.Embedded = wordToDict.WordsToInxsForParallel(itm.Preprocessed);
+                                QueueStoreResult.Add(itm);
                             }
                         );
                         wordToDict.StoreEmbed();
+                        QueueStoreResult.CompleteAdding();
                     }
                 }
                 catch
@@ -115,14 +110,24 @@ namespace FastTextProcess
             );
             taskStoreResult = Task.Run(() =>
             {
-                try
+                FastTextResultDB.CreateIfNotExistsDB(dbf_res);
+                using (var res_dbx = new FastTextResultDB(dbf_res))
                 {
-
-                }
-                catch
-                {
-                    CancelTokenSrc.Cancel();
-                    throw;
+                    var tran = res_dbx.BeginTransaction();
+                    try
+                    {
+                        foreach (var itm in QueueStoreResult.GetConsumingEnumerable(cancel_token))
+                        {
+                            res_dbx.StoreProcessItem(itm);
+                        }
+                        tran.Commit();
+                    }
+                    catch
+                    {
+                        tran.Rollback();
+                        CancelTokenSrc.Cancel();
+                        throw;
+                    }
                 }
             }, cancel_token
             );

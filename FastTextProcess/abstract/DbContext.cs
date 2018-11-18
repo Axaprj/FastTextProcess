@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Text;
 
 namespace FastTextProcess
@@ -8,14 +9,14 @@ namespace FastTextProcess
     /// <summary>
     /// Abstract DB context (base class)
     /// </summary>
-    public abstract class DbContext:IDisposable
+    public abstract class DbContext : IDisposable
     {
         readonly SQLiteConnection _conn;
 
-        public DbContext(string db_file, bool foreign_keys=true)
+        public DbContext(string db_file, bool foreign_keys = true)
         {
             var conn_str = $"Data Source=\"{db_file}\";Version=3;";
-            if(foreign_keys)
+            if (foreign_keys)
                 conn_str += "foreign keys=true;";
             _conn = new SQLiteConnection(conn_str);
             _conn.Open();
@@ -27,8 +28,10 @@ namespace FastTextProcess
             _conn.Dispose();
         }
 
-        internal static int CreateDB(string db_file, string ddl_script)
+        internal static int CreateDB(string db_file, string ddl_script, bool if_not_exists = false)
         {
+            if (if_not_exists && File.Exists(db_file))
+                return 0;
             SQLiteConnection.CreateFile(db_file);
             using (var conn = new SQLiteConnection($"Data Source=\"{db_file}\";Version=3;"))
             {

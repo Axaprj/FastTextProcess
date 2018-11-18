@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Сб ноя 17 20:24:53 2018
+-- File generated with SQLiteStudio v3.2.1 on Вс ноя 18 16:18:53 2018
 --
 -- Text encoding used: System
 --
@@ -10,10 +10,10 @@ BEGIN TRANSACTION;
 CREATE TABLE Dict (Inx INTEGER PRIMARY KEY, VectStr TEXT NOT NULL);
 
 -- Table: Src
-CREATE TABLE Src (Id INTEGER PRIMARY KEY AUTOINCREMENT, OriginalId TEXT NOT NULL UNIQUE, ProcInfo TEXT, DbgInfo TEXT);
+CREATE TABLE Src (OriginalId TEXT NOT NULL UNIQUE PRIMARY KEY, ProcInfo TEXT, DbgInfo TEXT, DictInxsStr TEXT NOT NULL);
 
--- Table: SrcData
-CREATE TABLE SrcData (SrcId INTEGER REFERENCES Src (Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL, SrcOrder INTEGER NOT NULL, DictInx INTEGER REFERENCES Dict (Inx) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL, PRIMARY KEY (SrcId, SrcOrder));
+-- Index: inxSrcOriginalId
+CREATE INDEX inxSrcOriginalId ON Src (OriginalId);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

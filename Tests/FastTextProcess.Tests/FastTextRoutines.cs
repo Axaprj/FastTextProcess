@@ -15,6 +15,7 @@ namespace FastTextProcess.Tests
     public class FastTextRoutines : TestBase
     {
         const string DBF_W2V_EN = "w2v_en.db";
+        const string DBF_AclImdb = "AclImdb_proc.db";
         public FastTextRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
@@ -59,7 +60,7 @@ namespace FastTextProcess.Tests
         public void ProcAclImdb()
         {
             using (var proc = new TextProcessor(
-                DBF_W2V_EN, new Preprocessor.CommonEn()))
+                DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
             {
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
