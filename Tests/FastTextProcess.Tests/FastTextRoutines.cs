@@ -64,19 +64,30 @@ namespace FastTextProcess.Tests
             {
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
-                var dir = new DirectoryInfo(path);
-                Assert.True(dir.Exists,
-                    $"source folder does not exist: '{path}'");
-                var files = dir.GetFiles("*.txt").AsParallel();
-                Parallel.ForEach(files, (file) =>
-                    {
-                        using (var strm = file.OpenText())
-                        {
-                            proc.Process(strm.ReadToEnd(), src_id: file.Name, proc_info: "neg");
-                        }
-                    }
-                );
+                ProcAclImdbDir(proc, path, proc_info: "neg");
+                path = Path.GetFullPath(
+                    Path.Combine(Resources.DataArcDir, "aclImdb/train/pos/"));
+                ProcAclImdbDir(proc, path, proc_info: "pos");
             }
         }
+
+        void ProcAclImdbDir(TextProcessor proc, string path, string proc_info)
+        {
+            var dir = new DirectoryInfo(path);
+            Assert.True(dir.Exists,
+                $"source folder does not exist: '{path}'");
+            var files = dir.GetFiles("*.txt").AsParallel();
+            Parallel.ForEach(files, (file) =>
+            {
+                using (var strm = file.OpenText())
+                {
+                    proc.Process(strm.ReadToEnd()
+                        , src_id: proc_info + "/" + file.Name
+                        , proc_info: proc_info);
+                }
+            }
+            );
+        }
+
     }
 }
