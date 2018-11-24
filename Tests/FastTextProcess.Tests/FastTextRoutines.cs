@@ -21,7 +21,7 @@ namespace FastTextProcess.Tests
         [Fact]
         public void ProcCreateDbEn()
         {
-            var fvec = Resources.DataArcDir + "cc.en.300.vec";
+            var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
             AssertFileExists(fvec, "FastText file of vectors");
 
             AssertFileNotExists(DBF_W2V_EN, "db word2vect");
@@ -64,9 +64,9 @@ namespace FastTextProcess.Tests
                 var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
                 if (words.Any())
                 {
-                    var fmod = Resources.DataArcDir + "cc.en.300.bin";
+                    var fmod = Path.Combine(Resources.DataArcDir, "cc.en.300.bin");
                     AssertFileExists(fmod, "FastText model file");
-                    var fexe = Resources.DataArcDir + "fasttext.exe";
+                    var fexe = Resources.FastTextBin;
                     AssertFileExists(fexe, "FastText executable");
                     var trans = dbx.BeginTransaction();
                     try

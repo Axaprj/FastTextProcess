@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace FastTextProcess
 {
+    /// <summary>
+    /// FastText process launcher
+    /// TODO: errors handling
+    /// </summary>
     public class FastTextLauncher : IDisposable
     {
         readonly BlockingCollection<Entities.Dict> QueueOut =

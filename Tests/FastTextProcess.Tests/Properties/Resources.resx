@@ -119,5 +119,10 @@
   </resheader>
   <data name="DataArcDir" xml:space="preserve">
     <value>./../../../../../../data.arc/</value>
+    <comment>data folder</comment>
+  </data>
+  <data name="FastTextBin" xml:space="preserve">
+    <value>./../../../../../../data.arc/fasttext.exe</value>
+    <comment>fasttext executable</comment>
   </data>
 </root>

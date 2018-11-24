@@ -68,5 +68,14 @@ namespace FastTextProcess.Tests.Properties {
                 return ResourceManager.GetString("DataArcDir", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ./../../../../../../data.arc/fasttext.exe.
+        /// </summary>
+        internal static string FastTextBin {
+            get {
+                return ResourceManager.GetString("FastTextBin", resourceCulture);
+            }
+        }
     }
 }
