@@ -30,7 +30,7 @@ namespace FastTextProcess.Preprocessor
         /// </summary>
         string CleanCommonEn(string str)
         {
-            str = str.ToLower();
+            //str = str.ToLower();
             str = rexClnCommonEn.Replace(str, " ");
             str = str
                 //.Replace(" ' s", " 's")

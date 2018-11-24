@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on бс эюџ 17 17:04:02 2018
+-- File generated with SQLiteStudio v3.2.1 on бс эюџ 24 15:47:14 2018
 --
 -- Text encoding used: System
 --
@@ -30,10 +30,10 @@ CREATE INDEX inxWordDictAddins ON DictAddins (Word);
 -- View: EmbedJoin
 CREATE VIEW EmbedJoin AS SELECT * FROM 
 (
-SELECT ed.Inx As Inx, ed.Freq As Freq, d.Word As Word, d.Vect As Vect FROM EmbedDict ed 
+SELECT ed.Inx As Inx, ed.Freq As Freq, d.Word As Word, "main" As Dict, d.Vect As Vect FROM EmbedDict ed 
     JOIN Dict d ON (ed.DictId = d.Id)
 UNION
-SELECT ed.Inx As Inx, ed.Freq As Freq, da.Word As Word, da.Vect As Vect FROM EmbedDict ed 
+SELECT ed.Inx As Inx, ed.Freq As Freq, da.Word As Word, "addin" As Dict, da.Vect As Vect FROM EmbedDict ed 
     JOIN DictAddins da ON (ed.DictAddinsId = da.Id)
 )
 ORDER BY Inx;

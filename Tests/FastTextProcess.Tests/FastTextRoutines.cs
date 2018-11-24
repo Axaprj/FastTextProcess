@@ -24,7 +24,7 @@ namespace FastTextProcess.Tests
             var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
             AssertFileExists(fvec, "FastText file of vectors");
 
-            AssertFileNotExists(DBF_W2V_EN, "db word2vect");
+            AssertFileNotExists(DBF_W2V_EN, "word2vect En common DB");
             FastTextProcessDB.CreateDB(DBF_W2V_EN);
 
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys: false))
@@ -125,5 +125,20 @@ namespace FastTextProcess.Tests
             );
         }
 
+        [Fact]
+        public void ProcCleanResults()
+        {
+            if (File.Exists(DBF_AclImdb))
+            {
+                File.Delete(DBF_AclImdb);
+                Log($"'{DBF_AclImdb}' deleted");
+            }
+            AssertFileExists(DBF_W2V_EN, "word2vect En common DB");
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                dbx.EmbedDict().DeleteAll();
+                dbx.Dict(DictDbSet.DictKind.Addin).DeleteAll();
+            }
+        }
     }
 }

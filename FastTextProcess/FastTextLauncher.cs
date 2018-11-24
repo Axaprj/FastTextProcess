@@ -76,9 +76,12 @@ namespace FastTextProcess
             QueueIn.CompleteAdding();
             try
             {
-                taskFTIn.Wait();
-                taskFTOut.Wait();
-                taskFTRes.Wait();
+                if (taskFTOut != null)
+                    taskFTOut.Wait();
+                if (taskFTIn != null)
+                    taskFTIn.Wait();
+                if (taskFTRes != null)
+                    taskFTRes.Wait();
             }
             finally
             {
