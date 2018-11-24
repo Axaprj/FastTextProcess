@@ -8,6 +8,7 @@ namespace FastTextProcess.Context
 {
     /// <summary>
     /// FastText dictionary DB: Dict/DictAddins DbSet
+    /// TAGS: not_thread_safe
     /// </summary>
     public class DictDbSet : DbSet
     {

@@ -10,6 +10,7 @@ namespace FastTextProcess.Context
 {
     /// <summary>
     /// FastText processing result DB context
+    /// TAGS: not_thread_safe
     /// </summary>
     public class FastTextResultDB : DbContext
     {
@@ -21,7 +22,6 @@ namespace FastTextProcess.Context
 
         #region SQL Commands
         SQLiteCommand _cmdSrcInsert;
-
         SQLiteCommand CmdSrcInsert
         {
             get
@@ -46,6 +46,25 @@ namespace FastTextProcess.Context
                 return _cmdSrcInsert;
             }
         }
+        SQLiteCommand _cmdDictInsert;
+        SQLiteCommand CmdDictInsert
+        {
+            get
+            {
+                if (_cmdDictInsert == null)
+                {
+                    var sql = string.Format(
+                        "INSERT INTO {0} ({1}, {2}) VALUES (${1}, ${2})",
+                        ProcessItem.TblnDict, ProcessItem.FldnDictInx, ProcessItem.FldnDictVectStr
+                        );
+                    _cmdDictInsert = CreateCmd(sql);
+                    _cmdDictInsert.Parameters.Add(ProcessItem.FldnDictInx, DbType.Int64);
+                    _cmdDictInsert.Parameters.Add(ProcessItem.FldnDictVectStr, DbType.String);
+                    _cmdDictInsert.Prepare();
+                }
+                return _cmdDictInsert;
+            }
+        }
         #endregion
 
         internal long StoreProcessItem(ProcessItem itm)
@@ -58,5 +77,23 @@ namespace FastTextProcess.Context
                 throw new InvalidOperationException($"StoreProcessItem failed: {itm}");
             return LastInsertRowId;
         }
+
+        public void StoreDictItem(EmbedJoin itm)
+        {
+            CmdDictInsert.Parameters[ProcessItem.FldnDictInx].Value = itm.Inx;
+            CmdDictInsert.Parameters[ProcessItem.FldnDictVectStr].Value = itm.GetVectStr();
+            if (CmdDictInsert.ExecuteNonQuery() != 1)
+                throw new InvalidOperationException($"StoreDictItem failed: {itm}");
+        }
+
+        public long? GetDictInxMax()
+        {
+            var sql = string.Format("SELECT MAX({1}) FROM {0}",
+                ProcessItem.TblnDict, ProcessItem.FldnDictInx);
+            var cmd = CreateCmd(sql);
+            var res = cmd.ExecuteScalar();
+            return res == null || DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
+        }
+
     }
 }

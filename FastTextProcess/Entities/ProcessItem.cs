@@ -12,6 +12,10 @@ namespace FastTextProcess.Entities
         internal const string FldnSrcDbgInfo = "DbgInfo";
         internal const string FldnSrcDictInxsStr = "DictInxsStr";
 
+        internal const string TblnDict = "Dict";
+        internal const string FldnDictInx = "Inx";
+        internal const string FldnDictVectStr = "VectStr";
+
         public string Src;
         public string SrcOriginalId;
         public string SrcProcInfo;

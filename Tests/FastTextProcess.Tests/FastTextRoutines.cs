@@ -92,7 +92,30 @@ namespace FastTextProcess.Tests
         [Fact]
         public void SubProcAclImdbDictEn()
         {
-
+            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                using (var dbx_dst = new FastTextResultDB(DBF_AclImdb))
+                {
+                    var tran = dbx_dst.BeginTransaction();
+                    try
+                    {
+                        var inx_old = dbx_dst.GetDictInxMax();
+                        long inx_check = inx_old.HasValue ? inx_old.Value + 1 : 0;
+                        dbx_src.ProcessEmbedJoins((itm) =>
+                        {
+                            Assert.Equal(inx_check, itm.Inx);
+                            dbx_dst.StoreDictItem(itm);
+                            inx_check++;
+                        }, from_inx: inx_check);
+                        tran.Commit();
+                    }
+                    catch
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
 
         [Fact]

@@ -17,12 +17,24 @@ namespace FastTextProcess.Entities
         public static Dict Create(string str)
         {
             var sarr = str.Trim().Split(' ');
-            var sfarr = new string[sarr.Length-1];
+            var sfarr = new string[sarr.Length - 1];
             Array.Copy(sarr, 1, sfarr, 0, sfarr.Length);
             var farr = Array.ConvertAll(sfarr, float.Parse);
             var barr = new byte[farr.Length * 4];
             Buffer.BlockCopy(farr, 0, barr, 0, barr.Length);
             return new Dict { Word = sarr[0], Vect = barr };
+        }
+
+        public static float[] GetVectFloat(byte[] vect)
+        {
+            var lenb = vect.Length;
+            if (vect.Length % 4 != 0)
+                throw new InvalidOperationException(
+                    $"Wrong vector byte array length {lenb}");
+            var res = new float[(int)lenb / 4];
+            for (int inx = 0; inx < res.Length; inx++)
+                res[inx] = BitConverter.ToSingle(vect, inx * 4);
+            return res;
         }
     }
 }

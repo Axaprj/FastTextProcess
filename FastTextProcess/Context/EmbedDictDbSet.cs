@@ -8,6 +8,7 @@ namespace FastTextProcess.Context
 {
     /// <summary>
     /// FastText dictionary DB: EmbedDict DbSet
+    /// TAGS: not_thread_safe
     /// </summary>
     public class EmbedDictDbSet : DbSet
     {
