@@ -57,7 +57,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        public void ProcFillEmptyVectDictEn()
+        public void SubProcFillEmptyVectDictEn()
         {
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
             {
@@ -90,6 +90,12 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
+        public void SubProcAclImdbDictEn()
+        {
+
+        }
+
+        [Fact]
         public void ProcAclImdb()
         {
             using (var proc = new TextProcessor(
@@ -104,6 +110,8 @@ namespace FastTextProcess.Tests
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/pos/"));
                 ProcAclImdbDir(proc, path, proc_info: "pos");
             }
+            SubProcFillEmptyVectDictEn();
+            SubProcAclImdbDictEn();
             Log("Done");
         }
 
@@ -126,7 +134,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        public void ProcCleanResults()
+        public void ProcAclImdbResultClean()
         {
             if (File.Exists(DBF_AclImdb))
             {
