@@ -127,11 +127,11 @@ namespace FastTextProcess.Tests
                 Log("Process Negative samples ...");
                 var path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
-                ProcAclImdbDir(proc, path, proc_info: "neg");
+                ProcAclImdbDir(proc, path, proc_info: "1 0");
                 Log("Process Positive samples ...");
                 path = Path.GetFullPath(
                     Path.Combine(Resources.DataArcDir, "aclImdb/train/pos/"));
-                ProcAclImdbDir(proc, path, proc_info: "pos");
+                ProcAclImdbDir(proc, path, proc_info: "0 1");
             }
             SubProcFillEmptyVectDictEn();
             SubProcAclImdbDictEn();
