@@ -35,13 +35,13 @@ namespace FastTextProcess.Preprocessor
             str = str
                 //.Replace(" ' s", " 's")
                 //.Replace(" ' ve", " 've")
-                // .Replace("n't", " n't") // not in dict
+                // .Replace("n't", " n't") // not in fasttext dict
                 //.Replace(" ' re", " 're")
                 //.Replace(" ' d", " 'd")
                 //.Replace(" ' ll", " 'll")
                 .Replace("'", " ' ") // add
                 .Replace("\"", " \" ") // add
-                .Replace("`", " ` ") // add
+                .Replace("`", " ' ") // add
                 .Replace(".", " . ") // add
                 .Replace(",", " , ")
                 .Replace("!", " ! ")
