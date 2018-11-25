@@ -20,7 +20,7 @@ namespace FastTextProcess.Tests
 
         [Fact]
         [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Load PreTrained FastText Database")]
+        [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbEn()
         {
             var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
@@ -186,7 +186,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Task", "AclImdb")]
+        [Trait("Task", "EN Common")]
         [Trait("SubProcess", "Insert Predefined Vectors")]
         public void SubProcAclImdbInsertPredefinedMacro()
         {
@@ -204,7 +204,7 @@ namespace FastTextProcess.Tests
                 long? ed_inx = embed_dict.FindInxById(vect_empty.Id, DictDbSet.DictKind.Addin);
                 if (ed_inx.HasValue)
                     Assert.True(ed_inx.Value == 0, 
-                        $"'{vect_empty.Word}' dictionary Inx should be Zero");
+                        $"'{vect_empty.Word}' dictionary index should be Zero");
                 else
                 {
                     var ed = new EmbedDict { Inx = 0, DictAddinsId = vect_empty.Id };
