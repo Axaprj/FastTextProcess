@@ -19,12 +19,13 @@ namespace FastTextProcess.Tests
         public FastTextRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
+        [Trait("Category", "En-Common Process")]
         public void ProcCreateDbEn()
         {
             var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
             AssertFileExists(fvec, "FastText file of vectors");
 
-            AssertFileNotExists(DBF_W2V_EN, "word2vect En common DB");
+            AssertFileNotExists(DBF_W2V_EN, "word2vect En-Common DB");
             FastTextProcessDB.CreateDB(DBF_W2V_EN);
 
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys: false))
@@ -56,69 +57,9 @@ namespace FastTextProcess.Tests
             }
         }
 
+        #region ProcAclImdb
         [Fact]
-        public void SubProcFillEmptyVectDictEn()
-        {
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
-            {
-                var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
-                if (words.Any())
-                {
-                    var fmod = Path.Combine(Resources.DataArcDir, "cc.en.300.bin");
-                    AssertFileExists(fmod, "FastText model file");
-                    var fexe = Resources.FastTextBin;
-                    AssertFileExists(fexe, "FastText executable");
-                    var trans = dbx.BeginTransaction();
-                    try
-                    {
-                        var dict = dbx.Dict(DictDbSet.DictKind.Addin);
-                        using (var ftl = new FastTextLauncher(fexe, fmod))
-                        {
-                            ftl.RunAsync((w2v) => dict.UpdateVectOfWord(w2v));
-                            foreach (var w in words)
-                                ftl.Push(w);
-                        }
-                        trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        throw;
-                    }
-                }
-            }
-        }
-
-        [Fact]
-        public void SubProcAclImdbDictEn()
-        {
-            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
-            {
-                using (var dbx_dst = new FastTextResultDB(DBF_AclImdb))
-                {
-                    var tran = dbx_dst.BeginTransaction();
-                    try
-                    {
-                        var inx_old = dbx_dst.GetDictInxMax();
-                        long inx_check = inx_old.HasValue ? inx_old.Value + 1 : 0;
-                        dbx_src.ProcessEmbedJoins((itm) =>
-                        {
-                            Assert.Equal(inx_check, itm.Inx);
-                            dbx_dst.StoreDictItem(itm);
-                            inx_check++;
-                        }, from_inx: inx_check);
-                        tran.Commit();
-                    }
-                    catch
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
-            }
-        }
-
-        [Fact]
+        [Trait("Category", "En-Common Process")]
         public void ProcAclImdb()
         {
             using (var proc = new TextProcessor(
@@ -155,8 +96,10 @@ namespace FastTextProcess.Tests
             }
             );
         }
+        #endregion
 
         [Fact]
+        [Trait("Category", "En-Common Process")]
         public void ProcAclImdbResultClean()
         {
             if (File.Exists(DBF_AclImdb))
@@ -164,11 +107,75 @@ namespace FastTextProcess.Tests
                 File.Delete(DBF_AclImdb);
                 Log($"'{DBF_AclImdb}' deleted");
             }
-            AssertFileExists(DBF_W2V_EN, "word2vect En common DB");
+            AssertFileExists(DBF_W2V_EN, "word2vect En-Common DB");
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
             {
                 dbx.EmbedDict().DeleteAll();
                 dbx.Dict(DictDbSet.DictKind.Addin).DeleteAll();
+            }
+        }
+
+        [Fact]
+        [Trait("Category", "En-Common subroutine")]
+        public void SubProcFillEmptyVectDictEn()
+        {
+            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
+                if (words.Any())
+                {
+                    var fmod = Path.Combine(Resources.DataArcDir, "cc.en.300.bin");
+                    AssertFileExists(fmod, "FastText model file");
+                    var fexe = Resources.FastTextBin;
+                    AssertFileExists(fexe, "FastText executable");
+                    var trans = dbx.BeginTransaction();
+                    try
+                    {
+                        var dict = dbx.Dict(DictDbSet.DictKind.Addin);
+                        using (var ftl = new FastTextLauncher(fexe, fmod))
+                        {
+                            ftl.RunAsync((w2v) => dict.UpdateVectOfWord(w2v));
+                            foreach (var w in words)
+                                ftl.Push(w);
+                        }
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        [Fact]
+        [Trait("Category", "En-Common subroutine")]
+        public void SubProcAclImdbDictEn()
+        {
+            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                using (var dbx_dst = new FastTextResultDB(DBF_AclImdb))
+                {
+                    var tran = dbx_dst.BeginTransaction();
+                    try
+                    {
+                        var inx_old = dbx_dst.GetDictInxMax();
+                        long inx_check = inx_old.HasValue ? inx_old.Value + 1 : 0;
+                        dbx_src.ProcessEmbedJoins((itm) =>
+                        {
+                            Assert.Equal(inx_check, itm.Inx);
+                            dbx_dst.StoreDictItem(itm);
+                            inx_check++;
+                        }, from_inx: inx_check);
+                        tran.Commit();
+                    }
+                    catch
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
             }
         }
     }
