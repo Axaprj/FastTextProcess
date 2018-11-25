@@ -19,7 +19,8 @@ namespace FastTextProcess.Tests
         public FastTextRoutines(ITestOutputHelper output) : base(output) { }
 
         [Fact]
-        [Trait("Category", "En-Common Process")]
+        [Trait("Task", "EN Common")]
+        [Trait("SubProcess", "Load PreTrained FastText Database")]
         public void ProcCreateDbEn()
         {
             var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
@@ -59,7 +60,8 @@ namespace FastTextProcess.Tests
 
         #region ProcAclImdb
         [Fact]
-        [Trait("Category", "En-Common Process")]
+        [Trait("Task", "AclImdb")]
+        [Trait("Process", "Processing Full")]
         public void ProcAclImdb()
         {
             SubProcAclImdbInsertPredefinedMacro();
@@ -100,7 +102,8 @@ namespace FastTextProcess.Tests
         #endregion
 
         [Fact]
-        [Trait("Category", "En-Common Process")]
+        [Trait("Task", "AclImdb")]
+        [Trait("Process", "Clean Processing Results")]
         public void ProcAclImdbResultClean()
         {
             if (File.Exists(DBF_AclImdb))
@@ -117,7 +120,8 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Category", "En-Common SubProcess")]
+        [Trait("Task", "EN Common")]
+        [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors")]
         public void SubProcFillEmptyVectDictEn()
         {
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
@@ -151,7 +155,8 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Category", "En-Common SubProcess")]
+        [Trait("Task", "AclImdb")]
+        [Trait("SubProcess", "Build Result Dictionary")]
         public void SubProcAclImdbDictEn()
         {
             using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
@@ -181,7 +186,8 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Category", "En-Common SubProcess")]
+        [Trait("Task", "AclImdb")]
+        [Trait("SubProcess", "Insert Predefined Vectors")]
         public void SubProcAclImdbInsertPredefinedMacro()
         {
             using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
