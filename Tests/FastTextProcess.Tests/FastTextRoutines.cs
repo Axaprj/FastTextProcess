@@ -62,6 +62,7 @@ namespace FastTextProcess.Tests
         [Trait("Category", "En-Common Process")]
         public void ProcAclImdb()
         {
+            SubProcAclImdbInsertPredefinedMacro();
             using (var proc = new TextProcessor(
                 DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
             {
@@ -116,7 +117,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Category", "En-Common subroutine")]
+        [Trait("Category", "En-Common SubProcess")]
         public void SubProcFillEmptyVectDictEn()
         {
             using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
@@ -150,7 +151,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        [Trait("Category", "En-Common subroutine")]
+        [Trait("Category", "En-Common SubProcess")]
         public void SubProcAclImdbDictEn()
         {
             using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
@@ -175,6 +176,33 @@ namespace FastTextProcess.Tests
                         tran.Rollback();
                         throw;
                     }
+                }
+            }
+        }
+
+        [Fact]
+        [Trait("Category", "En-Common SubProcess")]
+        public void SubProcAclImdbInsertPredefinedMacro()
+        {
+            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
+            {
+                var vect_empty = Dict.CreateEmpty();
+                //var vect_fl = Dict.GetVectFloat(vect_empty.Vect);
+                var dict = dbx_src.Dict(DictDbSet.DictKind.Addin);
+                long? vect_empty_id = dict.FindIdByWord(vect_empty.Word);
+                if (vect_empty_id.HasValue)
+                    vect_empty.Id = vect_empty_id.Value;
+                else
+                    dict.Insert(vect_empty);
+                var embed_dict = dbx_src.EmbedDict();
+                long? ed_inx = embed_dict.FindInxById(vect_empty.Id, DictDbSet.DictKind.Addin);
+                if (ed_inx.HasValue)
+                    Assert.True(ed_inx.Value == 0, 
+                        $"'{vect_empty.Word}' dictionary Inx should be Zero");
+                else
+                {
+                    var ed = new EmbedDict { Inx = 0, DictAddinsId = vect_empty.Id };
+                    embed_dict.Insert(ed);
                 }
             }
         }

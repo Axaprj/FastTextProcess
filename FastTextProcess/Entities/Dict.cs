@@ -25,6 +25,13 @@ namespace FastTextProcess.Entities
             return new Dict { Word = sarr[0], Vect = barr };
         }
 
+        public static Dict CreateEmpty(string word = "<%NONE%>", int vect_sz = 300)
+        {
+            var res = new Dict { Id = -1, Word = word, Vect = new byte[vect_sz * 4] };
+            Array.Clear(res.Vect, 0, vect_sz * 4);
+            return res;
+        }
+
         public static float[] GetVectFloat(byte[] vect)
         {
             var lenb = vect.Length;
