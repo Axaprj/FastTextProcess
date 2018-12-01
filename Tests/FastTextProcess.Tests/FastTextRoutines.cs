@@ -1,6 +1,5 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
-using FastTextProcess.Tests.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +22,7 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbEn()
         {
-            var fvec = Path.Combine(Resources.DataArcDir, "cc.en.300.vec");
+            var fvec = DataArcPath("cc.en.300.vec");
             AssertFileExists(fvec, "FastText file of vectors");
 
             AssertFileNotExists(DBF_W2V_EN, "word2vect En-Common DB");
@@ -69,12 +68,10 @@ namespace FastTextProcess.Tests
                 DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
             {
                 Log("Process Negative samples ...");
-                var path = Path.GetFullPath(
-                    Path.Combine(Resources.DataArcDir, "aclImdb/train/neg/"));
+                var path = DataArcPath("aclImdb/train/neg/");
                 ProcAclImdbDir(proc, path, proc_info: "1 0");
                 Log("Process Positive samples ...");
-                path = Path.GetFullPath(
-                    Path.Combine(Resources.DataArcDir, "aclImdb/train/pos/"));
+                path = DataArcPath("aclImdb/train/pos/");
                 ProcAclImdbDir(proc, path, proc_info: "0 1");
             }
             SubProcFillEmptyVectDictEn();
@@ -129,9 +126,9 @@ namespace FastTextProcess.Tests
                 var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
                 if (words.Any())
                 {
-                    var fmod = Path.Combine(Resources.DataArcDir, "cc.en.300.bin");
+                    var fmod = DataArcPath("cc.en.300.bin");
                     AssertFileExists(fmod, "FastText model file");
-                    var fexe = Resources.FastTextBin;
+                    var fexe = FastTextBin;
                     AssertFileExists(fexe, "FastText executable");
                     var trans = dbx.BeginTransaction();
                     try

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,33 @@ namespace FastTextProcess.Tests
         {
             fpath = Path.GetFullPath(fpath);
             Assert.False(File.Exists(fpath), $"'{fpath}' is exist ({descr})");
+        }
+
+        IConfigurationRoot ConfRoot
+        {
+            get
+            {
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("FastTextProcess.Tests.json", optional: true, reloadOnChange: true)
+                    .Build();
+                return config;
+            }
+        }
+
+        protected string DataArcPath(string file_name)
+        {
+            var dir = ConfRoot.GetSection("DataArcDir").Value;
+            return Path.GetFullPath(Path.Combine(dir, file_name));
+        }
+
+        protected string FastTextBin
+        {
+            get
+            {
+                var bin = ConfRoot.GetSection("FastTextBin").Value;
+                return Path.GetFullPath(bin);
+            }
         }
     }
 }
