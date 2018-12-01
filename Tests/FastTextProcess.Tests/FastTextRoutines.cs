@@ -75,7 +75,7 @@ namespace FastTextProcess.Tests
                 ProcAclImdbDir(proc, path, proc_info: "0 1");
             }
             SubProcFillEmptyVectDictEn();
-            SubProcAclImdbDictEn();
+            SubProcAclImdbResultDictEn();
             Log("Done");
         }
 
@@ -115,7 +115,7 @@ namespace FastTextProcess.Tests
                 );
             }
             SubProcFillEmptyVectDictEn();
-            SubProcAclImdbDictEn();
+            SubProcAclImdbResultDictEn();
             Log($"Done ({src_id_pref})");
         }
 
@@ -194,7 +194,7 @@ namespace FastTextProcess.Tests
         [Fact]
         [Trait("Task", "AclImdb")]
         [Trait("SubProcess", "Build Result Dictionary")]
-        public void SubProcAclImdbDictEn()
+        public void SubProcAclImdbResultDictEn()
         {
             using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
             {
