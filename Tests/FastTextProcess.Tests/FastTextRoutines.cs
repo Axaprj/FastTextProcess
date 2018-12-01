@@ -60,8 +60,8 @@ namespace FastTextProcess.Tests
         #region ProcAclImdb
         [Fact]
         [Trait("Task", "AclImdb")]
-        [Trait("Process", "Processing Full")]
-        public void ProcAclImdb()
+        [Trait("Process", "Append Train Data (Processing Full)")]
+        public void ProcAclImdbTrain()
         {
             SubProcAclImdbInsertPredefinedMacro();
             using (var proc = new TextProcessor(
@@ -77,6 +77,46 @@ namespace FastTextProcess.Tests
             SubProcFillEmptyVectDictEn();
             SubProcAclImdbDictEn();
             Log("Done");
+        }
+
+        [Fact]
+        [Trait("Task", "AclImdb")]
+        [Trait("Process", "Append Tests Data (Processing Full)")]
+        public void ProcAclImdbTest()
+        {
+            var path = DataArcPath("aclImdb/test/neg/");
+            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref:"test/neg");
+            path = DataArcPath("aclImdb/test/pos/");
+            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "test/pos");
+            Log("Done (ProcAclImdbTest)");
+        }
+
+        void ProcAclImdbFull(string data_dir, string proc_info, string src_id_pref)
+        {
+            SubProcAclImdbInsertPredefinedMacro();
+            using (var proc = new TextProcessor(
+                DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
+            {
+                Log($"Process samples '{src_id_pref}' ...");
+                var dir_path = DataArcPath(data_dir);
+                var dir = new DirectoryInfo(dir_path);
+                Assert.True(dir.Exists,
+                    $"source folder does not exist: '{dir_path}'");
+                var files = dir.GetFiles("*.txt").AsParallel();
+                Parallel.ForEach(files, (file) =>
+                {
+                    using (var strm = file.OpenText())
+                    {
+                        proc.Process(strm.ReadToEnd()
+                            , src_id: src_id_pref + "/" + file.Name
+                            , proc_info: proc_info);
+                    }
+                }
+                );
+            }
+            SubProcFillEmptyVectDictEn();
+            SubProcAclImdbDictEn();
+            Log($"Done ({src_id_pref})");
         }
 
         void ProcAclImdbDir(TextProcessor proc, string path, string proc_info)
