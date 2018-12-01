@@ -42,7 +42,7 @@ namespace FastTextProcess.Tests
             {
                 var config = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("FastTextProcess.Tests.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("FastTextProcess.Tests.json", optional: false, reloadOnChange: false)
                     .Build();
                 return config;
             }

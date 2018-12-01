@@ -63,20 +63,14 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Append Train Data (Processing Full)")]
         public void ProcAclImdbTrain()
         {
-            SubProcAclImdbInsertPredefinedMacro();
-            using (var proc = new TextProcessor(
-                DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
-            {
-                Log("Process Negative samples ...");
-                var path = DataArcPath("aclImdb/train/neg/");
-                ProcAclImdbDir(proc, path, proc_info: "1 0");
-                Log("Process Positive samples ...");
-                path = DataArcPath("aclImdb/train/pos/");
-                ProcAclImdbDir(proc, path, proc_info: "0 1");
-            }
+            Log("Process Train Samples ...");
+            var path = DataArcPath("aclImdb/train/neg/");
+            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "train/neg/");
+            path = DataArcPath("aclImdb/train/pos/");
+            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "train/pos/");
             SubProcFillEmptyVectDictEn();
             SubProcAclImdbResultDictEn();
-            Log("Done");
+            Log("Done (ProcAclImdbTrain)");
         }
 
         [Fact]
@@ -84,10 +78,13 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Append Tests Data (Processing Full)")]
         public void ProcAclImdbTest()
         {
+            Log("Process Test Samples ...");
             var path = DataArcPath("aclImdb/test/neg/");
-            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref:"test/neg");
+            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "test/neg/");
             path = DataArcPath("aclImdb/test/pos/");
-            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "test/pos");
+            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "test/pos/");
+            SubProcFillEmptyVectDictEn();
+            SubProcAclImdbResultDictEn();
             Log("Done (ProcAclImdbTest)");
         }
 
@@ -108,33 +105,13 @@ namespace FastTextProcess.Tests
                     using (var strm = file.OpenText())
                     {
                         proc.Process(strm.ReadToEnd()
-                            , src_id: src_id_pref + "/" + file.Name
+                            , src_id: src_id_pref + file.Name
                             , proc_info: proc_info);
                     }
                 }
                 );
             }
-            SubProcFillEmptyVectDictEn();
-            SubProcAclImdbResultDictEn();
             Log($"Done ({src_id_pref})");
-        }
-
-        void ProcAclImdbDir(TextProcessor proc, string path, string proc_info)
-        {
-            var dir = new DirectoryInfo(path);
-            Assert.True(dir.Exists,
-                $"source folder does not exist: '{path}'");
-            var files = dir.GetFiles("*.txt").AsParallel();
-            Parallel.ForEach(files, (file) =>
-            {
-                using (var strm = file.OpenText())
-                {
-                    proc.Process(strm.ReadToEnd()
-                        , src_id: proc_info + "/" + file.Name
-                        , proc_info: proc_info);
-                }
-            }
-            );
         }
         #endregion
 
@@ -240,7 +217,7 @@ namespace FastTextProcess.Tests
                 var embed_dict = dbx_src.EmbedDict();
                 long? ed_inx = embed_dict.FindInxById(vect_empty.Id, DictDbSet.DictKind.Addin);
                 if (ed_inx.HasValue)
-                    Assert.True(ed_inx.Value == 0, 
+                    Assert.True(ed_inx.Value == 0,
                         $"'{vect_empty.Word}' dictionary index should be Zero");
                 else
                 {

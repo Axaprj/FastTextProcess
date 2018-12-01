@@ -48,6 +48,7 @@ namespace FastTextProcess.Preprocessor
                 .Replace("(", " ( ")
                 .Replace(")", " ) ")
                 .Replace("?", " ? ");
+            str = str.Replace("n ' t", "n't");
             str = rexVe.Replace(str, "${lett} 've");
             str = rexRe.Replace(str, "${lett} 're");
             str = rexD.Replace(str, "${lett} 'd");
