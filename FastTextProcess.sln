@@ -5,11 +5,12 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastTextProcess", "FastTextProcess\FastTextProcess.csproj", "{4C4ECC82-38CE-4EAE-98D1-70C5ED275CF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTextProcess.Tests", "Tests\FastTextProcess.Tests\FastTextProcess.Tests.csproj", "{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastTextProcess.Tests", "Tests\FastTextProcess.Tests\FastTextProcess.Tests.csproj", "{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33B96E3A-522B-4F82-985D-E2B3088F4FDE}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.txt = LICENSE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
