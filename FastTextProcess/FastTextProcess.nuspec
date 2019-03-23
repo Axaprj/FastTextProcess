@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FastTextProcess</id>
+    <version>1.0.0</version>
+    <title>FastTextProcess</title>
+    <authors>Igor Alexeev, axaprj2000@yahoo.com</authors>
+    <owners>propertyindicators@gmail.com</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Axaprj/FastTextProcess</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Text to embedded vectors conversion high-performance framework.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>FastText C#</tags>
+  </metadata>
+  <!-- Insert below <metadata> element -->
+  <files>
+    <file src="bin\Release\netstandard2.0\FastTextProcess.dll" target="lib\netstandard2.0\FastTextProcess.dll" />
+    <file src="bin\Release\netstandard2.0\FastTextProcess.xml" target="lib\netstandard2.0\FastTextProcess.xml" />
+    <file src="..\README.md" target="" />
+    <file src="..\LICENSE.txt" target="" />
+  </files>
+</package>

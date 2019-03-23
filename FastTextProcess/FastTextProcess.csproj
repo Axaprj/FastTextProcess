@@ -1,10 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>Copyright (c) 2018 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
+    <Authors>Igor Alexeev</Authors>
+    <Company>propertyindicators@gmail.com</Company>
+    <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Axaprj/FastTextProcess/master/LICENSE.txt</PackageLicenseUrl>
+    <Version>1.0.1</Version>
+    <Configurations>Debug;Release;net462</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\FastTextProcess.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\FastTextProcess.xml</DocumentationFile>
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='net462|AnyCPU'">
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <DocumentationFile>D:\SRC\GIT\FastTextProcess\FastTextProcess\FastTextProcess.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
