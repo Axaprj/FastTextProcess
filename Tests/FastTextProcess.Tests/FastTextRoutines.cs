@@ -22,7 +22,8 @@ namespace FastTextProcess.Tests
         /// </summary>
         /// <param name="ft_vec_fn">FastText vectors filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
-        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn)
+        /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
+        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn, bool with_insert_or_replace=false)
         {
             var fvec = DataArcPath(ft_vec_fn);
             AssertFileExists(fvec, "FastText file of vectors");
@@ -49,7 +50,10 @@ namespace FastTextProcess.Tests
                         if (string.IsNullOrEmpty(line))
                             continue;
                         var w2v = Dict.Create(line);
-                        w2v_tbl.Insert(w2v);
+                        if(with_insert_or_replace)
+                            w2v_tbl.InsertOrReplace(w2v);
+                        else
+                            w2v_tbl.Insert(w2v);
                     }
                 }
                 Log("ControlWordsIndex create...");

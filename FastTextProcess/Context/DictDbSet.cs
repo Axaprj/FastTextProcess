@@ -23,6 +23,7 @@ namespace FastTextProcess.Context
 
         #region SQL Commands
         SQLiteCommand _cmdInsert;
+        SQLiteCommand _cmdInsertOrReplace;
         SQLiteCommand _cmdFindIdByWord;
         SQLiteCommand _cmdUpdateVectOfWord;
 
@@ -43,6 +44,25 @@ namespace FastTextProcess.Context
                 return _cmdInsert;
             }
         }
+
+        SQLiteCommand CmdInsertOrReplace
+        {
+            get
+            {
+                if (_cmdInsertOrReplace == null)
+                {
+                    var sql = string.Format(
+                        "INSERT OR REPLACE INTO {0} ({1}, {2}) VALUES (${1}, ${2})",
+                        TableName, Dict.FldnWord, Dict.FldnVect);
+                    _cmdInsertOrReplace = Ctx.CreateCmd(sql);
+                    _cmdInsertOrReplace.Parameters.Add(Dict.FldnWord, DbType.String);
+                    _cmdInsertOrReplace.Parameters.Add(Dict.FldnVect, DbType.Binary);
+                    _cmdInsertOrReplace.Prepare();
+                }
+                return _cmdInsertOrReplace;
+            }
+        }
+
 
         SQLiteCommand CmdUpdateVectOfWord
         {
@@ -79,12 +99,21 @@ namespace FastTextProcess.Context
             }
         }
         #endregion
-
+        
         public int Insert(Dict w2v)
         {
             CmdInsert.Parameters[Dict.FldnWord].Value = w2v.Word;
             CmdInsert.Parameters[Dict.FldnVect].Value = w2v.Vect;
             var res = CmdInsert.ExecuteNonQuery();
+            w2v.Id = Ctx.LastInsertRowId;
+            return res;
+        }
+
+        public int InsertOrReplace(Dict w2v)
+        {
+            CmdInsertOrReplace.Parameters[Dict.FldnWord].Value = w2v.Word;
+            CmdInsertOrReplace.Parameters[Dict.FldnVect].Value = w2v.Vect;
+            var res = CmdInsertOrReplace.ExecuteNonQuery();
             w2v.Id = Ctx.LastInsertRowId;
             return res;
         }

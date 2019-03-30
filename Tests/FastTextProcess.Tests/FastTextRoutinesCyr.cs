@@ -26,8 +26,10 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Clean Processing Results")]
         public void ProcResultCleanRuk()
         {
-            ProcResultClean(DBF_W2V_RU, DBF_RUK_Proc);
-            ProcResultClean(DBF_W2V_UK, DBF_RUK_Proc);
+            try { ProcResultClean(DBF_W2V_RU, DBF_RUK_Proc); }
+            catch (Exception ex) { Log(ex.Message); }
+            try { ProcResultClean(DBF_W2V_UK, DBF_RUK_Proc); }
+            catch (Exception ex) { Log(ex.Message); }
         }
 
         [Fact]
@@ -35,8 +37,8 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbRuk()
         {
-            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU);
-            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK);
+            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU, with_insert_or_replace: true);
+            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK, with_insert_or_replace: true);
         }
     }
 }
