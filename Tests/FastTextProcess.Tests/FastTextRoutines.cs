@@ -11,24 +11,26 @@ using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FastTextRoutines : TestBase
     {
-        const string DBF_W2V_EN = "w2v_en.db";
-        const string DBF_AclImdb = "AclImdb_proc.db";
         public FastTextRoutines(ITestOutputHelper output) : base(output) { }
-
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("Process", "Load PreTrained FastText Database")]
-        public void ProcCreateDbEn()
+        /// <summary>
+        /// Create word to vector db 
+        /// </summary>
+        /// <param name="ft_vec_fn">FastText vectors filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn)
         {
-            var fvec = DataArcPath("cc.en.300.vec");
+            var fvec = DataArcPath(ft_vec_fn);
             AssertFileExists(fvec, "FastText file of vectors");
 
-            AssertFileNotExists(DBF_W2V_EN, "word2vect En-Common DB");
-            FastTextProcessDB.CreateDB(DBF_W2V_EN);
+            AssertFileNotExists(dbf_w2v_fn, "word2vect DB");
+            FastTextProcessDB.CreateDB(dbf_w2v_fn);
 
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN, foreign_keys: false))
+            using (var dbx = new FastTextProcessDB(dbf_w2v_fn, foreign_keys: false))
             {
                 var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
                 var trans = dbx.BeginTransaction();
@@ -56,94 +58,38 @@ namespace FastTextProcess.Tests
                 trans.Commit();
             }
         }
-
-        #region ProcAclImdb
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("Process", "Append Train Data (Processing Full)")]
-        public void ProcAclImdbTrain()
+        /// <summary>
+        /// Cleanup result DB
+        /// </summary>
+        /// <param name="proc_db_fn">Result Db filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void ProcResultClean(string proc_db_fn, string dbf_w2v_fn)
         {
-            Log("Process Train Samples ...");
-            var path = DataArcPath("aclImdb/train/neg/");
-            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "train/neg/");
-            path = DataArcPath("aclImdb/train/pos/");
-            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "train/pos/");
-            SubProcFillEmptyVectDictEn();
-            SubProcAclImdbResultDictEn();
-            Log("Done (ProcAclImdbTrain)");
-        }
-
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("Process", "Append Tests Data (Processing Full)")]
-        public void ProcAclImdbTest()
-        {
-            Log("Process Test Samples ...");
-            var path = DataArcPath("aclImdb/test/neg/");
-            ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "test/neg/");
-            path = DataArcPath("aclImdb/test/pos/");
-            ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "test/pos/");
-            SubProcFillEmptyVectDictEn();
-            SubProcAclImdbResultDictEn();
-            Log("Done (ProcAclImdbTest)");
-        }
-
-        void ProcAclImdbFull(string data_dir, string proc_info, string src_id_pref)
-        {
-            SubProcAclImdbInsertPredefinedMacro();
-            using (var proc = new TextProcessor(
-                DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
+            if (File.Exists(proc_db_fn))
             {
-                Log($"Process samples '{src_id_pref}' ...");
-                var dir_path = DataArcPath(data_dir);
-                var dir = new DirectoryInfo(dir_path);
-                Assert.True(dir.Exists,
-                    $"source folder does not exist: '{dir_path}'");
-                var files = dir.GetFiles("*.txt").AsParallel();
-                Parallel.ForEach(files, (file) =>
-                {
-                    using (var strm = file.OpenText())
-                    {
-                        proc.Process(strm.ReadToEnd()
-                            , src_id: src_id_pref + file.Name
-                            , proc_info: proc_info);
-                    }
-                }
-                );
+                File.Delete(proc_db_fn);
+                Log($"'{proc_db_fn}' deleted");
             }
-            Log($"Done ({src_id_pref})");
-        }
-        #endregion
-
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("Process", "Clean Processing Results")]
-        public void ProcAclImdbResultClean()
-        {
-            if (File.Exists(DBF_AclImdb))
-            {
-                File.Delete(DBF_AclImdb);
-                Log($"'{DBF_AclImdb}' deleted");
-            }
-            AssertFileExists(DBF_W2V_EN, "word2vect En-Common DB");
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            AssertFileExists(dbf_w2v_fn, "word2vect DB");
+            using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
             {
                 dbx.EmbedDict().DeleteAll();
                 dbx.Dict(DictDbSet.DictKind.Addin).DeleteAll();
             }
         }
-
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors")]
-        public void SubProcFillEmptyVectDictEn()
+        /// <summary>
+        /// Fill Empty Add-in Dictionary Vectors
+        /// </summary>
+        /// <param name="ft_bin_fn">FastText bin model filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void SubProcFillEmptyVectDict(string ft_bin_fn, string dbf_w2v_fn)
         {
-            using (var dbx = new FastTextProcessDB(DBF_W2V_EN))
+            using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
             {
                 var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
                 if (words.Any())
                 {
-                    var fmod = DataArcPath("cc.en.300.bin");
+                    var fmod = DataArcPath(ft_bin_fn);
                     AssertFileExists(fmod, "FastText model file");
                     var fexe = FastTextBin;
                     AssertFileExists(fexe, "FastText executable");
@@ -167,15 +113,16 @@ namespace FastTextProcess.Tests
                 }
             }
         }
-
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("SubProcess", "Build Result Dictionary")]
-        public void SubProcAclImdbResultDictEn()
+        /// <summary>
+        /// Build result DB dictionary
+        /// </summary>
+        /// <param name="proc_db_fn">Result Db filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void SubProcBuildResultDict(string proc_db_fn, string dbf_w2v_fn)
         {
-            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
+            using (var dbx_src = new FastTextProcessDB(dbf_w2v_fn))
             {
-                using (var dbx_dst = new FastTextResultDB(DBF_AclImdb))
+                using (var dbx_dst = new FastTextResultDB(proc_db_fn))
                 {
                     var tran = dbx_dst.BeginTransaction();
                     try
@@ -198,13 +145,13 @@ namespace FastTextProcess.Tests
                 }
             }
         }
-
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Insert Predefined Vectors")]
-        public void SubProcAclImdbInsertPredefinedMacro()
+        /// <summary>
+        /// Insert Predefined Macro vectors
+        /// </summary>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void SubProcInsertPredefinedMacro(string dbf_w2v_fn)
         {
-            using (var dbx_src = new FastTextProcessDB(DBF_W2V_EN))
+            using (var dbx_src = new FastTextProcessDB(dbf_w2v_fn))
             {
                 var vect_empty = Dict.CreateEmpty();
                 //var vect_fl = Dict.GetVectFloat(vect_empty.Vect);
