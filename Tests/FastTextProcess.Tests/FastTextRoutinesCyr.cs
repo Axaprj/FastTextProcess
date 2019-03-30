@@ -11,6 +11,9 @@ using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
+    /// <summary>
+    /// Ru Uk texts processor
+    /// </summary>
     public class FastTextRoutinesCyr : FastTextRoutines
     {
         const string DBF_W2V_RU = "w2v_ru.db";
@@ -21,26 +24,19 @@ namespace FastTextProcess.Tests
         [Fact]
         [Trait("Task", "RUK")]
         [Trait("Process", "Clean Processing Results")]
-        public void ProcAclImdbResultClean()
+        public void ProcResultCleanRuk()
         {
             ProcResultClean(DBF_W2V_RU, DBF_RUK_Proc);
             ProcResultClean(DBF_W2V_UK, DBF_RUK_Proc);
         }
 
-        void ProcResultClean(string res_db_file, string proc_file)
+        [Fact]
+        [Trait("Task", "RUK")]
+        [Trait("Process", "Load PreTrained FastText Database")]
+        public void ProcCreateDbRuk()
         {
-            if (File.Exists(res_db_file))
-            {
-                File.Delete(res_db_file);
-                Log($"'{res_db_file}' deleted");
-            }
-            AssertFileExists(proc_file, "word2vect DB");
-            using (var dbx = new FastTextProcessDB(proc_file))
-            {
-                dbx.EmbedDict().DeleteAll();
-                dbx.Dict(DictDbSet.DictKind.Addin).DeleteAll();
-            }
+            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU);
+            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK);
         }
-    
     }
 }
