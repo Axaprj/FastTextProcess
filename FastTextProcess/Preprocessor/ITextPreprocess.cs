@@ -6,6 +6,11 @@ namespace FastTextProcess.Preprocessor
 {
     public interface ITextPreprocess
     {
-        string[] Process(string txt);
+        /// <summary>
+        /// Process text to words array
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        string[] ProcessWords(string txt);
     }
 }

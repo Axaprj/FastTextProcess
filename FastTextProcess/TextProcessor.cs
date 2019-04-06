@@ -42,7 +42,7 @@ namespace FastTextProcess
                         QueueProcess.GetConsumingEnumerable(cancel_token)
                         , (itm) =>
                         {
-                            itm.Preprocessed = preprocessor.Process(itm.Src);
+                            itm.Preprocessed = preprocessor.ProcessWords(itm.Src);
                             QueueWordToDict.Add(itm, cancel_token);
                         }
                     );

@@ -38,7 +38,15 @@ namespace FastTextProcess.Tests
         public void ProcCreateDbRuk()
         {
             ProcCreateDb("wiki.ru.vec", DBF_W2V_RU, with_insert_or_replace: true);
+            SubProcInsertPredefinedMacro(DBF_W2V_RU);
             ProcCreateDb("wiki.uk.vec", DBF_W2V_UK, with_insert_or_replace: true);
+            SubProcInsertPredefinedMacro(DBF_W2V_UK);
+        }
+
+        void ProcAclImdbFull(string data_dir, string proc_info, string src_id_pref)
+        {
+           
+            Log($"Done ({src_id_pref})");
         }
     }
 }

@@ -24,16 +24,27 @@ namespace FastTextProcess
         Task taskFTIn;
         Task taskFTOut;
         Task taskFTRes;
-        const string CMD_VECT = "print-word-vectors";
+        /// <summary>
+        /// print word vectors given a trained model
+        /// </summary>
+        public const string CMD_VECT = "print-word-vectors";
+        /// <summary>
+        /// predict most likely labels
+        /// </summary>
+        public const string CMD_PREDICT = "predict";
+        /// <summary>
+        /// predict most likely labels with probabilities
+        /// </summary>
+        public const string CMD_PREDICT_PROB = "predict-prob";
 
-        public FastTextLauncher(string path_exe, string path_model)
+        public FastTextLauncher(string path_exe, string path_model, string cmd = CMD_VECT)
         {
             FTProc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = path_exe,
-                    Arguments = $" {CMD_VECT} \"{path_model}\"",
+                    Arguments = $" {cmd} \"{path_model}\"",
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,

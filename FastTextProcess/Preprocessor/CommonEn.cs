@@ -17,9 +17,9 @@ namespace FastTextProcess.Preprocessor
 
         Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
 
-        public string[] Process(string txt)
+        public string[] ProcessWords(string txt)
         {
-            txt = CleanCommonEn(txt);
+            txt = CleanCommonEn(txt, rexClnCommonEn);
             var warr = txt.Split(' ');
             return warr;
         }
@@ -28,10 +28,10 @@ namespace FastTextProcess.Preprocessor
         /// Tokenization/string cleaning for all datasets except for SST.
         /// Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
         /// </summary>
-        string CleanCommonEn(string str)
+        protected string CleanCommonEn(string str, Regex clean_rex)
         {
             //str = str.ToLower();
-            str = rexClnCommonEn.Replace(str, " ");
+            str = clean_rex.Replace(str, " ");
             str = str
                 //.Replace(" ' s", " 's")
                 //.Replace(" ' ve", " 've")
