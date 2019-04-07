@@ -54,14 +54,12 @@ namespace FastTextProcess.Tests
 
         void ProcRukFull(string data_dir, string proc_info, string src_id_pref)
         {
-            using (var proc_ru = new TextProcessor(
-                DBF_W2V_RU, DBF_RUK_Proc))
-            {
+            //using (var proc_ru = new TextProcessor(
+            //    DBF_W2V_RU, DBF_RUK_Proc))
+            //{
                 Log($"Process samples '{src_id_pref}' ...");
-                foreach(string src in GetSrcItems())
-                {
-                }
-            }
+                foreach(string src in GetSrcItems()) {}
+            //}
             Log($"Done ({src_id_pref})");
         }
         /// <summary>
