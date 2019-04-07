@@ -1,4 +1,6 @@
 {
   "DataArcDir": "./../../../../../../data.arc/",
-  "FastTextBin": "./../../../../../../data.arc/fasttext.exe"
+  "FastTextBin": "./../../../../../../data.arc/fasttext.exe",
+  "DataCyrConnStr": "Data Source=\"./../../../../../../../TFS/GoRealt/py/data/StaTransform.db\";Version=3;",
+  "DataCyrSelectSQL": "SELECT TextSrc FROM AdSale_History"
 }

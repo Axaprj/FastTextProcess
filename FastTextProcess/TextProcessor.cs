@@ -25,7 +25,7 @@ namespace FastTextProcess
         readonly CancellationTokenSource CancelTokenSrc;
 
         public TextProcessor(string dbf_w2v, string dbf_res
-            , Preprocessor.ITextPreprocess preprocessor
+            , Preprocessor.ITextPreprocess preprocessor = null
             , int boundedCapacity = 10000)
         {
             QueueProcess = new BlockingCollection<ProcessItem>(boundedCapacity);
@@ -33,28 +33,30 @@ namespace FastTextProcess
             QueueStoreResult = new BlockingCollection<ProcessItem>(boundedCapacity);
             CancelTokenSrc = new CancellationTokenSource();
             var cancel_token = CancelTokenSrc.Token;
-
-            taskPreprocess = Task.Run(() =>
+            if (preprocessor != null)
             {
-                try
+                taskPreprocess = Task.Run(() =>
                 {
-                    Parallel.ForEach(
-                        QueueProcess.GetConsumingEnumerable(cancel_token)
-                        , (itm) =>
-                        {
-                            itm.Preprocessed = preprocessor.ProcessWords(itm.Src);
-                            QueueWordToDict.Add(itm, cancel_token);
-                        }
-                    );
-                    QueueWordToDict.CompleteAdding();
-                }
-                catch
-                {
-                    CancelTokenSrc.Cancel();
-                    throw;
-                }
-            }, cancel_token
-            );
+                    try
+                    {
+                        Parallel.ForEach(
+                            QueueProcess.GetConsumingEnumerable(cancel_token)
+                            , (itm) =>
+                            {
+                                itm.Preprocessed = preprocessor.ProcessWords(itm.Src);
+                                QueueWordToDict.Add(itm, cancel_token);
+                            }
+                        );
+                        QueueWordToDict.CompleteAdding();
+                    }
+                    catch
+                    {
+                        CancelTokenSrc.Cancel();
+                        throw;
+                    }
+                }, cancel_token
+                );
+            }
             taskWordToDict = Task.Run(() =>
             {
                 try
@@ -133,18 +135,30 @@ namespace FastTextProcess
             );
         }
 
-        public void Process(string src, string src_id, string proc_info)
+        public void Process(string src, string src_id, string proc_info, string[] preprocessed_src=null)
         {
             if (CancelTokenSrc.IsCancellationRequested)
                 throw new InvalidOperationException(
                     $"Processing was canceled. Terminated before process '{src_id}' source.");
-            var item = new ProcessItem
-            {
-                Src = src,
-                SrcOriginalId = src_id,
-                SrcProcInfo = proc_info
-            };
-            QueueProcess.Add(item);
+            if (taskPreprocess == null && preprocessed_src==null)
+                throw new InvalidOperationException(
+                    "Preprocessor and preprocessed value are not set");
+           
+                var item = new ProcessItem
+                {
+                    Src = src,
+                    SrcOriginalId = src_id,
+                    SrcProcInfo = proc_info
+                };
+            if (preprocessed_src == null)
+            { // start preprocessing
+                QueueProcess.Add(item);
+            }
+            else
+            { // without preprocessing
+                item.Preprocessed = preprocessed_src;
+                QueueWordToDict.Add(item, CancelTokenSrc.Token);
+            }
         }
 
         void WaitForFinalize()
@@ -163,7 +177,8 @@ namespace FastTextProcess
             catch (Exception ex) { agg_ex.Add(ex); }
             try
             {
-                taskPreprocess.Wait();
+                if (taskPreprocess != null)
+                    taskPreprocess.Wait();
             }
             catch (Exception ex) { agg_ex.Add(ex); }
 

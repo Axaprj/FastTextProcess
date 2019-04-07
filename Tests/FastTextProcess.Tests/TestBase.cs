@@ -36,7 +36,7 @@ namespace FastTextProcess.Tests
             Assert.False(File.Exists(fpath), $"'{fpath}' is exist ({descr})");
         }
 
-        IConfigurationRoot ConfRoot
+        protected IConfigurationRoot ConfRoot
         {
             get
             {
