@@ -30,3 +30,5 @@ ProcAclImdbTrain()
 ProcAclImdbTest()
 ```
 - Looking for result into `$DataArcDir/AclImdb_proc.db`
+
+## Igor Alexeev, axaprj2000@yahoo.com for https://propertyindicators.github.io/
