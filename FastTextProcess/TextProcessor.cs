@@ -14,6 +14,9 @@ namespace FastTextProcess
     public class TextProcessor : IDisposable
     {
         readonly BlockingCollection<ProcessItem> QueueProcess;
+        /// <summary>
+        /// Preprocessing task (null when job without preprocess)
+        /// </summary>
         readonly Task taskPreprocess;
 
         readonly BlockingCollection<ProcessItem> QueueWordToDict;
@@ -164,6 +167,8 @@ namespace FastTextProcess
         void WaitForFinalize()
         {
             QueueProcess.CompleteAdding();
+            if (taskPreprocess == null)
+                QueueWordToDict.CompleteAdding();
             var agg_ex = new List<Exception>();
             try
             {
