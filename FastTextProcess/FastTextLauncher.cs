@@ -8,13 +8,53 @@ using System.Threading.Tasks;
 namespace FastTextProcess
 {
     /// <summary>
+    /// FastText Language labels
+    /// </summary>
+    public enum FTLangLabel
+    {
+        /// <summary> Not specified/unknown </summary>
+        NotSpecified = 0,
+        /// <summary> English </summary>
+        __label__en,
+        /// <summary> Russian </summary>
+        __label__ru,
+        /// <summary> Ukrainian </summary>
+        __label__uk
+    }
+
+    /// <summary>
+    /// FastText command arguments, helper, factory
+    /// </summary>
+    public static class FTCmd
+    {
+        /// <summary> print word vectors given a trained model </summary>
+        internal const string CMD_VECT = "print-word-vectors";
+        /// <summary> predict most likely labels </summary>
+        internal const string CMD_PREDICT = "predict";
+        /// <summary> predict most likely labels with probabilities </summary>
+        internal const string CMD_PREDICT_PROB = "predict-prob";
+
+        public static FastTextLauncher<Entities.Dict> CreateW2V(string path_exe, string path_model) =>
+            new FastTextLauncher<Entities.Dict>(path_exe, path_model, CMD_VECT);
+
+        public static FastTextLauncher<FTLangLabel> CreateLangDetect(string path_exe, string path_model) =>
+            new FastTextLauncher<FTLangLabel>(path_exe, path_model, CMD_PREDICT, "-");
+
+        public static FTLangLabel ParseLang(string str_lbl)
+        {
+            FTLangLabel res;
+            return Enum.TryParse<FTLangLabel>(str_lbl, out res) ? res : FTLangLabel.NotSpecified;
+        }
+
+    }
+    /// <summary>
     /// FastText process launcher
     /// TODO: errors handling
     /// </summary>
-    public class FastTextLauncher : IDisposable
+    public class FastTextLauncher<TResult> : IDisposable
     {
-        readonly BlockingCollection<Entities.Dict> QueueOut =
-             new BlockingCollection<Entities.Dict>();
+        readonly BlockingCollection<TResult> QueueOut =
+             new BlockingCollection<TResult>();
         readonly BlockingCollection<string> QueueIn =
              new BlockingCollection<string>();
         public readonly ConcurrentBag<string> BagErrors =
@@ -24,27 +64,15 @@ namespace FastTextProcess
         Task taskFTIn;
         Task taskFTOut;
         Task taskFTRes;
-        /// <summary>
-        /// print word vectors given a trained model
-        /// </summary>
-        public const string CMD_VECT = "print-word-vectors";
-        /// <summary>
-        /// predict most likely labels
-        /// </summary>
-        public const string CMD_PREDICT = "predict";
-        /// <summary>
-        /// predict most likely labels with probabilities
-        /// </summary>
-        public const string CMD_PREDICT_PROB = "predict-prob";
 
-        public FastTextLauncher(string path_exe, string path_model, string cmd = CMD_VECT)
+        internal FastTextLauncher(string path_exe, string path_model, string cmd, string additional_args = "")
         {
             FTProc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = path_exe,
-                    Arguments = $" {cmd} \"{path_model}\"",
+                    Arguments = $" {cmd} \"{path_model}\" {additional_args}",
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -56,31 +84,63 @@ namespace FastTextProcess
                 (_, e) => BagErrors.Add(e.Data));
         }
 
-        public void Push(string word) => QueueIn.Add(word);
+        public void Push(string txt) => QueueIn.Add(txt);
 
-        public void RunAsync(Action<Entities.Dict> actHanleResult)
+        public void Push(string[] txts)
+        {
+            foreach (var txt in txts)
+                QueueIn.Add(txt);
+        }
+
+        //public void RunAsync(Action<Entities.Dict> actHanleResult)
+        //{
+        //    taskFTOut = Task.Run(() =>
+        //    {
+        //        FTProc.Start();
+        //        taskFTIn = Task.Run(() =>
+        //        {
+        //            foreach (var word in QueueIn.GetConsumingEnumerable())
+        //                FTProc.StandardInput.WriteLine(word);
+        //            FTProc.StandardInput.Close();
+        //        });
+        //        taskFTRes = Task.Run(() =>
+        //        {
+        //            foreach (var v2w in QueueOut.GetConsumingEnumerable())
+        //                actHanleResult(v2w);
+        //        });
+        //        string ln;
+        //        while ((ln = FTProc.StandardOutput.ReadLine()) != null)
+        //            QueueOut.Add(Entities.Dict.Create(ln));
+        //        QueueOut.CompleteAdding();
+        //        FTProc.WaitForExit();
+        //    });
+        //}
+
+        public void RunAsync(Action<TResult> actHanleResult, Func<string, TResult> fnPostProcess)
         {
             taskFTOut = Task.Run(() =>
             {
                 FTProc.Start();
                 taskFTIn = Task.Run(() =>
                 {
-                    foreach (var word in QueueIn.GetConsumingEnumerable())
-                        FTProc.StandardInput.WriteLine(word);
+                    foreach (var txt in QueueIn.GetConsumingEnumerable())
+                        FTProc.StandardInput.WriteLine(txt);
                     FTProc.StandardInput.Close();
                 });
                 taskFTRes = Task.Run(() =>
                 {
-                    foreach (var v2w in QueueOut.GetConsumingEnumerable())
-                        actHanleResult(v2w);
+                    foreach (var res_out in QueueOut.GetConsumingEnumerable())
+                        actHanleResult(res_out);
                 });
                 string ln;
                 while ((ln = FTProc.StandardOutput.ReadLine()) != null)
-                    QueueOut.Add(Entities.Dict.Create(ln));
+                    QueueOut.Add(fnPostProcess(ln));
                 QueueOut.CompleteAdding();
                 FTProc.WaitForExit();
             });
         }
+
+
 
         void IDisposable.Dispose()
         {

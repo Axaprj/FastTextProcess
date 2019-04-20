@@ -1,5 +1,6 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Preprocessor;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -54,14 +55,33 @@ namespace FastTextProcess.Tests
 
         void ProcRukFull(string data_dir, string proc_info, string src_id_pref)
         {
-            using (var proc_ru = new TextProcessor(
-                DBF_W2V_RU, DBF_RUK_Proc))
+            using (var lang_detector = CreateLangDetector())
             {
+                var preproc = new CommonEnCyr();
                 Log($"Process samples '{src_id_pref}' ...");
-                foreach(string src in GetSrcItems()) {}
+                lang_detector.RunAsync(
+                      (lang_lbl) => Log(lang_lbl.ToString())
+                    , (str_lbl) => FTCmd.ParseLang(str_lbl));
+                foreach (string txt in GetSrcItems())
+                {
+                    var words = preproc.ProcessWords(txt);
+                    lang_detector.Push(string.Join(" ", words));
+                    //lang_detector.Push(words);
+                }
             }
             Log($"Done ({src_id_pref})");
         }
+
+        FastTextLauncher<FTLangLabel> CreateLangDetector()
+        {
+            var fmod = DataArcPath("lid.176.bin");
+            AssertFileExists(fmod, "FastText model file");
+            var fexe = FastTextBin;
+            AssertFileExists(fexe, "FastText executable");
+            var lang_detector = FTCmd.CreateLangDetect(fexe, fmod);
+            return lang_detector;
+        }
+
         /// <summary>
         /// Texts data source. Rewrite to connect another source.
         /// </summary>
@@ -72,7 +92,7 @@ namespace FastTextProcess.Tests
             using (var cn = new SQLiteConnection(conn_str))
             {
                 cn.Open();
-                var sql = ConfRoot.GetSection("DataCyrSelectSQL").Value; 
+                var sql = ConfRoot.GetSection("DataCyrSelectSQL").Value;
                 var cmd = new SQLiteCommand(sql, cn);
                 using (var rd = cmd.ExecuteReader())
                 {

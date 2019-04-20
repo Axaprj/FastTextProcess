@@ -101,9 +101,12 @@ namespace FastTextProcess.Tests
                     try
                     {
                         var dict = dbx.Dict(DictDbSet.DictKind.Addin);
-                        using (var ftl = new FastTextLauncher(fexe, fmod))
+                        using (var ftl = FTCmd.CreateW2V(fexe, fmod))
                         {
-                            ftl.RunAsync((w2v) => dict.UpdateVectOfWord(w2v));
+                            ftl.RunAsync(
+                                (w2v) => dict.UpdateVectOfWord(w2v),
+                                (txt) => Dict.Create(txt)
+                            );
                             foreach (var w in words)
                                 ftl.Push(w);
                         }

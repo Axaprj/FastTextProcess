@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace FastTextProcess.Preprocessor
 {
+    /// <summary>
+    /// Common En text preprocessor
+    /// </summary>
     public class CommonEn: ITextPreprocess
     {
         Regex rexClnCommonEn = new Regex("[^A-Za-z0-9(),.!?\'`\"]", RegexOptions.Compiled);
