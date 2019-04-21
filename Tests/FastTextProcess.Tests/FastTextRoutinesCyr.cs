@@ -59,20 +59,20 @@ namespace FastTextProcess.Tests
             {
                 var preproc = new CommonEnCyr();
                 Log($"Process samples '{src_id_pref}' ...");
-                lang_detector.RunAsync(
-                      (lang_lbl) => Log(lang_lbl.ToString())
-                    , (str_lbl) => FTCmd.ParseLang(str_lbl));
+                lang_detector.RunByLineAsync(
+                      (item) => Log(item.Lang.ToString() + ">>> " + item.Text)
+                    , (txt, txt_lbl) => new LangDetectItem(txt, txt_lbl));
                 foreach (string txt in GetSrcItems())
                 {
                     var words = preproc.ProcessWords(txt);
-                    lang_detector.Push(string.Join(" ", words));
-                    //lang_detector.Push(words);
+                    var proc_txt = string.Join(" ", words);
+                    lang_detector.Push(proc_txt);
                 }
             }
             Log($"Done ({src_id_pref})");
         }
 
-        FastTextLauncher<FTLangLabel> CreateLangDetector()
+        FastTextLauncher<LangDetectItem> CreateLangDetector()
         {
             var fmod = DataArcPath("lid.176.bin");
             AssertFileExists(fmod, "FastText model file");

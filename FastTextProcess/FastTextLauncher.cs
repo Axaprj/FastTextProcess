@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,20 @@ namespace FastTextProcess
         /// <summary> Ukrainian </summary>
         __label__uk
     }
+    /// <summary>
+    /// Language detection item result 
+    /// </summary>
+    public class LangDetectItem
+    {
+        public readonly string Text;
+        public readonly FTLangLabel Lang;
+        public LangDetectItem(string text, string text_lbl)
+        {
+            Text = text;
+            Lang = FTLangLabel.NotSpecified;
+            Enum.TryParse<FTLangLabel>(text_lbl, out Lang);
+        }
+    }
 
     /// <summary>
     /// FastText command arguments, helper, factory
@@ -33,19 +48,12 @@ namespace FastTextProcess
         internal const string CMD_PREDICT = "predict";
         /// <summary> predict most likely labels with probabilities </summary>
         internal const string CMD_PREDICT_PROB = "predict-prob";
-
+        /// <summary> Processor Factory: word to vector </summary>
         public static FastTextLauncher<Entities.Dict> CreateW2V(string path_exe, string path_model) =>
             new FastTextLauncher<Entities.Dict>(path_exe, path_model, CMD_VECT);
-
-        public static FastTextLauncher<FTLangLabel> CreateLangDetect(string path_exe, string path_model) =>
-            new FastTextLauncher<FTLangLabel>(path_exe, path_model, CMD_PREDICT, "-");
-
-        public static FTLangLabel ParseLang(string str_lbl)
-        {
-            FTLangLabel res;
-            return Enum.TryParse<FTLangLabel>(str_lbl, out res) ? res : FTLangLabel.NotSpecified;
-        }
-
+        /// <summary> Processor Factory: language detector </summary>
+        public static FastTextLauncher<LangDetectItem> CreateLangDetect(string path_exe, string path_model) =>
+            new FastTextLauncher<LangDetectItem>(path_exe, path_model, CMD_PREDICT, "-");
     }
     /// <summary>
     /// FastText process launcher
@@ -92,30 +100,6 @@ namespace FastTextProcess
                 QueueIn.Add(txt);
         }
 
-        //public void RunAsync(Action<Entities.Dict> actHanleResult)
-        //{
-        //    taskFTOut = Task.Run(() =>
-        //    {
-        //        FTProc.Start();
-        //        taskFTIn = Task.Run(() =>
-        //        {
-        //            foreach (var word in QueueIn.GetConsumingEnumerable())
-        //                FTProc.StandardInput.WriteLine(word);
-        //            FTProc.StandardInput.Close();
-        //        });
-        //        taskFTRes = Task.Run(() =>
-        //        {
-        //            foreach (var v2w in QueueOut.GetConsumingEnumerable())
-        //                actHanleResult(v2w);
-        //        });
-        //        string ln;
-        //        while ((ln = FTProc.StandardOutput.ReadLine()) != null)
-        //            QueueOut.Add(Entities.Dict.Create(ln));
-        //        QueueOut.CompleteAdding();
-        //        FTProc.WaitForExit();
-        //    });
-        //}
-
         public void RunAsync(Action<TResult> actHanleResult, Func<string, TResult> fnPostProcess)
         {
             taskFTOut = Task.Run(() =>
@@ -123,9 +107,12 @@ namespace FastTextProcess
                 FTProc.Start();
                 taskFTIn = Task.Run(() =>
                 {
-                    foreach (var txt in QueueIn.GetConsumingEnumerable())
-                        FTProc.StandardInput.WriteLine(txt);
-                    FTProc.StandardInput.Close();
+                    using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
+                    {
+                        foreach (var txt in QueueIn.GetConsumingEnumerable())
+                            writer.WriteLine(txt);
+                    }
+                    //FTProc.StandardInput.Close();
                 });
                 taskFTRes = Task.Run(() =>
                 {
@@ -140,29 +127,56 @@ namespace FastTextProcess
             });
         }
 
-
+        public void RunByLineAsync(Action<TResult> actHanleResult, Func<string, string, TResult> fnPostProcess)
+        {
+                taskFTOut = Task.Run(() =>
+                {
+                    FTProc.Start();
+                    taskFTRes = Task.Run(() =>
+                    {
+                        foreach (var res_out in QueueOut.GetConsumingEnumerable())
+                            actHanleResult(res_out);
+                    });
+                    using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
+                    {
+                        foreach (var txt in QueueIn.GetConsumingEnumerable())
+                        {
+                            var task_in = Task.Run(() =>
+                            {
+                                writer.WriteLine(txt);
+                                writer.Flush();
+                            });
+                            task_in.Wait();
+                            string res_ln = FTProc.StandardOutput.ReadLine();
+                            QueueOut.Add(fnPostProcess(txt, res_ln));
+                        }
+                    }
+                    QueueOut.CompleteAdding();
+                    FTProc.WaitForExit();
+                });
+        }
 
         void IDisposable.Dispose()
         {
-            QueueIn.CompleteAdding();
-            try
-            {
-                if (taskFTOut != null)
-                    taskFTOut.Wait();
-                if (taskFTIn != null)
-                    taskFTIn.Wait();
-                if (taskFTRes != null)
-                    taskFTRes.Wait();
-            }
-            finally
-            {
-                QueueIn.Dispose();
-                QueueOut.Dispose();
-                if (FTProc.HasExited)
-                    FTProc.Close();
-                else
-                    FTProc.Kill();
+                QueueIn.CompleteAdding();
+                try
+                {
+                    if (taskFTOut != null)
+                        taskFTOut.Wait();
+                    if (taskFTIn != null)
+                        taskFTIn.Wait();
+                    if (taskFTRes != null)
+                        taskFTRes.Wait();
+                }
+                finally
+                {
+                    QueueIn.Dispose();
+                    QueueOut.Dispose();
+                    if (FTProc.HasExited)
+                        FTProc.Close();
+                    else
+                        FTProc.Kill();
+                }
             }
         }
     }
-}
