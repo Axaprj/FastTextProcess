@@ -100,32 +100,32 @@ namespace FastTextProcess
                 QueueIn.Add(txt);
         }
 
-        public void RunAsync(Action<TResult> actHanleResult, Func<string, TResult> fnPostProcess)
-        {
-            taskFTOut = Task.Run(() =>
-            {
-                FTProc.Start();
-                taskFTIn = Task.Run(() =>
-                {
-                    using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
-                    {
-                        foreach (var txt in QueueIn.GetConsumingEnumerable())
-                            writer.WriteLine(txt);
-                    }
-                    //FTProc.StandardInput.Close();
-                });
-                taskFTRes = Task.Run(() =>
-                {
-                    foreach (var res_out in QueueOut.GetConsumingEnumerable())
-                        actHanleResult(res_out);
-                });
-                string ln;
-                while ((ln = FTProc.StandardOutput.ReadLine()) != null)
-                    QueueOut.Add(fnPostProcess(ln));
-                QueueOut.CompleteAdding();
-                FTProc.WaitForExit();
-            });
-        }
+        //public void RunAsync(Action<TResult> actHanleResult, Func<string, TResult> fnPostProcess)
+        //{
+        //    taskFTOut = Task.Run(() =>
+        //    {
+        //        FTProc.Start();
+        //        taskFTIn = Task.Run(() =>
+        //        {
+        //            using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
+        //            {
+        //                foreach (var txt in QueueIn.GetConsumingEnumerable())
+        //                    writer.WriteLine(txt);
+        //            }
+        //            //FTProc.StandardInput.Close();
+        //        });
+        //        taskFTRes = Task.Run(() =>
+        //        {
+        //            foreach (var res_out in QueueOut.GetConsumingEnumerable())
+        //                actHanleResult(res_out);
+        //        });
+        //        string ln;
+        //        while ((ln = FTProc.StandardOutput.ReadLine()) != null)
+        //            QueueOut.Add(fnPostProcess(ln));
+        //        QueueOut.CompleteAdding();
+        //        FTProc.WaitForExit();
+        //    });
+        //}
 
         public void RunByLineAsync(Action<TResult> actHanleResult, Func<string, string, TResult> fnPostProcess)
         {

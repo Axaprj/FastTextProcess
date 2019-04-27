@@ -33,6 +33,8 @@ namespace FastTextProcess.Context
             var rd = cmd.ExecuteReader();
             while (rd.Read())
             {
+                if (rd.GetValue(1) is DBNull)
+                    throw new InvalidOperationException("Empty Vector in EmbedJoin");
                 var ej = new EmbedJoin
                 {
                     Inx = rd.GetInt64(0),

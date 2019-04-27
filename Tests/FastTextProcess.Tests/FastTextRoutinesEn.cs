@@ -93,7 +93,7 @@ namespace FastTextProcess.Tests
 
         [Fact]
         [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors")]
+        [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors (via FastTest)")]
         public void SubProcFillEmptyVectDictEn()
         {
             SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN);
