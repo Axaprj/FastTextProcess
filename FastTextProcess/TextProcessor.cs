@@ -46,7 +46,9 @@ namespace FastTextProcess
                             QueueProcess.GetConsumingEnumerable(cancel_token)
                             , (itm) =>
                             {
-                                itm.Preprocessed = preprocessor.ProcessWords(itm.Src);
+                                var prep_itm = preprocessor.ProcessWords(itm.Src);
+                                itm.Preprocessed = prep_itm.Words;
+                                itm.Lang = prep_itm.Lang;
                                 QueueWordToDict.Add(itm, cancel_token);
                             }
                         );
@@ -98,7 +100,7 @@ namespace FastTextProcess
                             , opt
                             , (itm) =>
                             {
-                                itm.Embedded = wordToDict.WordsToInxsForParallel(itm.Preprocessed);
+                                itm.Embedded = wordToDict.WordsToInxsForParallel(itm.Preprocessed, itm.Lang);
                                 QueueStoreResult.Add(itm);
                             }
                         );

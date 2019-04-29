@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastTextProcess.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,6 +19,7 @@ namespace FastTextProcess.Entities
 
         public string Src;
         public string SrcOriginalId;
+        public FTLangLabel Lang;
         public string SrcProcInfo;
         public string[] Preprocessed;
         public long[] Embedded;
@@ -25,9 +27,8 @@ namespace FastTextProcess.Entities
         public string GetEmbeddedInxsStr() =>
             string.Join(" ", Embedded);
 
-
         public string GetPreprocessedStr() =>
-            string.Join(" ", Preprocessed);
+                    string.Join(" ", Preprocessed);
 
         public override string ToString() =>
              $"FastTextProcess::ProcessItem:'{SrcOriginalId}'; info:'{SrcProcInfo}';";

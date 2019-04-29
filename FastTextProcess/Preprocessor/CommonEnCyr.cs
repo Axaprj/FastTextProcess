@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastTextProcess.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,22 +10,18 @@ namespace FastTextProcess.Preprocessor
     /// <summary>
     /// Common En, Ru, Uk (Cyrillic) text preprocessor
     /// </summary>
-    public class CommonEnCyr: CommonEn
+    public class CommonEnCyr : CommonEn
     {
         Regex rexClnCommonEnCyr = new Regex("[^A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9(),.!?\'`\"]", RegexOptions.Compiled);
 
-        public string[] ProcessWords(string txt)
+        public override PreprocessItem ProcessWords(string txt)
         {
-            txt = ProcessText(txt);
-            var warr = txt.Split(' ');
-            return warr;
+            var ctxt = CleanCommonEn(txt, rexClnCommonEnCyr);
+            return new PreprocessItem(txt, ctxt.Split(' '), GetLang(ctxt));
         }
-
-        public string ProcessText(string txt)
+        protected override FTLangLabel GetLang(string txt)
         {
-            txt = CleanCommonEn(txt, rexClnCommonEnCyr);
-            return txt;
+            return FTLangLabel.__label__en;
         }
-
     }
 }

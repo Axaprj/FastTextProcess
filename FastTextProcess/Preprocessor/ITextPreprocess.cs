@@ -11,6 +11,6 @@ namespace FastTextProcess.Preprocessor
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        string[] ProcessWords(string txt);
+        PreprocessItem ProcessWords(string txt);
     }
 }

@@ -1,5 +1,6 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbEn()
         {
-            ProcCreateDb("cc.en.300.vec", DBF_W2V_EN);
+            ProcCreateDb("cc.en.300.vec", DBF_W2V_EN, FTLangLabel.__label__en);
         }
 
         #region AclImdb processing tasks
@@ -96,7 +97,7 @@ namespace FastTextProcess.Tests
         [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors (via FastTest)")]
         public void SubProcFillEmptyVectDictEn()
         {
-            SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN);
+            SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN, FTLangLabel.__label__en);
         }
 
         [Fact]

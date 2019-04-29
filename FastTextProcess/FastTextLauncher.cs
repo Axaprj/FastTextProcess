@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastTextProcess.Preprocessor;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,35 +9,6 @@ using System.Threading.Tasks;
 
 namespace FastTextProcess
 {
-    /// <summary>
-    /// FastText Language labels
-    /// </summary>
-    public enum FTLangLabel
-    {
-        /// <summary> Not specified/unknown </summary>
-        NotSpecified = 0,
-        /// <summary> English </summary>
-        __label__en,
-        /// <summary> Russian </summary>
-        __label__ru,
-        /// <summary> Ukrainian </summary>
-        __label__uk
-    }
-    /// <summary>
-    /// Language detection item result 
-    /// </summary>
-    public class LangDetectItem
-    {
-        public readonly string Text;
-        public readonly FTLangLabel Lang;
-        public LangDetectItem(string text, string text_lbl)
-        {
-            Text = text;
-            Lang = FTLangLabel.NotSpecified;
-            Enum.TryParse<FTLangLabel>(text_lbl, out Lang);
-        }
-    }
-
     /// <summary>
     /// FastText command arguments, helper, factory
     /// </summary>
@@ -52,8 +24,8 @@ namespace FastTextProcess
         public static FastTextLauncher<Entities.Dict> CreateW2V(string path_exe, string path_model) =>
             new FastTextLauncher<Entities.Dict>(path_exe, path_model, CMD_VECT);
         /// <summary> Processor Factory: language detector </summary>
-        public static FastTextLauncher<LangDetectItem> CreateLangDetect(string path_exe, string path_model) =>
-            new FastTextLauncher<LangDetectItem>(path_exe, path_model, CMD_PREDICT, "-");
+        public static FastTextLauncher<PreprocessItem> CreateLangDetect(string path_exe, string path_model) =>
+            new FastTextLauncher<PreprocessItem>(path_exe, path_model, CMD_PREDICT, "-");
     }
     /// <summary>
     /// FastText process launcher
@@ -69,7 +41,7 @@ namespace FastTextProcess
              new ConcurrentBag<string>();
 
         Process FTProc;
-        Task taskFTIn;
+        //Task taskFTIn;
         Task taskFTOut;
         Task taskFTRes;
 
@@ -163,8 +135,8 @@ namespace FastTextProcess
                 {
                     if (taskFTOut != null)
                         taskFTOut.Wait();
-                    if (taskFTIn != null)
-                        taskFTIn.Wait();
+                    //if (taskFTIn != null)
+                    //    taskFTIn.Wait();
                     if (taskFTRes != null)
                         taskFTRes.Wait();
                 }

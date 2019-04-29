@@ -1,4 +1,5 @@
 ﻿using FastTextProcess.Entities;
+using FastTextProcess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,11 +35,12 @@ namespace FastTextProcess.Context
                 if (_cmdInsert == null)
                 {
                     var sql = string.Format(
-                        "INSERT INTO {0} ({1}, {2}) VALUES (${1}, ${2})",
-                        TableName, Dict.FldnWord, Dict.FldnVect);
+                        "INSERT INTO {0} ({1}, {2}, {3}) VALUES (${1}, ${2}, ${3})",
+                        TableName, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId);
                     _cmdInsert = Ctx.CreateCmd(sql);
                     _cmdInsert.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdInsert.Parameters.Add(Dict.FldnVect, DbType.Binary);
+                    _cmdInsert.Parameters.Add(Dict.FldnLangId, DbType.Int32);
                     _cmdInsert.Prepare();
                 }
                 return _cmdInsert;
@@ -52,11 +54,12 @@ namespace FastTextProcess.Context
                 if (_cmdInsertOrReplace == null)
                 {
                     var sql = string.Format(
-                        "INSERT OR REPLACE INTO {0} ({1}, {2}) VALUES (${1}, ${2})",
-                        TableName, Dict.FldnWord, Dict.FldnVect);
+                        "INSERT OR REPLACE INTO {0} ({1}, {2}, {3}) VALUES (${1}, ${2}, ${3})",
+                        TableName, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId);
                     _cmdInsertOrReplace = Ctx.CreateCmd(sql);
                     _cmdInsertOrReplace.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdInsertOrReplace.Parameters.Add(Dict.FldnVect, DbType.Binary);
+                    _cmdInsertOrReplace.Parameters.Add(Dict.FldnLangId, DbType.Int32);
                     _cmdInsertOrReplace.Prepare();
                 }
                 return _cmdInsertOrReplace;
@@ -71,11 +74,12 @@ namespace FastTextProcess.Context
                 if (_cmdUpdateVectOfWord == null)
                 {
                     var sql = string.Format(
-                        "UPDATE {0} SET {2}=${2} WHERE {1}=${1}",
-                        TableName, Dict.FldnWord, Dict.FldnVect);
+                        "UPDATE {0} SET {1}=${1} WHERE {2}=${2} AND {3}=${3}",
+                        TableName, Dict.FldnVect, Dict.FldnWord, Dict.FldnLangId);
                     _cmdUpdateVectOfWord = Ctx.CreateCmd(sql);
                     _cmdUpdateVectOfWord.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdUpdateVectOfWord.Parameters.Add(Dict.FldnVect, DbType.Binary);
+                    _cmdUpdateVectOfWord.Parameters.Add(Dict.FldnLangId, DbType.Int32);
                     _cmdUpdateVectOfWord.Prepare();
                 }
                 return _cmdUpdateVectOfWord;
@@ -89,21 +93,23 @@ namespace FastTextProcess.Context
                 if (_cmdFindIdByWord == null)
                 {
                     var sql = string.Format(
-                        "SELECT {1} FROM {0} WHERE {2} = ${2}",
-                        TableName, Dict.FldnId, Dict.FldnWord);
+                        "SELECT {1} FROM {0} WHERE {2} = ${2} AND ({3} = ${3} OR {3} = {4}) ",
+                        TableName, Dict.FldnId, Dict.FldnWord, Dict.FldnLangId, (int)FTLangLabel.NotSpecified);
                     _cmdFindIdByWord = Ctx.CreateCmd(sql);
                     _cmdFindIdByWord.Parameters.Add(Dict.FldnWord, DbType.String);
+                    _cmdFindIdByWord.Parameters.Add(Dict.FldnLangId, DbType.Int32);
                     _cmdFindIdByWord.Prepare();
                 }
                 return _cmdFindIdByWord;
             }
         }
         #endregion
-        
+
         public int Insert(Dict w2v)
         {
             CmdInsert.Parameters[Dict.FldnWord].Value = w2v.Word;
             CmdInsert.Parameters[Dict.FldnVect].Value = w2v.Vect;
+            CmdInsert.Parameters[Dict.FldnLangId].Value = w2v.Lang;
             var res = CmdInsert.ExecuteNonQuery();
             w2v.Id = Ctx.LastInsertRowId;
             return res;
@@ -113,6 +119,7 @@ namespace FastTextProcess.Context
         {
             CmdInsertOrReplace.Parameters[Dict.FldnWord].Value = w2v.Word;
             CmdInsertOrReplace.Parameters[Dict.FldnVect].Value = w2v.Vect;
+            CmdInsertOrReplace.Parameters[Dict.FldnLangId].Value = w2v.Lang;
             var res = CmdInsertOrReplace.ExecuteNonQuery();
             w2v.Id = Ctx.LastInsertRowId;
             return res;
@@ -122,13 +129,15 @@ namespace FastTextProcess.Context
         {
             CmdUpdateVectOfWord.Parameters[Dict.FldnWord].Value = w2v.Word;
             CmdUpdateVectOfWord.Parameters[Dict.FldnVect].Value = w2v.Vect;
+            CmdUpdateVectOfWord.Parameters[Dict.FldnLangId].Value = w2v.Lang;
             var res = CmdUpdateVectOfWord.ExecuteNonQuery();
             return res;
         }
 
-        public long? FindIdByWord(string word)
+        public long? FindIdByWord(string word, FTLangLabel lang)
         {
             CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
+            CmdFindIdByWord.Parameters[Dict.FldnLangId].Value = (int)lang;
             var res = CmdFindIdByWord.ExecuteScalar();
             return res == null || DBNull.Value.Equals(res) ? (long?)null : Convert.ToInt64(res);
         }
@@ -136,7 +145,7 @@ namespace FastTextProcess.Context
         public int ControlWordsIndex(bool is_enabled)
         {
             var sql = is_enabled
-                ? $"CREATE INDEX IF NOT EXISTS inxWord{TableName} ON {TableName} ({Dict.FldnWord})"
+                ? $"CREATE INDEX IF NOT EXISTS inxWord{TableName} ON {TableName} ({Dict.FldnWord}, {Dict.FldnLangId})"
                 : $"DROP INDEX inxWord{TableName}";
             var cmd = Ctx.CreateCmd(sql);
             return cmd.ExecuteNonQuery();

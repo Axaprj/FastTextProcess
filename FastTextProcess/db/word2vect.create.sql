@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on бс эюџ 24 16:01:44 2018
+-- File generated with SQLiteStudio v3.2.1 on Mon Apr 29 18:20:33 2019
 --
 -- Text encoding used: System
 --
@@ -7,10 +7,10 @@ PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
 -- Table: Dict
-CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
+CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT NOT NULL, Vect BLOB NOT NULL, LangId INTEGER NOT NULL, UNIQUE (Word, LangId));
 
 -- Table: DictAddins
-CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB);
+CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT NOT NULL, Vect BLOB, LangId INTEGER NOT NULL, UNIQUE (Word, LangId));
 
 -- Table: EmbedDict
 CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTEGER REFERENCES Dict (Id) ON DELETE CASCADE ON UPDATE CASCADE, DictAddinsId INTEGER REFERENCES DictAddins (Id) ON DELETE CASCADE ON UPDATE CASCADE, Freq INTEGER NOT NULL);
@@ -22,10 +22,10 @@ CREATE INDEX inxIdDictAddinsEmbedDict ON EmbedDict (DictAddinsId);
 CREATE INDEX inxIdDictEmbedDict ON EmbedDict (DictId);
 
 -- Index: inxWordDict
-CREATE INDEX inxWordDict ON Dict (Word);
+CREATE INDEX inxWordDict ON Dict (Word, LangId);
 
 -- Index: inxWordDictAddins
-CREATE INDEX inxWordDictAddins ON DictAddins (Word);
+CREATE INDEX inxWordDictAddins ON DictAddins (Word, LangId);
 
 -- View: EmbedJoin
 CREATE VIEW EmbedJoin AS SELECT * FROM 

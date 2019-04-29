@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastTextProcess.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,7 +10,7 @@ namespace FastTextProcess.Preprocessor
     /// <summary>
     /// Common En text preprocessor
     /// </summary>
-    public class CommonEn: ITextPreprocess
+    public class CommonEn : ITextPreprocess
     {
         Regex rexClnCommonEn = new Regex("[^A-Za-z0-9(),.!?\'`\"]", RegexOptions.Compiled);
         Regex rexVe = new Regex("(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
@@ -20,13 +21,14 @@ namespace FastTextProcess.Preprocessor
 
         Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
 
-        public string[] ProcessWords(string txt)
+        public virtual PreprocessItem ProcessWords(string txt)
         {
-            txt = CleanCommonEn(txt, rexClnCommonEn);
-            var warr = txt.Split(' ');
-            return warr;
+            var ctxt = CleanCommonEn(txt, rexClnCommonEn);
+            return new PreprocessItem(txt, ctxt.Split(' '), GetLang(ctxt));
         }
 
+        protected virtual FTLangLabel GetLang(string txt)
+            => FTLangLabel.__label__en;
         /// <summary>
         /// Tokenization/string cleaning for all datasets except for SST.
         /// Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py

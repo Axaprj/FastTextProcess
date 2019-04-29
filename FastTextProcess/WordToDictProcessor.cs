@@ -1,5 +1,6 @@
 ﻿using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Enums;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -21,7 +22,34 @@ namespace FastTextProcess
         }
         long? _curEmbedInx = null;
         readonly object SetOfNewLock = new object();
-        readonly Dictionary<string, NewItem> SetOfNew = new Dictionary<string, NewItem>();
+        Dictionary<FTLangLabel, Dictionary<string, NewItem>> _setOfNew;
+
+
+        IEnumerable<FTLangLabel> GetSetOfNewLangs()
+        {
+            lock (SetOfNewLock)
+            {
+                return _setOfNew.Keys;
+            }
+        }
+
+        Dictionary<string, NewItem> GetSetOfNew(FTLangLabel lang)
+        {
+            lock (SetOfNewLock)
+            {
+                _setOfNew = _setOfNew
+                    ?? new Dictionary<FTLangLabel, Dictionary<string, NewItem>>();
+
+                if (_setOfNew.ContainsKey(lang))
+                    return _setOfNew[lang];
+                else
+                {
+                    var res = new Dictionary<string, NewItem>();
+                    _setOfNew[lang] = res;
+                    return res;
+                }
+            }
+        }
         struct ExistingItem
         {
             public long FreqAdd;
@@ -34,7 +62,7 @@ namespace FastTextProcess
             ProcessDB = new FastTextProcessDB(dbf_w2v);//, foreign_keys:false);
         }
 
-        public long[] WordsToInxsForParallel(string[] words)
+        public long[] WordsToInxsForParallel(string[] words, FTLangLabel lang)
         {
             var dict = ProcessDB.Dict(DictDbSet.DictKind.Main);
             var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
@@ -42,28 +70,29 @@ namespace FastTextProcess
             var embed_inxs = new long[words.Length];
             for (int inx = 0; inx < words.Length; inx++)
             {
-                embed_inxs[inx] = WordToInx(words[inx], dict, dict_addins, embed);
+                embed_inxs[inx] = WordToInx(words[inx], lang, dict, dict_addins, embed);
             }
             return embed_inxs;
         }
 
-        long WordToInx(string word, DictDbSet dict, DictDbSet dict_addins, EmbedDictDbSet embed)
+        long WordToInx(string word, FTLangLabel lang, DictDbSet dict, DictDbSet dict_addins, EmbedDictDbSet embed)
         {
             long embed_inx;
-            long? cur_id = dict.FindIdByWord(word);
+            long? cur_id = dict.FindIdByWord(word, lang);
             if (cur_id.HasValue)
             {
-                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Main, word);
+                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Main, word, lang);
             }
             else
             {
-                cur_id = dict_addins.FindIdByWord(word);
-                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Addin, word);
+                cur_id = dict_addins.FindIdByWord(word, lang);
+                embed_inx = GetOrAddEmbed(embed, cur_id, DictDbSet.DictKind.Addin, word, lang);
             }
             return embed_inx;
         }
 
-        long GetOrAddEmbed(EmbedDictDbSet embed, long? dict_id, DictDbSet.DictKind dict_kind, string word)
+        long GetOrAddEmbed(EmbedDictDbSet embed
+            , long? dict_id, DictDbSet.DictKind dict_kind, string word, FTLangLabel lang)
         {
             long? inx = null;
             if (dict_id.HasValue)
@@ -85,13 +114,14 @@ namespace FastTextProcess
                 var item = new NewItem { DictKind = dict_kind, DictId = dict_id, Freq = 0 };
                 lock (SetOfNewLock)
                 {
-                    if (SetOfNew.ContainsKey(word))
-                        item = SetOfNew[word];
+                    var set_of_new = GetSetOfNew(lang);
+                    if (set_of_new.ContainsKey(word))
+                        item = set_of_new[word];
                     else
                         item.Inx = GetNextEmbedInx(embed);
                     inx = item.Inx;
                     item.Freq++;
-                    SetOfNew[word] = item;
+                    set_of_new[word] = item;
                 }
             }
             return inx.Value;
@@ -121,23 +151,29 @@ namespace FastTextProcess
                     embed.IncrementFreq(inx: inx, add_freq: item.FreqAdd);
                 }
                 var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
-                foreach (string word in SetOfNew.Keys)
+                foreach (var lang in GetSetOfNewLangs())
                 {
-                    var item = SetOfNew[word];
-                    if (!item.DictId.HasValue)
+                    var set_of_new = GetSetOfNew(lang);
+                    foreach (string word in set_of_new.Keys)
                     {
-                        Dict w2v = new Dict { Word = word };
-                        dict_addins.Insert(w2v);
-                        item.DictId = w2v.Id;
+                        var item = set_of_new[word];
+                        if (!item.DictId.HasValue)
+                        {
+                            Dict w2v = new Dict { Word = word, Lang = lang };
+                            dict_addins.Insert(w2v);
+                            item.DictId = w2v.Id;
+                        }
+                        var ed = new EmbedDict
+                        {
+                            Inx = item.Inx,
+                            DictId = item.DictKind ==
+                                DictDbSet.DictKind.Main ? item.DictId : null,
+                            DictAddinsId = item.DictKind ==
+                                DictDbSet.DictKind.Addin ? item.DictId : null,
+                            Freq = item.Freq
+                        };
+                        embed.Insert(ed);
                     }
-                    var ed = new EmbedDict
-                    {
-                        Inx = item.Inx,
-                        DictId = item.DictKind == DictDbSet.DictKind.Main ? item.DictId : null,
-                        DictAddinsId = item.DictKind == DictDbSet.DictKind.Addin ? item.DictId : null,
-                        Freq = item.Freq
-                    };
-                    embed.Insert(ed);
                 }
                 trans.Commit();
             }

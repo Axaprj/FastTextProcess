@@ -1,5 +1,6 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Enums;
 using FastTextProcess.Preprocessor;
 using System;
 using System.Collections.Generic;
@@ -39,9 +40,9 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbRuk()
         {
-            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU, with_insert_or_replace: true);
+            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU, FTLangLabel.__label__ru, with_insert_or_replace: true);
             SubProcInsertPredefinedMacro(DBF_W2V_RU);
-            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK, with_insert_or_replace: true);
+            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK, FTLangLabel.__label__uk, with_insert_or_replace: true);
             SubProcInsertPredefinedMacro(DBF_W2V_UK);
         }
 
@@ -61,7 +62,8 @@ namespace FastTextProcess.Tests
                 Log($"Process samples '{src_id_pref}' ...");
                 lang_detector.RunByLineAsync(
                       (item) => Log(item.Lang.ToString() + ">>> " + item.Text)
-                    , (txt, txt_lbl) => new LangDetectItem(txt, txt_lbl));
+                    , (txt, txt_lbl) 
+                        => new PreprocessItem(txt, new string[] { "" }, txt_lbl));
                 foreach (string txt in GetSrcItems())
                 {
                     var words = preproc.ProcessWords(txt);
@@ -72,7 +74,7 @@ namespace FastTextProcess.Tests
             Log($"Done ({src_id_pref})");
         }
 
-        FastTextLauncher<LangDetectItem> CreateLangDetector()
+        FastTextLauncher<PreprocessItem> CreateLangDetector()
         {
             var fmod = DataArcPath("lid.176.bin");
             AssertFileExists(fmod, "FastText model file");

@@ -1,5 +1,6 @@
 using FastTextProcess.Context;
 using FastTextProcess.Entities;
+using FastTextProcess.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +24,7 @@ namespace FastTextProcess.Tests
         /// <param name="ft_vec_fn">FastText vectors filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
         /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
-        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn, bool with_insert_or_replace=false)
+        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang, bool with_insert_or_replace = false)
         {
             var fvec = DataArcPath(ft_vec_fn);
             AssertFileExists(fvec, "FastText file of vectors");
@@ -49,8 +50,8 @@ namespace FastTextProcess.Tests
                         line = sr.ReadLine();
                         if (string.IsNullOrEmpty(line))
                             continue;
-                        var w2v = Dict.Create(line);
-                        if(with_insert_or_replace)
+                        var w2v = Dict.Create(line, lang);
+                        if (with_insert_or_replace)
                             w2v_tbl.InsertOrReplace(w2v);
                         else
                             w2v_tbl.Insert(w2v);
@@ -86,7 +87,8 @@ namespace FastTextProcess.Tests
         /// </summary>
         /// <param name="ft_bin_fn">FastText bin model filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
-        protected void SubProcFillEmptyVectDict(string ft_bin_fn, string dbf_w2v_fn)
+        protected void SubProcFillEmptyVectDict(
+            string ft_bin_fn, string dbf_w2v_fn, FTLangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
             {
@@ -105,7 +107,7 @@ namespace FastTextProcess.Tests
                         {
                             ftl.RunByLineAsync(
                                 (w2v) => dict.UpdateVectOfWord(w2v),
-                                (src, res_txt) => Dict.Create(res_txt)
+                                (src, res_txt) => Dict.Create(res_txt, lang)
                             );
                             foreach (var w in words)
                                 ftl.Push(w);
@@ -163,7 +165,7 @@ namespace FastTextProcess.Tests
                 var vect_empty = Dict.CreateEmpty();
                 //var vect_fl = Dict.GetVectFloat(vect_empty.Vect);
                 var dict = dbx_src.Dict(DictDbSet.DictKind.Addin);
-                long? vect_empty_id = dict.FindIdByWord(vect_empty.Word);
+                long? vect_empty_id = dict.FindIdByWord(vect_empty.Word, vect_empty.Lang);
                 if (vect_empty_id.HasValue)
                     vect_empty.Id = vect_empty_id.Value;
                 else
