@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FastTextProcess.Entities
 {
-    internal class ProcessItem
+    internal class ProcessItem : ITextSource
     {
         internal const string TblnSrc = "Src";
         internal const string FldnSrcProcInfo = "ProcInfo";
@@ -18,6 +18,9 @@ namespace FastTextProcess.Entities
         internal const string FldnDictVectStr = "VectStr";
 
         public string Src;
+        string ITextSource.GetText() => Src;
+        void ITextSource.SetText(string txt) { Src = txt; }
+
         public string SrcOriginalId;
         public FTLangLabel Lang;
         public string SrcProcInfo;
@@ -30,7 +33,10 @@ namespace FastTextProcess.Entities
         public string GetPreprocessedStr() =>
                     string.Join(" ", Preprocessed);
 
+
         public override string ToString() =>
              $"FastTextProcess::ProcessItem:'{SrcOriginalId}'; info:'{SrcProcInfo}';";
+
+
     }
 }

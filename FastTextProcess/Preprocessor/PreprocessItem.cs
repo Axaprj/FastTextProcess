@@ -11,17 +11,16 @@ namespace FastTextProcess.Preprocessor
     public class PreprocessItem
     {
         public readonly string Text;
-        public readonly string[] Words;
+        public string[] Words { get { return Text.Split(' '); } }
         public readonly FTLangLabel Lang;
-        public PreprocessItem(string text, string[] words, string ft_lang_label)
-            :this(text , words, FTLangLabel.NotSpecified)
+        public PreprocessItem(string text, string ft_lang_label)
+            : this(text, FTLangLabel.NotSpecified)
         {
             Enum.TryParse(ft_lang_label, out Lang);
         }
-        public PreprocessItem(string text, string[] words, FTLangLabel lang)
+        public PreprocessItem(string text, FTLangLabel lang)
         {
             Text = text;
-            Words = words;
             Lang = lang;
         }
     }

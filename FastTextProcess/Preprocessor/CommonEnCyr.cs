@@ -1,5 +1,4 @@
-﻿using FastTextProcess.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,16 +11,24 @@ namespace FastTextProcess.Preprocessor
     /// </summary>
     public class CommonEnCyr : CommonEn
     {
-        Regex rexClnCommonEnCyr = new Regex("[^A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9(),.!?\'`\"]", RegexOptions.Compiled);
+        readonly Regex rexClnCommonEnCyr = new Regex("[^A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9(),.!?\'`\"]", RegexOptions.Compiled);
+        readonly FastTextLauncher _ftLauncher;
 
-        public override PreprocessItem ProcessWords(string txt)
+        public CommonEnCyr(FastTextLauncher ft_launcher)
         {
-            var ctxt = CleanCommonEn(txt, rexClnCommonEnCyr);
-            return new PreprocessItem(txt, ctxt.Split(' '), GetLang(ctxt));
+            _ftLauncher = ft_launcher;
+            _ftLauncher.RunByLineAsync(
+                (txt_src, txt_lbl) => HandleResult(txt_src, new PreprocessItem(txt_src.GetText(), txt_lbl))
+                );
         }
-        protected override FTLangLabel GetLang(string txt)
+
+        public void ProcessWords(string txt) => ProcessWords(new TextSourceStub(txt));
+
+        public override void ProcessWords(ITextSource txt_src)
         {
-            return FTLangLabel.__label__en;
+            var ctxt = CleanCommonEn(txt_src.GetText(), rexClnCommonEnCyr);
+            txt_src.SetText(ctxt);
+            _ftLauncher.Push(txt_src);
         }
     }
 }

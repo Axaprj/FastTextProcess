@@ -106,8 +106,8 @@ namespace FastTextProcess.Tests
                         using (var ftl = FTCmd.CreateW2V(fexe, fmod))
                         {
                             ftl.RunByLineAsync(
-                                (w2v) => dict.UpdateVectOfWord(w2v),
-                                (src, res_txt) => Dict.Create(res_txt, lang)
+                                (txt_src, res_txt) =>
+                                    dict.UpdateVectOfWord(Dict.Create(res_txt, lang))
                             );
                             foreach (var w in words)
                                 ftl.Push(w);

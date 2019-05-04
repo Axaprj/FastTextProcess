@@ -21,14 +21,15 @@ namespace FastTextProcess.Preprocessor
 
         Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
 
-        public virtual PreprocessItem ProcessWords(string txt)
+        public Action<ITextSource, PreprocessItem> HandleResult { get; set; }
+
+        public virtual void ProcessWords(ITextSource txt_src)
         {
-            var ctxt = CleanCommonEn(txt, rexClnCommonEn);
-            return new PreprocessItem(txt, ctxt.Split(' '), GetLang(ctxt));
+            var ctxt = CleanCommonEn(txt_src.GetText(), rexClnCommonEn);
+            txt_src.SetText(ctxt);
+            HandleResult(txt_src, new PreprocessItem(ctxt, FTLangLabel.__label__en));
         }
 
-        protected virtual FTLangLabel GetLang(string txt)
-            => FTLangLabel.__label__en;
         /// <summary>
         /// Tokenization/string cleaning for all datasets except for SST.
         /// Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
@@ -62,5 +63,6 @@ namespace FastTextProcess.Preprocessor
             str = rexClnSpaces.Replace(str, " ");
             return str.Trim();
         }
+          
     }
 }

@@ -28,7 +28,7 @@ namespace FastTextProcess
         readonly CancellationTokenSource CancelTokenSrc;
 
         public TextProcessor(string dbf_w2v, string dbf_res
-            , Preprocessor.ITextPreprocess preprocessor = null
+            , Preprocessor.ITextPreprocess preprocessor
             , int boundedCapacity = 10000)
         {
             QueueProcess = new BlockingCollection<ProcessItem>(boundedCapacity);
@@ -36,32 +36,30 @@ namespace FastTextProcess
             QueueStoreResult = new BlockingCollection<ProcessItem>(boundedCapacity);
             CancelTokenSrc = new CancellationTokenSource();
             var cancel_token = CancelTokenSrc.Token;
-            if (preprocessor != null)
+            taskPreprocess = Task.Run(() =>
             {
-                taskPreprocess = Task.Run(() =>
+                try
                 {
-                    try
+                    preprocessor.HandleResult = (txt_src, prep_itm) =>
                     {
-                        Parallel.ForEach(
-                            QueueProcess.GetConsumingEnumerable(cancel_token)
-                            , (itm) =>
-                            {
-                                var prep_itm = preprocessor.ProcessWords(itm.Src);
-                                itm.Preprocessed = prep_itm.Words;
-                                itm.Lang = prep_itm.Lang;
-                                QueueWordToDict.Add(itm, cancel_token);
-                            }
-                        );
-                        QueueWordToDict.CompleteAdding();
-                    }
-                    catch
-                    {
-                        CancelTokenSrc.Cancel();
-                        throw;
-                    }
-                }, cancel_token
-                );
-            }
+                        var itm = (ProcessItem)txt_src;
+                        itm.Preprocessed = prep_itm.Words;
+                        itm.Lang = prep_itm.Lang;
+                        QueueWordToDict.Add(itm, cancel_token);
+                    };
+                    Parallel.ForEach(
+                       QueueProcess.GetConsumingEnumerable(cancel_token)
+                       , (itm) => preprocessor.ProcessWords(itm)
+                   );
+                    QueueWordToDict.CompleteAdding();
+                }
+                catch
+                {
+                    CancelTokenSrc.Cancel();
+                    throw;
+                }
+            }, cancel_token
+            );
             taskWordToDict = Task.Run(() =>
             {
                 try
@@ -140,37 +138,23 @@ namespace FastTextProcess
             );
         }
 
-        public void Process(string src, string src_id, string proc_info, string[] preprocessed_src=null)
+        public void Process(string src, string src_id, string proc_info)
         {
             if (CancelTokenSrc.IsCancellationRequested)
                 throw new InvalidOperationException(
                     $"Processing was canceled. Terminated before process '{src_id}' source.");
-            if (taskPreprocess == null && preprocessed_src==null)
-                throw new InvalidOperationException(
-                    "Preprocessor and preprocessed value are not set");
-           
-                var item = new ProcessItem
-                {
-                    Src = src,
-                    SrcOriginalId = src_id,
-                    SrcProcInfo = proc_info
-                };
-            if (preprocessed_src == null)
-            { // start preprocessing
-                QueueProcess.Add(item);
-            }
-            else
-            { // without preprocessing
-                item.Preprocessed = preprocessed_src;
-                QueueWordToDict.Add(item, CancelTokenSrc.Token);
-            }
+            var item = new ProcessItem
+            {
+                Src = src,
+                SrcOriginalId = src_id,
+                SrcProcInfo = proc_info
+            };
+            QueueProcess.Add(item);
         }
 
         void WaitForFinalize()
         {
             QueueProcess.CompleteAdding();
-            if (taskPreprocess == null)
-                QueueWordToDict.CompleteAdding();
             var agg_ex = new List<Exception>();
             try
             {
@@ -184,8 +168,7 @@ namespace FastTextProcess
             catch (Exception ex) { agg_ex.Add(ex); }
             try
             {
-                if (taskPreprocess != null)
-                    taskPreprocess.Wait();
+                taskPreprocess.Wait();
             }
             catch (Exception ex) { agg_ex.Add(ex); }
 
