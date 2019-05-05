@@ -6,8 +6,8 @@ namespace FastTextProcess.Preprocessor
 {
     public interface ITextPreprocess
     {
-        void ProcessWords(ITextSource txt_src);
+        void Push(ITextSource txt_src);
 
-        Action<ITextSource, PreprocessItem> HandleResult { get; set;  }
+        void RunAsync(Action<ITextSource, PreprocessItem> actResultHandler);
     }
 }

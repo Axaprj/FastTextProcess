@@ -21,13 +21,18 @@ namespace FastTextProcess.Preprocessor
 
         Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
 
-        public Action<ITextSource, PreprocessItem> HandleResult { get; set; }
+        Action<ITextSource, PreprocessItem> _resultHandler;
 
-        public virtual void ProcessWords(ITextSource txt_src)
+        public virtual void Push(ITextSource txt_src)
         {
             var ctxt = CleanCommonEn(txt_src.GetText(), rexClnCommonEn);
             txt_src.SetText(ctxt);
-            HandleResult(txt_src, new PreprocessItem(ctxt, FTLangLabel.__label__en));
+            _resultHandler(txt_src, new PreprocessItem(ctxt, FTLangLabel.__label__en));
+        }
+
+        public virtual void RunAsync(Action<ITextSource, PreprocessItem> actResultHandler)
+        {
+            _resultHandler = actResultHandler;
         }
 
         /// <summary>

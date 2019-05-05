@@ -40,17 +40,18 @@ namespace FastTextProcess
             {
                 try
                 {
-                    preprocessor.HandleResult = (txt_src, prep_itm) =>
-                    {
-                        var itm = (ProcessItem)txt_src;
-                        itm.Preprocessed = prep_itm.Words;
-                        itm.Lang = prep_itm.Lang;
-                        QueueWordToDict.Add(itm, cancel_token);
-                    };
+                    preprocessor.RunAsync((txt_src, prep_itm) =>
+                        {
+                            var itm = (ProcessItem)txt_src;
+                            itm.Preprocessed = prep_itm.Words;
+                            itm.Lang = prep_itm.Lang;
+                            QueueWordToDict.Add(itm, cancel_token);
+                        }
+                    );
                     Parallel.ForEach(
                        QueueProcess.GetConsumingEnumerable(cancel_token)
-                       , (itm) => preprocessor.ProcessWords(itm)
-                   );
+                       , (itm) => preprocessor.Push(itm)
+                    );
                     QueueWordToDict.CompleteAdding();
                 }
                 catch
