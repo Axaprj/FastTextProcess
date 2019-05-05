@@ -19,8 +19,7 @@ namespace FastTextProcess.Tests
     /// </summary>
     public class FastTextRoutinesCyr : FastTextRoutines
     {
-        const string DBF_W2V_RU = "w2v_ru.db";
-        const string DBF_W2V_UK = "w2v_uk.db";
+        const string DBF_W2V_RUK = "w2v_ruk.db";
         const string DBF_RUK_Proc = "RUK_proc.db";
         public FastTextRoutinesCyr(ITestOutputHelper output) : base(output) { }
 
@@ -29,9 +28,7 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Clean Processing Results")]
         public void ProcResultCleanRuk()
         {
-            try { ProcResultClean(DBF_W2V_RU, DBF_RUK_Proc); }
-            catch (Exception ex) { Log(ex.Message); }
-            try { ProcResultClean(DBF_W2V_UK, DBF_RUK_Proc); }
+            try { ProcResultClean(DBF_W2V_RUK, DBF_RUK_Proc); }
             catch (Exception ex) { Log(ex.Message); }
         }
 
@@ -40,10 +37,9 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbRuk()
         {
-            ProcCreateDb("wiki.ru.vec", DBF_W2V_RU, FTLangLabel.__label__ru, with_insert_or_replace: true);
-            SubProcInsertPredefinedMacro(DBF_W2V_RU);
-            ProcCreateDb("wiki.uk.vec", DBF_W2V_UK, FTLangLabel.__label__uk, with_insert_or_replace: true);
-            SubProcInsertPredefinedMacro(DBF_W2V_UK);
+            ProcCreateDb("wiki.ru.vec", DBF_W2V_RUK, FTLangLabel.__label__ru, with_insert_or_replace: true);
+            ProcAppendDb("wiki.uk.vec", DBF_W2V_RUK, FTLangLabel.__label__uk, with_insert_or_replace: true);
+            SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }
 
         [Fact]

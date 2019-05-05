@@ -32,6 +32,21 @@ namespace FastTextProcess.Tests
             AssertFileNotExists(dbf_w2v_fn, "word2vect DB");
             FastTextProcessDB.CreateDB(dbf_w2v_fn);
 
+            ProcAppendDb(ft_vec_fn, dbf_w2v_fn, lang, with_insert_or_replace);
+        }
+        /// <summary>
+        /// Append records to word to vector db 
+        /// </summary>
+        /// <param name="ft_vec_fn">FastText vectors filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
+        protected void ProcAppendDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang, bool with_insert_or_replace = false)
+        {
+            var fvec = DataArcPath(ft_vec_fn);
+            AssertFileExists(fvec, "FastText file of vectors");
+
+            AssertFileExists(dbf_w2v_fn, "word2vect DB");
+
             using (var dbx = new FastTextProcessDB(dbf_w2v_fn, foreign_keys: false))
             {
                 var w2v_tbl = dbx.Dict(DictDbSet.DictKind.Main);
