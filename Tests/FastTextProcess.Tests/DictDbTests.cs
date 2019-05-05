@@ -82,12 +82,20 @@ namespace FastTextProcess.Tests
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
                 var w1u = dict_db.FindByWord("шкарпетки", Enums.FTLangLabel.__label__uk);
                 var w1r = dict_db.FindByWord("носки", Enums.FTLangLabel.__label__ru);
+                var w1e = dict_db.FindByWord("socks", Enums.FTLangLabel.__label__en);
                 var w2u = dict_db.FindByWord("краватка", Enums.FTLangLabel.__label__uk);
                 var w2r = dict_db.FindByWord("галстук", Enums.FTLangLabel.__label__ru);
+                var w2e = dict_db.FindByWord("necktie", Enums.FTLangLabel.__label__en);
+
                 Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
                 Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");
+
+                Log($"cos({w1u.Word}, {w1e.Word}) = {w1u.GetCosine(w1e)}");
+                Log($"cos({w1r.Word}, {w1e.Word}) = {w1r.GetCosine(w1e)}");
+                                
                 Log($"cos({w1u.Word}, {w2u.Word}) = {w1u.GetCosine(w2u)}");
                 Log($"cos({w1r.Word}, {w2r.Word}) = {w1r.GetCosine(w2r)}");
+                Log($"cos({w1e.Word}, {w2e.Word}) = {w1e.GetCosine(w2e)}");
             }
             Log("done");
         }
