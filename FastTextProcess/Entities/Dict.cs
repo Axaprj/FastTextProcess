@@ -57,5 +57,33 @@ namespace FastTextProcess.Entities
                 res[inx] = BitConverter.ToSingle(vect, inx * 4);
             return res;
         }
+
+        public static float GetCosine(float[] a, float[] b)
+        {
+            if (a == null || b == null)
+                throw new InvalidOperationException(
+                    "Not initialized vectors");
+            var len = a.Length;
+            if (len != b.Length)
+                throw new InvalidOperationException(
+                    $"Wrong vector arrays: length(a)={len} length(b)={b.Length}");
+            float prod = 0;
+            float sq_a = 0;
+            float sq_b = 0;
+            for (int inx = 0; inx < len; inx++)
+            {
+                prod += a[inx] * b[inx];
+                sq_a += a[inx] * a[inx];
+                sq_b += b[inx] * b[inx];
+            }
+            return (float)(prod / (Math.Sqrt(sq_a)* Math.Sqrt(sq_b)));
+        }
+
+        public float GetCosine(Dict other)
+        {
+            float[] a = GetVectFloat(this.Vect);
+            float[] b = GetVectFloat(other.Vect);
+            return GetCosine(a, b);
+        }
     }
 }

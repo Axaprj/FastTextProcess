@@ -71,6 +71,25 @@ namespace FastTextProcess.Tests
             }
             Log("done");
         }
-
+        [Fact]
+        public void TestCosineRUK()
+        {
+            var DBF_W2V_RUK = "w2v_ruk.db";
+            AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
+            
+            using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
+            {
+                var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
+                var w1u = dict_db.FindByWord("шкарпетки", Enums.FTLangLabel.__label__uk);
+                var w1r = dict_db.FindByWord("носки", Enums.FTLangLabel.__label__ru);
+                var w2u = dict_db.FindByWord("краватка", Enums.FTLangLabel.__label__uk);
+                var w2r = dict_db.FindByWord("галстук", Enums.FTLangLabel.__label__ru);
+                Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
+                Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");
+                Log($"cos({w1u.Word}, {w2u.Word}) = {w1u.GetCosine(w2u)}");
+                Log($"cos({w1r.Word}, {w2r.Word}) = {w1r.GetCosine(w2r)}");
+            }
+            Log("done");
+        }
     }
 }

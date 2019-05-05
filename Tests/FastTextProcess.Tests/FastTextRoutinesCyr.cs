@@ -37,8 +37,8 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbRuk()
         {
-            ProcCreateDb("wiki.ru.vec", DBF_W2V_RUK, FTLangLabel.__label__ru, with_insert_or_replace: true);
-            ProcAppendDb("wiki.uk.vec", DBF_W2V_RUK, FTLangLabel.__label__uk, with_insert_or_replace: true);
+            ProcCreateDb("cc.ru.300.vec", DBF_W2V_RUK, FTLangLabel.__label__ru, with_insert_or_replace: true);
+            ProcAppendDb("cc.uk.300.vec", DBF_W2V_RUK, FTLangLabel.__label__uk, with_insert_or_replace: true);
             SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }
 

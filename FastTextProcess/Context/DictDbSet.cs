@@ -163,5 +163,29 @@ namespace FastTextProcess.Context
                     yield return rd.GetString(0);
             }
         }
+
+        public Dict FindByWord(string word, FTLangLabel lang)
+        {
+            var sql = string.Format(
+                       "SELECT {1}, {2}, {3}, {4} FROM {0} WHERE {2} = ${2} AND ({4} = ${4} OR {4} = {5}) ",
+                       TableName
+                       , Dict.FldnId, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId, (int)FTLangLabel.NotSpecified);
+            var cmd = Ctx.CreateCmd(sql);
+            cmd.Parameters.AddWithValue(Dict.FldnWord, word);
+            cmd.Parameters.AddWithValue(Dict.FldnLangId, (int)lang);
+            using (var rd = cmd.ExecuteReader())
+            {
+                while (rd.Read())
+                    return new Dict
+                    {
+                        Id = rd.GetInt64(0),
+                        Word = rd.GetString(1),
+                        Vect = (byte[])rd[2],
+                        Lang = (FTLangLabel)rd.GetInt32(3)
+                    };
+            }
+            return null;
+        }
+
     }
 }
