@@ -10,6 +10,7 @@ namespace FastTextProcess.Entities
     /// </summary>
     public class Dict
     {
+        const int DEF_VECT_SIZE = 300;
         internal const string FldnId = "Id";
         internal const string FldnWord = "Word";
         internal const string FldnVect = "Vect";
@@ -20,7 +21,7 @@ namespace FastTextProcess.Entities
         public byte[] Vect { get; set; }
         public FTLangLabel Lang { get; set; }
 
-        public static Dict Create(string str, FTLangLabel lang)
+        public static Dict CreateParseFT(string str, FTLangLabel lang)
         {
             var sarr = str.Trim().Split(' ');
             var sfarr = new string[sarr.Length - 1];
@@ -31,9 +32,15 @@ namespace FastTextProcess.Entities
             return new Dict { Word = sarr[0], Vect = barr, Lang = lang };
         }
 
+        public static Dict CreateRnd(string word, FTLangLabel lang, int vect_sz = DEF_VECT_SIZE)
+        {
+            var barr = new byte[vect_sz * 4];
+            return new Dict { Id = -1, Word = word, Vect = barr, Lang = lang };
+        }
+
         public static Dict CreateEmpty(string word = "<%NONE%>"
             , FTLangLabel lang = FTLangLabel.NotSpecified
-            , int vect_sz = 300)
+            , int vect_sz = DEF_VECT_SIZE)
         {
             var res = new Dict
             {

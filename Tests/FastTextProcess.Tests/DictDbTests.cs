@@ -72,11 +72,44 @@ namespace FastTextProcess.Tests
             Log("done");
         }
         [Fact]
+        public void TestVectRangeRUK()
+        {
+            var DBF_W2V_RUK = "w2v_ruk.db";
+            AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
+
+            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__en);
+            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__ru);
+            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__uk);
+            Log("done");
+        }
+
+        void CalcMinMax(string w2v_db_fn, Enums.FTLangLabel lang)
+        {
+            using (var dbx = new FastTextProcessDB(w2v_db_fn))
+            {
+                var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
+                var w2v_all = dict_db.GetAll(lang);
+                var fmin = float.MaxValue;
+                var fmax = float.MinValue;
+                long cnt = 0;
+                foreach (var w2v in w2v_all)
+                {
+                    foreach (var vv in Dict.GetVectFloat(w2v.Vect))
+                    {
+                        fmin = Math.Min(fmin, vv);
+                        fmax = Math.Max(fmax, vv);
+                    }
+                    cnt++;
+                }
+                Log($"Lang={lang}: Count={cnt}; Min={fmin}; Max={fmax};");
+            }
+        }
+        [Fact]
         public void TestCosineRUK()
         {
             var DBF_W2V_RUK = "w2v_ruk.db";
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
-            
+
             using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
             {
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
@@ -92,7 +125,7 @@ namespace FastTextProcess.Tests
 
                 Log($"cos({w1u.Word}, {w1e.Word}) = {w1u.GetCosine(w1e)}");
                 Log($"cos({w1r.Word}, {w1e.Word}) = {w1r.GetCosine(w1e)}");
-                                
+
                 Log($"cos({w1u.Word}, {w2u.Word}) = {w1u.GetCosine(w2u)}");
                 Log($"cos({w1r.Word}, {w2r.Word}) = {w1r.GetCosine(w2r)}");
                 Log($"cos({w1e.Word}, {w2e.Word}) = {w1e.GetCosine(w2e)}");

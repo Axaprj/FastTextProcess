@@ -65,7 +65,7 @@ namespace FastTextProcess.Tests
                         line = sr.ReadLine();
                         if (string.IsNullOrEmpty(line))
                             continue;
-                        var w2v = Dict.Create(line, lang);
+                        var w2v = Dict.CreateParseFT(line, lang);
                         if (with_insert_or_replace)
                             w2v_tbl.InsertOrReplace(w2v);
                         else
@@ -122,10 +122,42 @@ namespace FastTextProcess.Tests
                         {
                             ftl.RunByLineAsync(
                                 (txt_src, res_txt) =>
-                                    dict.UpdateVectOfWord(Dict.Create(res_txt, lang))
+                                    dict.UpdateVectOfWord(Dict.CreateParseFT(res_txt, lang))
                             );
                             foreach (var w in words)
                                 ftl.Push(w);
+                        }
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fill Empty Add-in Dictionary Vectors using Random Vectors generation
+        /// </summary>
+        /// <param name="ft_bin_fn">FastText bin model filename</param>
+        /// <param name="dbf_w2v_fn">DB word to vector filename</param>
+        protected void SubProcFillEmptyVectDictRND(
+            string dbf_w2v_fn, FTLangLabel lang)
+        {
+            using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
+            {
+                var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
+                if (words.Any())
+                {
+                    var trans = dbx.BeginTransaction();
+                    try
+                    {
+                        var dict = dbx.Dict(DictDbSet.DictKind.Addin);
+                        foreach (var w in words)
+                        {
+                            dict.UpdateVectOfWord(Dict.CreateRnd(w, lang));
                         }
                         trans.Commit();
                     }

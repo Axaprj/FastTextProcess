@@ -50,6 +50,9 @@ namespace FastTextProcess.Tests
         {
             var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
             ProcRukFull(conn_str, "StaTransform.db", "AdID:");
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__ru);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__uk);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__en);
             SubProcBuildResultDict(DBF_RUK_Proc, DBF_W2V_RUK);
             SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }

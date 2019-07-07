@@ -164,6 +164,27 @@ namespace FastTextProcess.Context
             }
         }
 
+        public IEnumerable<Dict> GetAll(FTLangLabel lang)
+        {
+            var sql = string.Format(
+                       "SELECT {1}, {2}, {3}, {4} FROM {0} WHERE {4} = ${4}",
+                       TableName
+                       , Dict.FldnId, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId);
+            var cmd = Ctx.CreateCmd(sql);
+            cmd.Parameters.AddWithValue(Dict.FldnLangId, (int)lang);
+            using (var rd = cmd.ExecuteReader())
+            {
+                while (rd.Read())
+                    yield return new Dict
+                    {
+                        Id = rd.GetInt64(0),
+                        Word = rd.GetString(1),
+                        Vect = (byte[])rd[2],
+                        Lang = (FTLangLabel)rd.GetInt32(3)
+                    }; 
+            }
+        }
+
         public Dict FindByWord(string word, FTLangLabel lang)
         {
             var sql = string.Format(
