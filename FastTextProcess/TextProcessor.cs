@@ -52,6 +52,7 @@ namespace FastTextProcess
                        QueueProcess.GetConsumingEnumerable(cancel_token)
                        , (itm) => preprocessor.Push(itm)
                     );
+                    preprocessor.CompleteAdding();
                     QueueWordToDict.CompleteAdding();
                 }
                 catch
@@ -155,8 +156,13 @@ namespace FastTextProcess
 
         void WaitForFinalize()
         {
-            QueueProcess.CompleteAdding();
             var agg_ex = new List<Exception>();
+            try
+            {
+                QueueProcess.CompleteAdding();
+                taskPreprocess.Wait();
+            }
+            catch (Exception ex) { agg_ex.Add(ex); }
             try
             {
                 taskWordToDict.Wait();

@@ -59,6 +59,11 @@ namespace FastTextProcess
                 (_, e) => BagErrors.Add(e.Data));
         }
 
+        public void CompleteAdding()
+        {
+            QueueIn.CompleteAdding();
+            taskFTOut.Wait();
+        }
 
         public void Push(ITextSource txt_src) => QueueIn.Add(txt_src);
 
@@ -66,43 +71,43 @@ namespace FastTextProcess
 
         public void RunByLineAsync(Action<ITextSource, string> actHandleResult)
         {
-                taskFTOut = Task.Run(() =>
+            taskFTOut = Task.Run(() =>
+            {
+                FTProc.Start();
+                using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
                 {
-                    FTProc.Start();
-                    using (var writer = new StreamWriter(FTProc.StandardInput.BaseStream, Encoding.UTF8))
+                    foreach (var txt_src in QueueIn.GetConsumingEnumerable())
                     {
-                        foreach (var txt_src in QueueIn.GetConsumingEnumerable())
+                        var task_in = Task.Run(() =>
                         {
-                            var task_in = Task.Run(() =>
-                            {
-                                writer.WriteLine(txt_src.GetText());
-                                writer.Flush();
-                            });
-                            task_in.Wait();
-                            string res_ln = FTProc.StandardOutput.ReadLine();
-                            actHandleResult(txt_src, res_ln);
-                        }
+                            writer.WriteLine(txt_src.GetText());
+                            writer.Flush();
+                        });
+                        task_in.Wait();
+                        string res_ln = FTProc.StandardOutput.ReadLine();
+                        actHandleResult(txt_src, res_ln);
                     }
-                    FTProc.WaitForExit();
-                });
+                }
+                FTProc.WaitForExit();
+            });
         }
 
         void IDisposable.Dispose()
         {
-                QueueIn.CompleteAdding();
-                try
-                {
-                    if (taskFTOut != null)
-                        taskFTOut.Wait();
-                }
-                finally
-                {
-                    QueueIn.Dispose();
-                    if (FTProc.HasExited)
-                        FTProc.Close();
-                    else
-                        FTProc.Kill();
-                }
+            QueueIn.CompleteAdding();
+            try
+            {
+                if (taskFTOut != null)
+                    taskFTOut.Wait();
+            }
+            finally
+            {
+                QueueIn.Dispose();
+                if (FTProc.HasExited)
+                    FTProc.Close();
+                else
+                    FTProc.Kill();
             }
         }
     }
+}

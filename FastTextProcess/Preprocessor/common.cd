@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FastTextProcess.Preprocessor.CommonEn">
+    <Position X="1" Y="0.75" Width="2.5" />
+    <Members>
+      <Field Name="_resultHandler" Hidden="true" />
+      <Method Name="CleanCommonEn" Hidden="true" />
+      <Field Name="rexClnCommonEn" Hidden="true" />
+      <Field Name="rexClnSpaces" Hidden="true" />
+      <Field Name="rexD" Hidden="true" />
+      <Field Name="rexLL" Hidden="true" />
+      <Field Name="rexRe" Hidden="true" />
+      <Field Name="rexS" Hidden="true" />
+      <Field Name="rexVe" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAQQAgAAAIAAQAgIAAAAAAAAAAAAAAAAAAAgACEQ=</HashCode>
+      <FileName>Preprocessor\CommonEn.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FastTextProcess.Preprocessor.CommonEnCyr" Collapsed="true">
+    <Position X="1" Y="4" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAASAA=</HashCode>
+      <FileName>Preprocessor\CommonEnCyr.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_ftLauncher" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FastTextProcess.Preprocessor.PreprocessItem">
+    <Position X="6.75" Y="0.75" Width="2" />
+    <Members>
+      <Method Name="PreprocessItem" Hidden="true" />
+      <Property Name="Words" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAACAAgAAA=</HashCode>
+      <FileName>Preprocessor\PreprocessItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastTextProcess.FastTextLauncher">
+    <Position X="5.25" Y="4" Width="2.5" />
+    <Members>
+      <Method Name="FastTextLauncher" Hidden="true" />
+      <Method Name="IDisposable.Dispose" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAQAAQAAAAAAAAAAAAAABAgABAAAACAA=</HashCode>
+      <FileName>FastTextLauncher.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="FastTextProcess.Preprocessor.ITextPreprocess">
+    <Position X="4.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAACAA=</HashCode>
+      <FileName>Preprocessor\ITextPreprocess.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="10" />
+</ClassDiagram>

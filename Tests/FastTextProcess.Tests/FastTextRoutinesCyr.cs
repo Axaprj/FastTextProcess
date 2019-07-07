@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 namespace FastTextProcess.Tests
 {
     /// <summary>
-    /// Ru Uk texts processor
+    /// Ru Uk En texts processor
     /// </summary>
     public class FastTextRoutinesCyr : FastTextRoutines
     {
@@ -48,23 +48,49 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Append Data (Processing Full)")]
         public void ProcRukBuildFull()
         {
-            ProcRukFull("", "", "");
+            var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
+            ProcRukFull(conn_str, "StaTransform.db", "AdID:");
+            SubProcBuildResultDict(DBF_RUK_Proc, DBF_W2V_RUK);
+            SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }
 
-        void ProcRukFull(string data_dir, string proc_info, string src_id_pref)
+        void ProcRukFull(string conn_str, string proc_info, string src_id_pref)
         {
+
+            using (var lang_detector = CreateLangDetector())
+            {
+                using (var proc = new TextProcessor(
+                    DBF_W2V_RUK, DBF_RUK_Proc, new CommonEnCyr(lang_detector)))
+                {
+                    Log($"Process samples '{proc_info}' ...");
+                    foreach (var keyValue in GetSrcItems(conn_str))
+                    {
+                        proc.Process(keyValue.Value, src_id: src_id_pref + keyValue.Key
+                                , proc_info: proc_info);
+                    }
+                }
+            }
+            Log($"Done ({proc_info})");
+        }
+
+        [Fact]
+        [Trait("Task", "RUK Lang Detector test")]
+        [Trait("Process", "LangDetector/DataSource test")]
+        public void TestLangDetector()
+        {
+            var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
             using (var lang_detector = CreateLangDetector())
             {
                 var preproc = new CommonEnCyr(lang_detector);
                 preproc.RunAsync((txt_src, pp_item)
                     => Log($"{pp_item.Lang}>>> {pp_item.Text}"));
-                Log($"Process samples '{src_id_pref}' ...");
-                foreach (string txt in GetSrcItems())
+                Log($"TEST Process samples ...");
+                foreach (var keyValue in GetSrcItems(conn_str))
                 {
-                    preproc.Push(txt);
+                    preproc.Push(keyValue.Value);
                 }
             }
-            Log($"Done ({src_id_pref})");
+            Log($"TEST Done");
         }
 
         FastTextLauncher CreateLangDetector()
@@ -81,9 +107,8 @@ namespace FastTextProcess.Tests
         /// Texts data source. Rewrite to connect another source.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<string> GetSrcItems()
+        IEnumerable<KeyValuePair<long, string>> GetSrcItems(string conn_str)
         {
-            var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
             using (var cn = new SQLiteConnection(conn_str))
             {
                 cn.Open();
@@ -92,7 +117,7 @@ namespace FastTextProcess.Tests
                 using (var rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        yield return rd.GetString(0);
+                        yield return KeyValuePair.Create(rd.GetInt64(0), rd.GetString(1));
                 }
             }
         }

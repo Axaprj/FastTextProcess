@@ -12,20 +12,25 @@ namespace FastTextProcess.Preprocessor
     /// </summary>
     public class CommonEn : ITextPreprocess
     {
-        Regex rexClnCommonEn = new Regex("[^A-Za-z0-9(),.!?\'`\"]", RegexOptions.Compiled);
-        Regex rexVe = new Regex("(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
-        Regex rexRe = new Regex("(?<lett>[A-Za-z]) ' re", RegexOptions.Compiled);
-        Regex rexD = new Regex("(?<lett>[A-Za-z]) ' d", RegexOptions.Compiled);
-        Regex rexLL = new Regex("(?<lett>[A-Za-z]) ' ll", RegexOptions.Compiled);
-        Regex rexS = new Regex("(?<lett>[A-Za-z]) ' s", RegexOptions.Compiled);
+        readonly Regex rexClnCommonEn = new Regex("[^A-Za-z0-9(),.!?\'`\"]", RegexOptions.Compiled);
+        readonly Regex rexVe = new Regex("(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
+        readonly Regex rexRe = new Regex("(?<lett>[A-Za-z]) ' re", RegexOptions.Compiled);
+        readonly Regex rexD = new Regex("(?<lett>[A-Za-z]) ' d", RegexOptions.Compiled);
+        readonly Regex rexLL = new Regex("(?<lett>[A-Za-z]) ' ll", RegexOptions.Compiled);
+        readonly Regex rexS = new Regex("(?<lett>[A-Za-z]) ' s", RegexOptions.Compiled);
 
-        Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
+        readonly Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
 
         Action<ITextSource, PreprocessItem> _resultHandler;
 
+        public virtual void CompleteAdding()
+        {
+            // do nothing here
+        }
+
         public virtual void Push(ITextSource txt_src)
         {
-            var ctxt = CleanCommonEn(txt_src.GetText(), rexClnCommonEn);
+            var ctxt = CleanCommon(txt_src.GetText(), rexClnCommonEn);
             txt_src.SetText(ctxt);
             _resultHandler(txt_src, new PreprocessItem(ctxt, FTLangLabel.__label__en));
         }
@@ -39,7 +44,7 @@ namespace FastTextProcess.Preprocessor
         /// Tokenization/string cleaning for all datasets except for SST.
         /// Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
         /// </summary>
-        protected string CleanCommonEn(string str, Regex clean_rex)
+        protected string CleanCommon(string str, Regex clean_rex)
         {
             //str = str.ToLower();
             str = clean_rex.Replace(str, " ");
