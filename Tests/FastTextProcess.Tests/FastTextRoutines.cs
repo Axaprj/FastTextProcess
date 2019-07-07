@@ -155,9 +155,10 @@ namespace FastTextProcess.Tests
                     try
                     {
                         var dict = dbx.Dict(DictDbSet.DictKind.Addin);
+                        var rnd = new Random();
                         foreach (var w in words)
                         {
-                            dict.UpdateVectOfWord(Dict.CreateRnd(w, lang));
+                            dict.UpdateVectOfWord(Dict.CreateRnd(rnd, w, lang));
                         }
                         trans.Commit();
                     }

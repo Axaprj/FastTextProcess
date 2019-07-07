@@ -11,6 +11,8 @@ namespace FastTextProcess.Entities
     public class Dict
     {
         const int DEF_VECT_SIZE = 300;
+        const float DEF_VECT_MIN = -0.4F;
+        const float DEF_VECT_MAX = 0.4F;
         internal const string FldnId = "Id";
         internal const string FldnWord = "Word";
         internal const string FldnVect = "Vect";
@@ -27,15 +29,30 @@ namespace FastTextProcess.Entities
             var sfarr = new string[sarr.Length - 1];
             Array.Copy(sarr, 1, sfarr, 0, sfarr.Length);
             var farr = Array.ConvertAll(sfarr, float.Parse);
-            var barr = new byte[farr.Length * 4];
-            Buffer.BlockCopy(farr, 0, barr, 0, barr.Length);
+            //var barr = new byte[farr.Length * 4];
+            //Buffer.BlockCopy(farr, 0, barr, 0, barr.Length);
+            var barr = Float2Byte(farr);
             return new Dict { Word = sarr[0], Vect = barr, Lang = lang };
         }
 
-        public static Dict CreateRnd(string word, FTLangLabel lang, int vect_sz = DEF_VECT_SIZE)
+        public static Dict CreateRnd(Random rnd, string word, FTLangLabel lang
+            , int vect_sz = DEF_VECT_SIZE, float vv_min=DEF_VECT_MIN, float vv_max=DEF_VECT_MAX)
         {
-            var barr = new byte[vect_sz * 4];
+            var farr = new float[vect_sz];
+            var delta = vv_max - vv_min;
+            for (int inx=0; inx < vect_sz; inx++)
+            {
+                farr[inx] = (float) (vv_max - delta * rnd.NextDouble());
+            }
+            var barr = Float2Byte(farr);
             return new Dict { Id = -1, Word = word, Vect = barr, Lang = lang };
+        }
+
+        static byte[] Float2Byte(float[] farr)
+        {
+            var barr = new byte[farr.Length * 4];
+            Buffer.BlockCopy(farr, 0, barr, 0, barr.Length);
+            return barr;
         }
 
         public static Dict CreateEmpty(string word = "<%NONE%>"
