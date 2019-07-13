@@ -49,7 +49,7 @@ namespace FastTextProcess.Tests
         public void ProcRukBuildFull()
         {
             var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
-            ProcRukFull(conn_str, "StaTransform.db", "AdID:");
+            ProcRukFull(conn_str, "cs", "");
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__ru);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__uk);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__en);
