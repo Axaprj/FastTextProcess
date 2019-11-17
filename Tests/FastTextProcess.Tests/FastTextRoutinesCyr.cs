@@ -19,8 +19,9 @@ namespace FastTextProcess.Tests
     /// </summary>
     public class FastTextRoutinesCyr : FastTextRoutines
     {
-        const string DBF_W2V_RUK = "w2v_ruk.db";
-        const string DBF_RUK_Proc = "RUK_proc.db";
+        string DBF_W2V_RUK { get { return DataOutPath("w2v_ruk.db"); } }
+        string DBF_RUK_Proc { get { return DataOutPath("RUK_proc.db"); } }
+        
         public FastTextRoutinesCyr(ITestOutputHelper output) : base(output) { }
 
         [Fact]
