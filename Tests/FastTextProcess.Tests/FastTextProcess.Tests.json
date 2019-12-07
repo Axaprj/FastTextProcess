@@ -2,6 +2,6 @@
   "DataArcDir": "c:/data.arc/",
   "DataOutDir": "C:/data.arc/statDb/",
   "FastTextBin": "c:/data.arc/fasttext.exe",
-  "DataCyrConnStr": "Data Source=\"C:/SRC/TFS/GoRealt/py/data/StaTransform.db\";Version=3;",
+  "DataCyrConnStr": "Data Source=\"c:/data.arc/statDb/StaTransform.db\";Version=3;",
   "DataCyrSelectSQL": "SELECT AdID, TextSrc FROM RegAn_ComSale_AdFilterView"
 }

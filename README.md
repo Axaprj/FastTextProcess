@@ -16,8 +16,8 @@ VS 2017, .NET Core, SQLite, XUnit
 - setup `FastTextProcess.Tests.json`
 ```json
 {
-  "DataArcDir": "./../../../../../../data.arc/",
-  "FastTextBin": "./../../../../../../data.arc/fasttext.exe"
+  "DataArcDir": "c:/data.arc/",
+  "FastTextBin": "c:/data.arc/fasttext.exe"
 }
 ```
 - Create pretrained vectors DB [FastTextProcess.Tests.FastTextRoutines](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutines.cs)
@@ -31,4 +31,37 @@ ProcAclImdbTest()
 ```
 - Looking for result into `$DataArcDir/AclImdb_proc.db`
 
+## advanced and experimental
+FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, En texts processor. 
+[Aligned word vectors](https://fasttext.cc/docs/en/aligned-vectors.html) used.
+
+## reference 
+[1] T. Mikolov, E. Grave, P. Bojanowski, C. Puhrsch, A. Joulin. Advances in Pre-Training Distributed Word Representations
+    @inproceedings{mikolov2018advances,
+      title={Advances in Pre-Training Distributed Word Representations},
+      author={Mikolov, Tomas and Grave, Edouard and Bojanowski, Piotr and Puhrsch, Christian and Joulin, Armand},
+      booktitle={Proceedings of the International Conference on Language Resources and Evaluation (LREC 2018)},
+      year={2018}
+    }
+
+[2] A. Joulin, P. Bojanowski, T. Mikolov, H. Jegou, E. Grave, Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion
+	@InProceedings{joulin2018loss,
+	 title={Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion},
+	 author={Joulin, Armand and Bojanowski, Piotr and Mikolov, Tomas and J\'egou, Herv\'e and Grave, Edouard},
+	 year={2018},
+	 booktitle={Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing},
+	}
+
+[3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information
+	@article{bojanowski2017enriching,
+	 title={Enriching Word Vectors with Subword Information},
+	 author={Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas},
+	 journal={Transactions of the Association for Computational Linguistics},
+	 volume={5},
+	 year={2017},
+	 issn={2307-387X},
+	 pages={135--146}
+	}
+
+## author
 Igor Alexeev, axaprj2000@yahoo.com for https://propertyindicators.github.io/
