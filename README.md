@@ -36,6 +36,7 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 [Aligned word vectors](https://fasttext.cc/docs/en/aligned-vectors.html) used.
 
 ## reference 
+```
 [1] T. Mikolov, E. Grave, P. Bojanowski, C. Puhrsch, A. Joulin. Advances in Pre-Training Distributed Word Representations
     @inproceedings{mikolov2018advances,
       title={Advances in Pre-Training Distributed Word Representations},
@@ -43,7 +44,8 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
       booktitle={Proceedings of the International Conference on Language Resources and Evaluation (LREC 2018)},
       year={2018}
     }
-
+```
+```
 [2] A. Joulin, P. Bojanowski, T. Mikolov, H. Jegou, E. Grave, Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion
 	@InProceedings{joulin2018loss,
 	 title={Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion},
@@ -51,7 +53,8 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 	 year={2018},
 	 booktitle={Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing},
 	}
-
+```
+```
 [3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information
 	@article{bojanowski2017enriching,
 	 title={Enriching Word Vectors with Subword Information},
@@ -62,6 +65,6 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 	 issn={2307-387X},
 	 pages={135--146}
 	}
-
+```
 ## author
 Igor Alexeev, axaprj2000@yahoo.com for https://propertyindicators.github.io/
