@@ -121,7 +121,7 @@ namespace FastTextProcess.Tests
         /// Texts data source. Rewrite to connect another source.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<KeyValuePair<long, string>> GetSrcItems(string conn_str)
+        IEnumerable<KeyValuePair<string, string>> GetSrcItems(string conn_str)
         {
             using (var cn = new SQLiteConnection(conn_str))
             {
@@ -131,7 +131,7 @@ namespace FastTextProcess.Tests
                 using (var rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        yield return KeyValuePair.Create(rd.GetInt64(0), rd.GetString(1));
+                        yield return KeyValuePair.Create(rd.GetString(0), rd.GetString(1));
                 }
             }
         }
