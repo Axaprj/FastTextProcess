@@ -29,7 +29,10 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Clean Processing Results")]
         public void ProcResultCleanRuk()
         {
-            try { ProcResultClean(DBF_W2V_RUK, DBF_RUK_Proc); }
+            try {
+                ProcResultClean(proc_db_fn:DBF_RUK_Proc, dbf_w2v_fn: DBF_W2V_RUK);
+                SubProcInsertPredefinedMacro(DBF_W2V_RUK);
+            }
             catch (Exception ex) { Log(ex.Message); }
         }
 
@@ -51,6 +54,7 @@ namespace FastTextProcess.Tests
         {
             var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
             ProcRukFull(conn_str, "cs", "");
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.NotSpecified);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__ru);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__uk);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__en);
@@ -87,7 +91,13 @@ namespace FastTextProcess.Tests
             {
                 var preproc = new CommonEnCyr(lang_detector);
                 preproc.RunAsync((txt_src, pp_item)
-                    => Log($"{pp_item.Lang}>>> {pp_item.Text}"));
+                    => {
+                        if (pp_item.Lang == FTLangLabel.NotSpecified)
+                            Log($"LANG_DETECT_ERROR>>> {pp_item.Text}");
+                        //else
+                            //Log($"{pp_item.Lang}>>> {pp_item.Text}"); 
+                       }
+                    );
                 Log($"TEST Process samples ...");
                 foreach (var keyValue in GetSrcItems(conn_str))
                 {

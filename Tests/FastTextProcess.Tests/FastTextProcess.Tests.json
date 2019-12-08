@@ -3,5 +3,5 @@
   "DataOutDir": "C:/data.arc/statDb/",
   "FastTextBin": "c:/data.arc/fasttext.exe",
   "DataCyrConnStr": "Data Source=\"c:/data.arc/statDb/StaTransform.db\";Version=3;",
-  "DataCyrSelectSQL": "SELECT AdID, TextSrc FROM RegAn_ComSale_AdFilterView"
+  "DataCyrSelectSQL": "SELECT AdID, TextSrc FROM Ads_Active"
 }
