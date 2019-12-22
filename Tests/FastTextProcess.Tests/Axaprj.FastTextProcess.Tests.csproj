@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FastTextProcess\FastTextProcess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="FastTextProcess.Tests.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -35,6 +31,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FastTextProcess\Axaprj.FastTextProcess.csproj" />
   </ItemGroup>
 
 </Project>

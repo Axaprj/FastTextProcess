@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastTextProcess", "FastTextProcess\FastTextProcess.csproj", "{4C4ECC82-38CE-4EAE-98D1-70C5ED275CF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.FastTextProcess", "FastTextProcess\Axaprj.FastTextProcess.csproj", "{4C4ECC82-38CE-4EAE-98D1-70C5ED275CF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastTextProcess.Tests", "Tests\FastTextProcess.Tests\FastTextProcess.Tests.csproj", "{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.FastTextProcess.Tests", "Tests\FastTextProcess.Tests\Axaprj.FastTextProcess.Tests.csproj", "{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33B96E3A-522B-4F82-985D-E2B3088F4FDE}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.WordToVecDB", "Axaprj.WordToVecDB\Axaprj.WordToVecDB.csproj", "{0F4CACF5-D13A-408A-8E68-BBF113D6170C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DC724FC-7191-4C49-A230-BA65D4A9C7A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

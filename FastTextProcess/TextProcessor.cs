@@ -1,15 +1,13 @@
-﻿using FastTextProcess.Context;
-using FastTextProcess.Entities;
+﻿using Axaprj.WordToVecDB.Context;
+using Axaprj.WordToVecDB.Entities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FastTextProcess
+
+namespace Axaprj.FastTextProcess
 {
     public class TextProcessor : IDisposable
     {

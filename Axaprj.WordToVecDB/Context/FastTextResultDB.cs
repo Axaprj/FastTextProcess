@@ -1,12 +1,12 @@
-﻿using FastTextProcess.Entities;
-using FastTextProcess.Properties;
+﻿using Axaprj.WordToVecDB.Properties;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
+using Axaprj.WordToVecDB.Entities;
 
-namespace FastTextProcess.Context
+namespace Axaprj.WordToVecDB.Context
 {
     /// <summary>
     /// FastText processing result DB context
@@ -67,7 +67,7 @@ namespace FastTextProcess.Context
         }
         #endregion
 
-        internal long StoreProcessItem(ProcessItem itm)
+        public long StoreProcessItem(ProcessItem itm)
         {
             CmdSrcInsert.Parameters[ProcessItem.FldnSrcOriginalId].Value = itm.SrcOriginalId;
             CmdSrcInsert.Parameters[ProcessItem.FldnSrcProcInfo].Value = itm.SrcProcInfo;

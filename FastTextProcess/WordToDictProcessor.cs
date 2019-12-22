@@ -1,13 +1,13 @@
-﻿using FastTextProcess.Context;
-using FastTextProcess.Entities;
-using FastTextProcess.Enums;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Axaprj.WordToVecDB.Context;
+using Axaprj.WordToVecDB.Entities;
+using Axaprj.WordToVecDB.Enums;
 
-namespace FastTextProcess
+namespace Axaprj.FastTextProcess
 {
     public class WordToDictProcessor : IDisposable
     {

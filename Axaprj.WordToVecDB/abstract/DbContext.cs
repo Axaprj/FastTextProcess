@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 
-namespace FastTextProcess
+namespace Axaprj.WordToVecDB
 {
     /// <summary>
     /// Abstract DB context (base class)

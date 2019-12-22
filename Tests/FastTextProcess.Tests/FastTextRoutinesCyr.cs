@@ -1,14 +1,9 @@
-using FastTextProcess.Context;
-using FastTextProcess.Entities;
-using FastTextProcess.Enums;
-using FastTextProcess.Preprocessor;
+using Axaprj.FastTextProcess;
+using Axaprj.FastTextProcess.Preprocessor;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 

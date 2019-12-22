@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Axaprj.WordToVecDB;
 
-namespace FastTextProcess
+namespace Axaprj.FastTextProcess
 {
-    public interface ITextSource
-    {
-        string GetText();
-        void SetText(string txt);
-    }
-
     internal class TextSourceStub : ITextSource
     {
         string Text;

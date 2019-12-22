@@ -1,5 +1,6 @@
-using FastTextProcess.Context;
-using FastTextProcess.Entities;
+using Axaprj.WordToVecDB.Context;
+using Axaprj.WordToVecDB.Entities;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Data;
 using System.Data.SQLite;
@@ -10,6 +11,9 @@ namespace FastTextProcess.Tests
 {
     public class DictDbTests : TestBase
     {
+        string DBF_W2V_RUK { get { return DataOutPath("w2v_ruk.db"); } }
+        string DBF_RUK_Proc { get { return DataOutPath("RUK_proc.db"); } }
+
         public DictDbTests(ITestOutputHelper output) : base(output) { }
 
         [Fact]
@@ -74,16 +78,15 @@ namespace FastTextProcess.Tests
         [Fact]
         public void TestVectRangeRUK()
         {
-            var DBF_W2V_RUK = "w2v_ruk.db";
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
-            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__en);
-            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__ru);
-            CalcMinMax(DBF_W2V_RUK, Enums.FTLangLabel.__label__uk);
+            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__en);
+            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__ru);
+            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__uk);
             Log("done");
         }
 
-        void CalcMinMax(string w2v_db_fn, Enums.FTLangLabel lang)
+        void CalcMinMax(string w2v_db_fn, FTLangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(w2v_db_fn))
             {
@@ -104,21 +107,21 @@ namespace FastTextProcess.Tests
                 Log($"Lang={lang}: Count={cnt}; Min={fmin}; Max={fmax};");
             }
         }
+
         [Fact]
         public void TestCosineRUK()
         {
-            var DBF_W2V_RUK = "w2v_ruk.db";
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
             using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
             {
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
-                var w1u = dict_db.FindByWord("шкарпетки", Enums.FTLangLabel.__label__uk);
-                var w1r = dict_db.FindByWord("носки", Enums.FTLangLabel.__label__ru);
-                var w1e = dict_db.FindByWord("socks", Enums.FTLangLabel.__label__en);
-                var w2u = dict_db.FindByWord("краватка", Enums.FTLangLabel.__label__uk);
-                var w2r = dict_db.FindByWord("галстук", Enums.FTLangLabel.__label__ru);
-                var w2e = dict_db.FindByWord("necktie", Enums.FTLangLabel.__label__en);
+                var w1u = dict_db.FindByWord("шкарпетки", FTLangLabel.__label__uk);
+                var w1r = dict_db.FindByWord("носки", FTLangLabel.__label__ru);
+                var w1e = dict_db.FindByWord("socks", FTLangLabel.__label__en);
+                var w2u = dict_db.FindByWord("краватка", FTLangLabel.__label__uk);
+                var w2r = dict_db.FindByWord("галстук", FTLangLabel.__label__ru);
+                var w2e = dict_db.FindByWord("necktie", FTLangLabel.__label__en);
 
                 Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
                 Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");

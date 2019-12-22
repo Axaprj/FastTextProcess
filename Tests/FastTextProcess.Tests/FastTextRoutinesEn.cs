@@ -1,6 +1,5 @@
-using FastTextProcess.Context;
-using FastTextProcess.Entities;
-using FastTextProcess.Enums;
+using Axaprj.FastTextProcess;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,8 +13,9 @@ namespace FastTextProcess.Tests
 {
     public class FastTextRoutinesEn : FastTextRoutines
     {
-        const string DBF_W2V_EN = "w2v_en.db";
-        const string DBF_AclImdb = "AclImdb_proc.db";
+        string DBF_W2V_EN { get { return DataOutPath("w2v_en.db"); } }
+        string DBF_AclImdb { get { return DataOutPath("AclImdb_proc.db"); } }
+
         public FastTextRoutinesEn(ITestOutputHelper output) : base(output) { }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace FastTextProcess.Tests
         {
             SubProcAclImdbInsertPredefinedMacro();
             using (var proc = new TextProcessor(
-                DBF_W2V_EN, DBF_AclImdb, new Preprocessor.CommonEn()))
+                DBF_W2V_EN, DBF_AclImdb, new Axaprj.FastTextProcess.Preprocessor.CommonEn()))
             {
                 Log($"Process samples '{src_id_pref}' ...");
                 var dir_path = DataArcPath(data_dir);

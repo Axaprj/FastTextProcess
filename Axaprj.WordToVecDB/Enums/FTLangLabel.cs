@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FastTextProcess.Enums
+namespace Axaprj.WordToVecDB.Enums
 {
     /// <summary>
     /// FastText Language labels

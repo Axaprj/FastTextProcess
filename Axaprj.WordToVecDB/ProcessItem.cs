@@ -1,11 +1,8 @@
-﻿using FastTextProcess.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Axaprj.WordToVecDB.Enums;
 
-namespace FastTextProcess.Entities
+namespace Axaprj.WordToVecDB.Entities
 {
-    internal class ProcessItem : ITextSource
+    public class ProcessItem : ITextSource
     {
         internal const string TblnSrc = "Src";
         internal const string FldnSrcProcInfo = "ProcInfo";

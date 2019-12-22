@@ -1,10 +1,10 @@
-﻿using FastTextProcess.Entities;
+﻿using Axaprj.WordToVecDB.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
-namespace FastTextProcess.Context
+namespace Axaprj.WordToVecDB.Context
 {
     /// <summary>
     /// FastText dictionary DB: EmbedDict DbSet

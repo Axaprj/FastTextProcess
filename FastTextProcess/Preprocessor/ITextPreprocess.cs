@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Axaprj.WordToVecDB;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FastTextProcess.Preprocessor
+namespace Axaprj.FastTextProcess.Preprocessor
 {
     public interface ITextPreprocess
     {

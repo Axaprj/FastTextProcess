@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FastTextProcess.Entities
+namespace Axaprj.WordToVecDB.Entities
 {
     public class EmbedJoin
     {

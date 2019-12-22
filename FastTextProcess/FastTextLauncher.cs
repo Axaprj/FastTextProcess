@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Axaprj.WordToVecDB;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastTextProcess
+namespace Axaprj.FastTextProcess
 {
     /// <summary>
     /// FastText command arguments, helper, factory

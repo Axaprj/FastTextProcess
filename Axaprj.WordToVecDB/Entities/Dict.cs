@@ -1,9 +1,7 @@
-﻿using FastTextProcess.Enums;
+﻿using Axaprj.WordToVecDB.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace FastTextProcess.Entities
+namespace Axaprj.WordToVecDB.Entities
 {
     /// <summary>
     /// word2vect.Dict entity

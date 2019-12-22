@@ -1,6 +1,7 @@
-using FastTextProcess.Context;
-using FastTextProcess.Entities;
-using FastTextProcess.Enums;
+using Axaprj.FastTextProcess;
+using Axaprj.WordToVecDB.Context;
+using Axaprj.WordToVecDB.Entities;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

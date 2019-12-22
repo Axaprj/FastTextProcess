@@ -1,11 +1,11 @@
-﻿using FastTextProcess.Entities;
-using FastTextProcess.Enums;
+﻿using Axaprj.WordToVecDB.Entities;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
-namespace FastTextProcess.Context
+namespace Axaprj.WordToVecDB.Context
 {
     /// <summary>
     /// FastText dictionary DB: Dict/DictAddins DbSet

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Axaprj.WordToVecDB;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace FastTextProcess.Preprocessor
+namespace Axaprj.FastTextProcess.Preprocessor
 {
     /// <summary>
     /// Common En, Ru, Uk (Cyrillic) text preprocessor

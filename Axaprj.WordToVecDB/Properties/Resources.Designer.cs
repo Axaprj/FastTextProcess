@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FastTextProcess.Properties {
+namespace Axaprj.WordToVecDB.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FastTextProcess.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FastTextProcess.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Axaprj.WordToVecDB.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,7 +62,7 @@ namespace FastTextProcess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to --
-        ///-- File generated with SQLiteStudio v3.2.1 on Сб ноя 17 20:24:53 2018
+        ///-- File generated with SQLiteStudio v3.2.1 on Сб ноя 24 15:46:30 2018
         ///--
         ///-- Text encoding used: System
         ///--
@@ -73,10 +73,13 @@ namespace FastTextProcess.Properties {
         ///CREATE TABLE Dict (Inx INTEGER PRIMARY KEY, VectStr TEXT NOT NULL);
         ///
         ///-- Table: Src
-        ///CREATE TABLE Src (Id INTEGER PRIMARY KEY AUTOINCREMENT, OriginalId TEXT NOT NULL UNIQUE, ProcInfo TEXT, DbgInfo TEXT);
+        ///CREATE TABLE Src (OriginalId TEXT NOT NULL UNIQUE PRIMARY KEY, ProcInfo TEXT, DbgInfo TEXT, DictInxsStr TEXT NOT NULL);
         ///
-        ///-- Table: SrcData
-        ///CREATE TABLE SrcData (SrcId INTEGER REFERENCES Src (Id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL, Src [rest of string was truncated]&quot;;.
+        ///-- Index: inxSrcOriginalId
+        ///CREATE INDEX inxSrcOriginalId ON Src (OriginalId);
+        ///
+        ///COMMIT TRANSACTION;
+        ///PRAGMA foreign_keys  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string vect_result_create {
             get {
@@ -86,7 +89,7 @@ namespace FastTextProcess.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to --
-        ///-- File generated with SQLiteStudio v3.2.1 on Сб ноя 17 17:04:02 2018
+        ///-- File generated with SQLiteStudio v3.2.1 on Mon Apr 29 18:20:33 2019
         ///--
         ///-- Text encoding used: System
         ///--
@@ -94,13 +97,12 @@ namespace FastTextProcess.Properties {
         ///BEGIN TRANSACTION;
         ///
         ///-- Table: Dict
-        ///CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB NOT NULL);
+        ///CREATE TABLE Dict (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT NOT NULL, Vect BLOB NOT NULL, LangId INTEGER NOT NULL, UNIQUE (Word, LangId));
         ///
         ///-- Table: DictAddins
-        ///CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT UNIQUE NOT NULL, Vect BLOB);
+        ///CREATE TABLE DictAddins (Id INTEGER PRIMARY KEY AUTOINCREMENT, Word TEXT NOT NULL, Vect BLOB, LangId INTEGER NOT NULL, UNIQUE (Word, LangId));
         ///
-        ///-- Table: EmbedDict
-        ///CREATE TABLE EmbedDict (Inx INTEGER UNIQUE PRIMARY KEY NOT NULL, DictId INTE [rest of string was truncated]&quot;;.
+        ///-- Table: Embe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string word2vect_create {
             get {

@@ -1,8 +1,4 @@
-﻿using FastTextProcess.Entities;
-using System;
-using System.Data.SQLite;
-
-namespace FastTextProcess
+﻿namespace Axaprj.WordToVecDB
 {
     /// <summary>
     /// Abstract DbSet

@@ -1,11 +1,12 @@
-﻿using FastTextProcess.Enums;
+﻿using Axaprj.WordToVecDB;
+using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace FastTextProcess.Preprocessor
+namespace Axaprj.FastTextProcess.Preprocessor
 {
     /// <summary>
     /// Common En text preprocessor

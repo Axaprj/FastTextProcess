@@ -1,11 +1,11 @@
-﻿using FastTextProcess.Entities;
-using FastTextProcess.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Text;
+using Axaprj.WordToVecDB.Entities;
+using Axaprj.WordToVecDB.Properties;
 
-namespace FastTextProcess.Context
+namespace Axaprj.WordToVecDB.Context
 {
     /// <summary>
     /// FastText dictionary DB context
