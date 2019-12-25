@@ -6,13 +6,14 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Copyright>Copyright (c) 2018 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
+    <Copyright>Copyright (c) 2019 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
     <Authors>Igor Alexeev</Authors>
     <Company>propertyindicators@gmail.com</Company>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/Axaprj/FastTextProcess/master/LICENSE.txt</PackageLicenseUrl>
-    <Version>1.0.1</Version>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <Version>1.0.1.0</Version>
     <Configurations>Debug;Release;net462</Configurations>
+    <PackageId>FastTextProcess</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

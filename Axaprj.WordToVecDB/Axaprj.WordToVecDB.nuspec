@@ -1,23 +1,20 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>FastTextProcess</id>
+    <id>Axaprj.WordToVecDB</id>
     <version>$version$</version>
-    <title>FastTextProcess</title>
+    <title>Axaprj.WordToVecDB</title>
     <authors>Igor Alexeev, axaprj2000@yahoo.com</authors>
     <owners>axaprj</owners>
-    <license type="expression">MIT</license>    
+    <license type="expression">MIT</license>
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/Axaprj/FastTextProcess</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Text to embedded vectors conversion high-performance framework.</description>
-    <copyright>Copyright © 2019  propertyindicators@gmail.com</copyright>
-    <releaseNotes>Separated Axaprj.WordToVecDB db access layer</releaseNotes>
+    <description>Text to embedded vectors SQLite DB.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright © 2019 propertyindicators@gmail.com</copyright>
     <tags>FastText C#</tags>
   </metadata>
-  <dependencies>
-    <dependency id="Axaprj.WordToVecDB" version="1.0.0.1" />
-  </dependencies>
   <!-- Insert below <metadata> element -->
   <files>
     <file src="..\README.md" target="" />
