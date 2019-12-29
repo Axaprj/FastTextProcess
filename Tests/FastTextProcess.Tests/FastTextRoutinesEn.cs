@@ -23,7 +23,8 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbEn()
         {
-            ProcCreateDb("cc.en.300.vec", DBF_W2V_EN, FTLangLabel.__label__en);
+            ProcCreateDb(DBF_W2V_EN);
+            ProcAppendDb("cc.en.300.vec", DBF_W2V_EN, FTLangLabel.__label__en);
         }
 
         #region AclImdb processing tasks

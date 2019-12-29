@@ -135,5 +135,39 @@ namespace FastTextProcess.Tests
             }
             Log("done");
         }
+
+        [Fact]
+        public void TestCosineRUK2()
+        {
+            AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
+
+            using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
+            {
+                var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
+                var sum_w2v_en = dict_db.FindByWord("sum", FTLangLabel.__label__en);
+                var sum_w2v_ru = dict_db.FindByWord("сумма", FTLangLabel.__label__ru);
+                PrintPair(sum_w2v_en, sum_w2v_ru);
+                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__ru))
+                    PrintPair(w2v, sum_w2v_en, distance_min: 0.3f);
+                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__ru))
+                    PrintPair(w2v, sum_w2v_ru, distance_min: 0.6f);
+            }
+            Log("done");
+        }
+
+        void PrintPair(Dict w2v1, Dict w2v2, float distance_min=-1, bool log_err=true)
+        {
+            try
+            {
+                var cc = w2v1.GetCosine(w2v2);
+                if (cc > distance_min)
+                    Log($"cos({w2v1.Word}, {w2v2.Word}) = {cc}");
+            }
+            catch (Exception ex)
+            {
+                if(log_err)
+                    Log($"ERR ({w2v1.Word}, {w2v2.Word}): {ex.Message}");
+            }
+        }
     }
 }

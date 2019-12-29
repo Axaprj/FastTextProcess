@@ -1,4 +1,5 @@
 using Axaprj.FastTextProcess;
+using Axaprj.WordToVecDB;
 using Axaprj.WordToVecDB.Context;
 using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
@@ -22,18 +23,12 @@ namespace FastTextProcess.Tests
         /// <summary>
         /// Create word to vector db 
         /// </summary>
-        /// <param name="ft_vec_fn">FastText vectors filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
-        /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
-        protected void ProcCreateDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang, bool with_insert_or_replace = false)
+        protected void ProcCreateDb(string dbf_w2v_fn)
         {
-            var fvec = DataArcPath(ft_vec_fn);
-            AssertFileExists(fvec, "FastText file of vectors");
-
             AssertFileNotExists(dbf_w2v_fn, "word2vect DB");
             FastTextProcessDB.CreateDB(dbf_w2v_fn);
-
-            ProcAppendDb(ft_vec_fn, dbf_w2v_fn, lang, with_insert_or_replace);
+            SubProcInsertPredefinedMacro(dbf_w2v_fn);
         }
         /// <summary>
         /// Append records to word to vector db 
@@ -41,7 +36,10 @@ namespace FastTextProcess.Tests
         /// <param name="ft_vec_fn">FastText vectors filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
         /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
-        protected void ProcAppendDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang, bool with_insert_or_replace = false)
+        /// <param name="fn_infilter_predicat">optional filter predicate</param>
+        protected void ProcAppendDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang
+            , bool with_insert_or_replace = false
+            , Func<Dict, bool> fn_infilter_predicat = null)
         {
             var fvec = DataArcPath(ft_vec_fn);
             AssertFileExists(fvec, "FastText file of vectors");
@@ -67,10 +65,13 @@ namespace FastTextProcess.Tests
                         if (string.IsNullOrEmpty(line))
                             continue;
                         var w2v = Dict.CreateParseFT(line, lang);
-                        if (with_insert_or_replace)
-                            w2v_tbl.InsertOrReplace(w2v);
-                        else
-                            w2v_tbl.Insert(w2v);
+                        if (fn_infilter_predicat == null || fn_infilter_predicat(w2v))
+                        {
+                            if (with_insert_or_replace)
+                                w2v_tbl.InsertOrReplace(w2v);
+                            else
+                                w2v_tbl.Insert(w2v);
+                        }
                     }
                 }
                 Log("ControlWordsIndex create...");

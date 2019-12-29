@@ -34,13 +34,13 @@ namespace Axaprj.WordToVecDB.Entities
         }
 
         public static Dict CreateRnd(Random rnd, string word, FTLangLabel lang
-            , int vect_sz = DEF_VECT_SIZE, float vv_min=DEF_VECT_MIN, float vv_max=DEF_VECT_MAX)
+            , int vect_sz = DEF_VECT_SIZE, float vv_min = DEF_VECT_MIN, float vv_max = DEF_VECT_MAX)
         {
             var farr = new float[vect_sz];
             var delta = vv_max - vv_min;
-            for (int inx=0; inx < vect_sz; inx++)
+            for (int inx = 0; inx < vect_sz; inx++)
             {
-                farr[inx] = (float) (vv_max - delta * rnd.NextDouble());
+                farr[inx] = (float)(vv_max - delta * rnd.NextDouble());
             }
             var barr = Float2Byte(farr);
             return new Dict { Id = -1, Word = word, Vect = barr, Lang = lang };
@@ -98,7 +98,7 @@ namespace Axaprj.WordToVecDB.Entities
                 sq_a += a[inx] * a[inx];
                 sq_b += b[inx] * b[inx];
             }
-            return (float)(prod / (Math.Sqrt(sq_a)* Math.Sqrt(sq_b)));
+            return (float)(prod / (Math.Sqrt(sq_a) * Math.Sqrt(sq_b)));
         }
 
         public float GetCosine(Dict other)
@@ -106,6 +106,20 @@ namespace Axaprj.WordToVecDB.Entities
             float[] a = GetVectFloat(this.Vect);
             float[] b = GetVectFloat(other.Vect);
             return GetCosine(a, b);
+        }
+
+        public override string ToString()
+        {
+            var msg = "Dict[";
+            try
+            {
+                msg += $"'{Word ?? "NULL"}' {Lang} {Id}";
+            }
+            catch (Exception ex)
+            {
+                msg += $"ToStr Err: {ex}";
+            }
+            return msg + "]";
         }
     }
 }

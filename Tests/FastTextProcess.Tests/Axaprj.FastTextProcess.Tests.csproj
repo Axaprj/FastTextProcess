@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Axaprj.WordToVecDB\Axaprj.WordToVecDB.csproj" />
     <ProjectReference Include="..\..\FastTextProcess\Axaprj.FastTextProcess.csproj" />
   </ItemGroup>
 

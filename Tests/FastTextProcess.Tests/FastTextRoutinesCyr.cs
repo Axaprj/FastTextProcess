@@ -1,5 +1,7 @@
 using Axaprj.FastTextProcess;
 using Axaprj.FastTextProcess.Preprocessor;
+using Axaprj.WordToVecDB;
+using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace FastTextProcess.Tests
     {
         string DBF_W2V_RUK { get { return DataOutPath("w2v_ruk.db"); } }
         string DBF_RUK_Proc { get { return DataOutPath("RUK_proc.db"); } }
-        
+
         public FastTextRoutinesCyr(ITestOutputHelper output) : base(output) { }
 
         [Fact]
@@ -24,8 +26,9 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Clean Processing Results")]
         public void ProcResultCleanRuk()
         {
-            try {
-                ProcResultClean(proc_db_fn:DBF_RUK_Proc, dbf_w2v_fn: DBF_W2V_RUK);
+            try
+            {
+                ProcResultClean(proc_db_fn: DBF_RUK_Proc, dbf_w2v_fn: DBF_W2V_RUK);
                 SubProcInsertPredefinedMacro(DBF_W2V_RUK);
             }
             catch (Exception ex) { Log(ex.Message); }
@@ -36,10 +39,22 @@ namespace FastTextProcess.Tests
         [Trait("Process", "Load PreTrained FastText Database")]
         public void ProcCreateDbRuk()
         {
-            ProcCreateDb("wiki.ru.align.vec", DBF_W2V_RUK, FTLangLabel.__label__ru, with_insert_or_replace: true);
-            ProcAppendDb("wiki.uk.align.vec", DBF_W2V_RUK, FTLangLabel.__label__uk, with_insert_or_replace: true);
-            ProcAppendDb("wiki.en.align.vec", DBF_W2V_RUK, FTLangLabel.__label__en, with_insert_or_replace: true);
-            SubProcInsertPredefinedMacro(DBF_W2V_RUK);
+            ProcCreateDb(DBF_W2V_RUK);
+            var cln_proc = new ServiceRoutines();
+            Func<Dict, bool> infilter = (w2v) =>
+            {
+                var cln_w = cln_proc.GetLettersOnly(w2v.Word, w2v.Lang);
+                var reject = string.IsNullOrEmpty(cln_w);
+                if (reject)
+                    Log($"Skip {w2v}");
+                return !reject;
+            };
+            ProcAppendDb("wiki.ru.align.vec", DBF_W2V_RUK, FTLangLabel.__label__ru
+                , with_insert_or_replace: true, fn_infilter_predicat: infilter);
+            ProcAppendDb("wiki.uk.align.vec", DBF_W2V_RUK, FTLangLabel.__label__uk
+                , with_insert_or_replace: true, fn_infilter_predicat: infilter);
+            ProcAppendDb("wiki.en.align.vec", DBF_W2V_RUK, FTLangLabel.__label__en
+                , with_insert_or_replace: true, fn_infilter_predicat: infilter);
         }
 
         [Fact]
@@ -54,7 +69,7 @@ namespace FastTextProcess.Tests
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__uk);
             SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__en);
             SubProcBuildResultDict(DBF_RUK_Proc, DBF_W2V_RUK);
-            SubProcInsertPredefinedMacro(DBF_W2V_RUK);
+            //SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }
 
         void ProcRukFull(string conn_str, string proc_info, string src_id_pref)
@@ -85,13 +100,13 @@ namespace FastTextProcess.Tests
             using (var lang_detector = CreateLangDetector())
             {
                 var preproc = new CommonEnCyr(lang_detector);
-                preproc.RunAsync((txt_src, pp_item)
-                    => {
-                        if (pp_item.Lang == FTLangLabel.NotSpecified)
-                            Log($"LANG_DETECT_ERROR>>> {pp_item.Text}");
-                        //else
-                            //Log($"{pp_item.Lang}>>> {pp_item.Text}"); 
-                       }
+                preproc.RunAsync((txt_src, pp_item) =>
+                {
+                    if (pp_item.Lang == FTLangLabel.NotSpecified)
+                        Log($"LANG_DETECT_ERROR>>> {pp_item.Text}");
+                    //else
+                    //Log($"{pp_item.Lang}>>> {pp_item.Text}"); 
+                }
                     );
                 Log($"TEST Process samples ...");
                 foreach (var keyValue in GetSrcItems(conn_str))
