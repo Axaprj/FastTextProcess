@@ -15,6 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.WordToVecDB", "Axaprj.WordToVecDB\Axaprj.WordToVecDB.csproj", "{0F4CACF5-D13A-408A-8E68-BBF113D6170C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.Textc.Vect", "Axaprj.Textc.Vect\Axaprj.Textc.Vect.csproj", "{1B184F6B-750A-4BDF-9CDE-3F2A75424602}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axaprj.Textc.Vect.Test", "Axaprj.Textc.Vect.Test\Axaprj.Textc.Vect.Test.csproj", "{EA08D7AD-6BAB-4AF3-9367-6D41544D4BE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Takenet.Textc.Core", "..\textc-csharp\src\Takenet.Textc\Takenet.Textc.Core.csproj", "{2A125DA5-B75F-48F4-8737-3CE3181DA778}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F4CACF5-D13A-408A-8E68-BBF113D6170C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B184F6B-750A-4BDF-9CDE-3F2A75424602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B184F6B-750A-4BDF-9CDE-3F2A75424602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B184F6B-750A-4BDF-9CDE-3F2A75424602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B184F6B-750A-4BDF-9CDE-3F2A75424602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA08D7AD-6BAB-4AF3-9367-6D41544D4BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA08D7AD-6BAB-4AF3-9367-6D41544D4BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA08D7AD-6BAB-4AF3-9367-6D41544D4BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA08D7AD-6BAB-4AF3-9367-6D41544D4BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A125DA5-B75F-48F4-8737-3CE3181DA778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A125DA5-B75F-48F4-8737-3CE3181DA778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A125DA5-B75F-48F4-8737-3CE3181DA778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A125DA5-B75F-48F4-8737-3CE3181DA778}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
