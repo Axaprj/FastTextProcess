@@ -1,3 +1,4 @@
+using Axaprj.WordToVecDB;
 using Axaprj.WordToVecDB.Context;
 using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
@@ -113,26 +114,23 @@ namespace FastTextProcess.Tests
         {
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
-            using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
-            {
-                var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
-                var w1u = dict_db.FindByWord("шкарпетки", FTLangLabel.__label__uk);
-                var w1r = dict_db.FindByWord("носки", FTLangLabel.__label__ru);
-                var w1e = dict_db.FindByWord("socks", FTLangLabel.__label__en);
-                var w2u = dict_db.FindByWord("краватка", FTLangLabel.__label__uk);
-                var w2r = dict_db.FindByWord("галстук", FTLangLabel.__label__ru);
-                var w2e = dict_db.FindByWord("necktie", FTLangLabel.__label__en);
+            var vs = VectorsService.Instance(DBF_W2V_RUK);
+            var w1u = vs.FindByWord("шкарпетки", FTLangLabel.__label__uk);
+            var w1r = vs.FindByWord("носки", FTLangLabel.__label__ru);
+            var w1e = vs.FindByWord("socks", FTLangLabel.__label__en);
+            var w2u = vs.FindByWord("краватка", FTLangLabel.__label__uk);
+            var w2r = vs.FindByWord("галстук", FTLangLabel.__label__ru);
+            var w2e = vs.FindByWord("necktie", FTLangLabel.__label__en);
 
-                Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
-                Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");
+            Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
+            Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");
 
-                Log($"cos({w1u.Word}, {w1e.Word}) = {w1u.GetCosine(w1e)}");
-                Log($"cos({w1r.Word}, {w1e.Word}) = {w1r.GetCosine(w1e)}");
+            Log($"cos({w1u.Word}, {w1e.Word}) = {w1u.GetCosine(w1e)}");
+            Log($"cos({w1r.Word}, {w1e.Word}) = {w1r.GetCosine(w1e)}");
 
-                Log($"cos({w1u.Word}, {w2u.Word}) = {w1u.GetCosine(w2u)}");
-                Log($"cos({w1r.Word}, {w2r.Word}) = {w1r.GetCosine(w2r)}");
-                Log($"cos({w1e.Word}, {w2e.Word}) = {w1e.GetCosine(w2e)}");
-            }
+            Log($"cos({w1u.Word}, {w2u.Word}) = {w1u.GetCosine(w2u)}");
+            Log($"cos({w1r.Word}, {w2r.Word}) = {w1r.GetCosine(w2r)}");
+            Log($"cos({w1e.Word}, {w2e.Word}) = {w1e.GetCosine(w2e)}");
             Log("done");
         }
 
@@ -148,14 +146,17 @@ namespace FastTextProcess.Tests
                 var sum_w2v_ru = dict_db.FindByWord("сумма", FTLangLabel.__label__ru);
                 PrintPair(sum_w2v_en, sum_w2v_ru);
                 foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__ru))
+                {
                     PrintPair(w2v, sum_w2v_en, distance_min: 0.3f);
-                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__ru))
                     PrintPair(w2v, sum_w2v_ru, distance_min: 0.6f);
+                }
+                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__en))
+                    PrintPair(w2v, sum_w2v_en, distance_min: 0.6f);
             }
             Log("done");
         }
 
-        void PrintPair(Dict w2v1, Dict w2v2, float distance_min=-1, bool log_err=true)
+        void PrintPair(Dict w2v1, Dict w2v2, float distance_min = -1, bool log_err = true)
         {
             try
             {
@@ -165,7 +166,7 @@ namespace FastTextProcess.Tests
             }
             catch (Exception ex)
             {
-                if(log_err)
+                if (log_err)
                     Log($"ERR ({w2v1.Word}, {w2v2.Word}): {ex.Message}");
             }
         }
