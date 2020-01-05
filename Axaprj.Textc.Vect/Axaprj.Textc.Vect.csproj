@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\textc-csharp\src\Takenet.Textc\Takenet.Textc.Core.csproj" />
+    <PackageReference Include="Takenet.Textc.Core" Version="0.2.28" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Axaprj.WordToVecDB\Axaprj.WordToVecDB.csproj" />
   </ItemGroup>
 
 </Project>

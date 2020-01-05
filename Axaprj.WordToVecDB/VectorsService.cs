@@ -44,8 +44,7 @@ namespace Axaprj.WordToVecDB
                     _vectCache = new TCache();
                 if (_vectCache.ContainsKey(lang))
                 {
-                    ConcurrentDictionary<string, Dict> dict;
-                    if (_vectCache[lang].TryGetTarget(out dict))
+                    if (_vectCache[lang].TryGetTarget(out ConcurrentDictionary<string, Dict> dict))
                         return dict;
                 }
                 var new_dict = new ConcurrentDictionary<string, Dict>();

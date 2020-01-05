@@ -1,5 +1,6 @@
 ﻿using Axaprj.WordToVecDB.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace Axaprj.WordToVecDB.Entities
 {
@@ -106,6 +107,22 @@ namespace Axaprj.WordToVecDB.Entities
             float[] a = GetVectFloat(this.Vect);
             float[] b = GetVectFloat(other.Vect);
             return GetCosine(a, b);
+        }
+        
+        public Dict GetNearest(IEnumerable<Dict> dicts, float min_cosine = 0f)
+        {
+            float max_cosine = 0f;
+            Dict nearest = null;
+            foreach (var dict in dicts)
+            {
+                var cc = GetCosine(dict);
+                if (cc > max_cosine)
+                {
+                    max_cosine = cc;
+                    nearest = dict;
+                }
+            }
+            return max_cosine > min_cosine ? nearest: null;
         }
 
         public override string ToString()
