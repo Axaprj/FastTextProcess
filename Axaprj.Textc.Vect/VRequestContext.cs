@@ -18,9 +18,9 @@ namespace Axaprj.Textc.Vect
             set { SetVariable(CtxVarW2VDictFile, value);  }
         }
 
-        public FTLangLabel LangLabel
+        public LangLabel LangLabel
         {
-            get { return (FTLangLabel)GetVariable(CtxVarW2VLangLabel); }
+            get { return (LangLabel)GetVariable(CtxVarW2VLangLabel); }
             set { SetVariable(CtxVarW2VLangLabel, value); }
         }
 

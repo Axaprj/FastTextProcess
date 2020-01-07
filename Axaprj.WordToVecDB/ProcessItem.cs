@@ -19,7 +19,7 @@ namespace Axaprj.WordToVecDB.Entities
         void ITextSource.SetText(string txt) { Src = txt; }
 
         public string SrcOriginalId;
-        public FTLangLabel Lang;
+        public LangLabel Lang;
         public string SrcProcInfo;
         public string[] Preprocessed;
         public long[] Embedded;

@@ -42,7 +42,7 @@ namespace Axaprj.Textc.Vect.Types
         protected VectorsService GetVService(IRequestContext context) =>
             VectorsService.Instance(GetVRequestCtx(context).W2VDictFile);
 
-        protected FTLangLabel GetLang(IRequestContext context) =>
+        protected LangLabel GetLang(IRequestContext context) =>
             GetVRequestCtx(context).LangLabel;
 
         protected override bool Compare(string x, string y)

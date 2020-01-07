@@ -21,18 +21,18 @@ namespace Axaprj.WordToVecDB
         /// </summary>
         /// <param name="word"></param>
         /// <returns></returns>
-        public string GetLettersOnly(string word, FTLangLabel lang)
+        public string GetLettersOnly(string word, LangLabel lang)
         {
             if (string.IsNullOrWhiteSpace(word))
                 return string.Empty;
             Regex rex = null;
             switch (lang)
             {
-                case FTLangLabel.__label__en:
+                case LangLabel.en:
                     rex = rexClnWordEn;
                     break;
-                case FTLangLabel.__label__ru:
-                case FTLangLabel.__label__uk:
+                case LangLabel.ru:
+                case LangLabel.uk:
                     rex = rexClnWordCyr;
                     break;
             }

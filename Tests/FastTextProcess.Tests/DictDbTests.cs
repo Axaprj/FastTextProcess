@@ -81,13 +81,13 @@ namespace FastTextProcess.Tests
         {
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
-            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__en);
-            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__ru);
-            CalcMinMax(DBF_W2V_RUK, FTLangLabel.__label__uk);
+            CalcMinMax(DBF_W2V_RUK, LangLabel.en);
+            CalcMinMax(DBF_W2V_RUK, LangLabel.ru);
+            CalcMinMax(DBF_W2V_RUK, LangLabel.uk);
             Log("done");
         }
 
-        void CalcMinMax(string w2v_db_fn, FTLangLabel lang)
+        void CalcMinMax(string w2v_db_fn, LangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(w2v_db_fn))
             {
@@ -115,12 +115,12 @@ namespace FastTextProcess.Tests
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
             var vs = VectorsService.Instance(DBF_W2V_RUK);
-            var w1u = vs.FindByWord("шкарпетки", FTLangLabel.__label__uk);
-            var w1r = vs.FindByWord("носки", FTLangLabel.__label__ru);
-            var w1e = vs.FindByWord("socks", FTLangLabel.__label__en);
-            var w2u = vs.FindByWord("краватка", FTLangLabel.__label__uk);
-            var w2r = vs.FindByWord("галстук", FTLangLabel.__label__ru);
-            var w2e = vs.FindByWord("necktie", FTLangLabel.__label__en);
+            var w1u = vs.FindByWord("шкарпетки", LangLabel.uk);
+            var w1r = vs.FindByWord("носки", LangLabel.ru);
+            var w1e = vs.FindByWord("socks", LangLabel.en);
+            var w2u = vs.FindByWord("краватка", LangLabel.uk);
+            var w2r = vs.FindByWord("галстук", LangLabel.ru);
+            var w2e = vs.FindByWord("necktie", LangLabel.en);
 
             Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
             Log($"cos({w2u.Word}, {w2r.Word}) = {w2u.GetCosine(w2r)}");
@@ -142,15 +142,15 @@ namespace FastTextProcess.Tests
             using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
             {
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
-                var sum_w2v_en = dict_db.FindByWord("sum", FTLangLabel.__label__en);
-                var sum_w2v_ru = dict_db.FindByWord("сумма", FTLangLabel.__label__ru);
+                var sum_w2v_en = dict_db.FindByWord("sum", LangLabel.en);
+                var sum_w2v_ru = dict_db.FindByWord("сумма", LangLabel.ru);
                 PrintPair(sum_w2v_en, sum_w2v_ru);
-                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__ru))
+                foreach (var w2v in dict_db.GetAll(LangLabel.ru))
                 {
                     PrintPair(w2v, sum_w2v_en, distance_min: 0.3f);
                     PrintPair(w2v, sum_w2v_ru, distance_min: 0.6f);
                 }
-                foreach (var w2v in dict_db.GetAll(FTLangLabel.__label__en))
+                foreach (var w2v in dict_db.GetAll(LangLabel.en))
                     PrintPair(w2v, sum_w2v_en, distance_min: 0.6f);
             }
             Log("done");

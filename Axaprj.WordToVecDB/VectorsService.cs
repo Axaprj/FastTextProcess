@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Axaprj.WordToVecDB
 {
-    using TCache = Dictionary<FTLangLabel, WeakReference<ConcurrentDictionary<string, Dict>>>;
+    using TCache = Dictionary<LangLabel, WeakReference<ConcurrentDictionary<string, Dict>>>;
     /// <summary>
     /// Vector values access Facade Service.
     /// TAG: thread_safe, cache, performance
@@ -36,7 +36,7 @@ namespace Axaprj.WordToVecDB
 
         readonly object VectCacheLock = new object();
         TCache _vectCache;
-        ConcurrentDictionary<string, Dict> GetVectDict(FTLangLabel lang)
+        ConcurrentDictionary<string, Dict> GetVectDict(LangLabel lang)
         {
             lock (VectCacheLock)
             {
@@ -53,7 +53,7 @@ namespace Axaprj.WordToVecDB
             }
         }
 
-        public Dict FindByWord(string word, FTLangLabel lang)
+        public Dict FindByWord(string word, LangLabel lang)
         {
             Dict w2v;
             var vect_dict = GetVectDict(lang);
@@ -73,7 +73,7 @@ namespace Axaprj.WordToVecDB
             return w2v;
         }
 
-        Dict DbFindByWord(string word, FTLangLabel lang)
+        Dict DbFindByWord(string word, LangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(_db_file))
             {

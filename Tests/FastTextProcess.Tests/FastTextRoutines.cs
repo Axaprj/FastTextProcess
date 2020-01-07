@@ -37,7 +37,7 @@ namespace FastTextProcess.Tests
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
         /// <param name="with_insert_or_replace">use insert_or_replace when non unique vocabulary</param>
         /// <param name="fn_infilter_predicat">optional filter predicate</param>
-        protected void ProcAppendDb(string ft_vec_fn, string dbf_w2v_fn, FTLangLabel lang
+        protected void ProcAppendDb(string ft_vec_fn, string dbf_w2v_fn, LangLabel lang
             , bool with_insert_or_replace = false
             , Func<Dict, bool> fn_infilter_predicat = null)
         {
@@ -105,7 +105,7 @@ namespace FastTextProcess.Tests
         /// <param name="ft_bin_fn">FastText bin model filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
         protected void SubProcFillEmptyVectDict(
-            string ft_bin_fn, string dbf_w2v_fn, FTLangLabel lang)
+            string ft_bin_fn, string dbf_w2v_fn, LangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
             {
@@ -146,7 +146,7 @@ namespace FastTextProcess.Tests
         /// <param name="ft_bin_fn">FastText bin model filename</param>
         /// <param name="dbf_w2v_fn">DB word to vector filename</param>
         protected void SubProcFillEmptyVectDictRND(
-            string dbf_w2v_fn, FTLangLabel lang)
+            string dbf_w2v_fn, LangLabel lang)
         {
             using (var dbx = new FastTextProcessDB(dbf_w2v_fn))
             {

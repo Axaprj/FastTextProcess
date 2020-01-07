@@ -27,7 +27,7 @@ namespace Axaprj.Textc.Vect.Test
             var context = new VRequestContext
             {
                 W2VDictFile = W2VDictEN,
-                LangLabel = FTLangLabel.__label__en,
+                LangLabel = LangLabel.en,
                 MinCosine = 0.6f
             };
             string inputText = "sum 5 3";

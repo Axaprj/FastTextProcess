@@ -10,13 +10,14 @@ namespace Axaprj.FastTextProcess.Preprocessor
     {
         public readonly string Text;
         public string[] Words { get { return Text.Split(' '); } }
-        public readonly FTLangLabel Lang;
+        public readonly LangLabel Lang;
         public PreprocessItem(string text, string ft_lang_label)
-            : this(text, FTLangLabel.NotSpecified)
+            : this(text, LangLabel.NA)
         {
-            Enum.TryParse(ft_lang_label, out Lang);
+            //Enum.TryParse(ft_lang_label, out Lang);
+            LangLabelExt.TryParseFastTextLabel(ft_lang_label, out Lang);
         }
-        public PreprocessItem(string text, FTLangLabel lang)
+        public PreprocessItem(string text, LangLabel lang)
         {
             Text = text;
             Lang = lang;

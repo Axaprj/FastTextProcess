@@ -49,11 +49,11 @@ namespace FastTextProcess.Tests
                     Log($"Skip {w2v}");
                 return !reject;
             };
-            ProcAppendDb("wiki.ru.align.vec", DBF_W2V_RUK, FTLangLabel.__label__ru
+            ProcAppendDb("wiki.ru.align.vec", DBF_W2V_RUK, LangLabel.ru
                 , with_insert_or_replace: true, fn_infilter_predicat: infilter);
-            ProcAppendDb("wiki.uk.align.vec", DBF_W2V_RUK, FTLangLabel.__label__uk
+            ProcAppendDb("wiki.uk.align.vec", DBF_W2V_RUK, LangLabel.uk
                 , with_insert_or_replace: true, fn_infilter_predicat: infilter);
-            ProcAppendDb("wiki.en.align.vec", DBF_W2V_RUK, FTLangLabel.__label__en
+            ProcAppendDb("wiki.en.align.vec", DBF_W2V_RUK, LangLabel.en
                 , with_insert_or_replace: true, fn_infilter_predicat: infilter);
         }
 
@@ -64,10 +64,10 @@ namespace FastTextProcess.Tests
         {
             var conn_str = ConfRoot.GetSection("DataCyrConnStr").Value;
             ProcRukFull(conn_str, "cs", "");
-            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.NotSpecified);
-            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__ru);
-            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__uk);
-            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, FTLangLabel.__label__en);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, LangLabel.NA);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, LangLabel.ru);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, LangLabel.uk);
+            SubProcFillEmptyVectDictRND(DBF_W2V_RUK, LangLabel.en);
             SubProcBuildResultDict(DBF_RUK_Proc, DBF_W2V_RUK);
             //SubProcInsertPredefinedMacro(DBF_W2V_RUK);
         }
@@ -102,7 +102,7 @@ namespace FastTextProcess.Tests
                 var preproc = new CommonEnCyr(lang_detector);
                 preproc.RunAsync((txt_src, pp_item) =>
                 {
-                    if (pp_item.Lang == FTLangLabel.NotSpecified)
+                    if (pp_item.Lang == LangLabel.NA)
                         Log($"LANG_DETECT_ERROR>>> {pp_item.Text}");
                     //else
                     //Log($"{pp_item.Lang}>>> {pp_item.Text}"); 

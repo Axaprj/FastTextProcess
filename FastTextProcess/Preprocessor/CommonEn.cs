@@ -33,7 +33,7 @@ namespace Axaprj.FastTextProcess.Preprocessor
         {
             var ctxt = CleanCommon(txt_src.GetText(), rexClnCommonEn);
             txt_src.SetText(ctxt);
-            _resultHandler(txt_src, new PreprocessItem(ctxt, FTLangLabel.__label__en));
+            _resultHandler(txt_src, new PreprocessItem(ctxt, LangLabel.en));
         }
 
         public virtual void RunAsync(Action<ITextSource, PreprocessItem> actResultHandler)

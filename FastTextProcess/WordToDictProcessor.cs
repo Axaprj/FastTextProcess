@@ -22,10 +22,10 @@ namespace Axaprj.FastTextProcess
         }
         long? _curEmbedInx = null;
         readonly object SetOfNewLock = new object();
-        Dictionary<FTLangLabel, Dictionary<string, NewItem>> _setOfNew;
+        Dictionary<LangLabel, Dictionary<string, NewItem>> _setOfNew;
 
 
-        IEnumerable<FTLangLabel> GetSetOfNewLangs()
+        IEnumerable<LangLabel> GetSetOfNewLangs()
         {
             lock (SetOfNewLock)
             {
@@ -36,12 +36,12 @@ namespace Axaprj.FastTextProcess
             }
         }
 
-        Dictionary<string, NewItem> GetSetOfNew(FTLangLabel lang)
+        Dictionary<string, NewItem> GetSetOfNew(LangLabel lang)
         {
             lock (SetOfNewLock)
             {
                 _setOfNew = _setOfNew
-                    ?? new Dictionary<FTLangLabel, Dictionary<string, NewItem>>();
+                    ?? new Dictionary<LangLabel, Dictionary<string, NewItem>>();
 
                 if (_setOfNew.ContainsKey(lang))
                     return _setOfNew[lang];
@@ -65,7 +65,7 @@ namespace Axaprj.FastTextProcess
             ProcessDB = new FastTextProcessDB(dbf_w2v);//, foreign_keys:false);
         }
 
-        public long[] WordsToInxsForParallel(string[] words, FTLangLabel lang)
+        public long[] WordsToInxsForParallel(string[] words, LangLabel lang)
         {
             var dict = ProcessDB.Dict(DictDbSet.DictKind.Main);
             var dict_addins = ProcessDB.Dict(DictDbSet.DictKind.Addin);
@@ -78,7 +78,7 @@ namespace Axaprj.FastTextProcess
             return embed_inxs;
         }
 
-        long WordToInx(string word, FTLangLabel lang, DictDbSet dict, DictDbSet dict_addins, EmbedDictDbSet embed)
+        long WordToInx(string word, LangLabel lang, DictDbSet dict, DictDbSet dict_addins, EmbedDictDbSet embed)
         {
             long embed_inx;
             long? cur_id = dict.FindIdByWord(word, lang);
@@ -95,7 +95,7 @@ namespace Axaprj.FastTextProcess
         }
 
         long GetOrAddEmbed(EmbedDictDbSet embed
-            , long? dict_id, DictDbSet.DictKind dict_kind, string word, FTLangLabel lang)
+            , long? dict_id, DictDbSet.DictKind dict_kind, string word, LangLabel lang)
         {
             long? inx = null;
             if (dict_id.HasValue)

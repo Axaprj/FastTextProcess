@@ -24,7 +24,7 @@ namespace FastTextProcess.Tests
         public void ProcCreateDbEn()
         {
             ProcCreateDb(DBF_W2V_EN);
-            ProcAppendDb("cc.en.300.vec", DBF_W2V_EN, FTLangLabel.__label__en);
+            ProcAppendDb("cc.en.300.vec", DBF_W2V_EN, LangLabel.en);
         }
 
         #region AclImdb processing tasks
@@ -98,7 +98,7 @@ namespace FastTextProcess.Tests
         [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors (via FastTest)")]
         public void SubProcFillEmptyVectDictEn()
         {
-            SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN, FTLangLabel.__label__en);
+            SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN, LangLabel.en);
         }
 
         [Fact]

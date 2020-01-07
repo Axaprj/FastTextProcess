@@ -20,9 +20,9 @@ namespace Axaprj.WordToVecDB.Entities
         public long Id { get; set; }
         public string Word { get; set; }
         public byte[] Vect { get; set; }
-        public FTLangLabel Lang { get; set; }
+        public LangLabel Lang { get; set; }
 
-        public static Dict CreateParseFT(string str, FTLangLabel lang)
+        public static Dict CreateParseFT(string str, LangLabel lang)
         {
             var sarr = str.Trim().Split(' ');
             var sfarr = new string[sarr.Length - 1];
@@ -34,7 +34,7 @@ namespace Axaprj.WordToVecDB.Entities
             return new Dict { Word = sarr[0], Vect = barr, Lang = lang };
         }
 
-        public static Dict CreateRnd(Random rnd, string word, FTLangLabel lang
+        public static Dict CreateRnd(Random rnd, string word, LangLabel lang
             , int vect_sz = DEF_VECT_SIZE, float vv_min = DEF_VECT_MIN, float vv_max = DEF_VECT_MAX)
         {
             var farr = new float[vect_sz];
@@ -55,7 +55,7 @@ namespace Axaprj.WordToVecDB.Entities
         }
 
         public static Dict CreateEmpty(string word = "<%NONE%>"
-            , FTLangLabel lang = FTLangLabel.NotSpecified
+            , LangLabel lang = LangLabel.NA
             , int vect_sz = DEF_VECT_SIZE)
         {
             var res = new Dict

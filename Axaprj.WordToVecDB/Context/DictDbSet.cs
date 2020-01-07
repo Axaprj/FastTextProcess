@@ -94,7 +94,7 @@ namespace Axaprj.WordToVecDB.Context
                 {
                     var sql = string.Format(
                         "SELECT {1} FROM {0} WHERE {2} = ${2} AND ({3} = ${3} OR {3} = {4}) ",
-                        TableName, Dict.FldnId, Dict.FldnWord, Dict.FldnLangId, (int)FTLangLabel.NotSpecified);
+                        TableName, Dict.FldnId, Dict.FldnWord, Dict.FldnLangId, (int)LangLabel.NA);
                     _cmdFindIdByWord = Ctx.CreateCmd(sql);
                     _cmdFindIdByWord.Parameters.Add(Dict.FldnWord, DbType.String);
                     _cmdFindIdByWord.Parameters.Add(Dict.FldnLangId, DbType.Int32);
@@ -134,7 +134,7 @@ namespace Axaprj.WordToVecDB.Context
             return res;
         }
 
-        public long? FindIdByWord(string word, FTLangLabel lang)
+        public long? FindIdByWord(string word, LangLabel lang)
         {
             CmdFindIdByWord.Parameters[Dict.FldnWord].Value = word;
             CmdFindIdByWord.Parameters[Dict.FldnLangId].Value = (int)lang;
@@ -164,7 +164,7 @@ namespace Axaprj.WordToVecDB.Context
             }
         }
 
-        public IEnumerable<Dict> GetAll(FTLangLabel lang)
+        public IEnumerable<Dict> GetAll(LangLabel lang)
         {
             var sql = string.Format(
                        "SELECT {1}, {2}, {3}, {4} FROM {0} WHERE {4} = ${4}",
@@ -180,17 +180,17 @@ namespace Axaprj.WordToVecDB.Context
                         Id = rd.GetInt64(0),
                         Word = rd.GetString(1),
                         Vect = (byte[])rd[2],
-                        Lang = (FTLangLabel)rd.GetInt32(3)
+                        Lang = (LangLabel)rd.GetInt32(3)
                     }; 
             }
         }
 
-        public Dict FindByWord(string word, FTLangLabel lang)
+        public Dict FindByWord(string word, LangLabel lang)
         {
             var sql = string.Format(
                        "SELECT {1}, {2}, {3}, {4} FROM {0} WHERE {2} = ${2} AND ({4} = ${4} OR {4} = {5}) ",
                        TableName
-                       , Dict.FldnId, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId, (int)FTLangLabel.NotSpecified);
+                       , Dict.FldnId, Dict.FldnWord, Dict.FldnVect, Dict.FldnLangId, (int)LangLabel.NA);
             var cmd = Ctx.CreateCmd(sql);
             cmd.Parameters.AddWithValue(Dict.FldnWord, word);
             cmd.Parameters.AddWithValue(Dict.FldnLangId, (int)lang);
@@ -202,7 +202,7 @@ namespace Axaprj.WordToVecDB.Context
                         Id = rd.GetInt64(0),
                         Word = rd.GetString(1),
                         Vect = (byte[])rd[2],
-                        Lang = (FTLangLabel)rd.GetInt32(3)
+                        Lang = (LangLabel)rd.GetInt32(3)
                     };
             }
             return null;
