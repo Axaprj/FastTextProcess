@@ -11,23 +11,17 @@ using Xunit.Abstractions;
 
 namespace FastTextProcess.Tests
 {
-    public class FastTextRoutinesEn : FastTextRoutines
+    /// <summary>
+    /// AclImdb English processing
+    /// </summary>
+    public class FastTextRoutinesEn : FastTextRoutinesModel
     {
-        string DBF_W2V_EN { get { return DataOutPath("w2v_en.db"); } }
-        string DBF_AclImdb { get { return DataOutPath("AclImdb_proc.db"); } }
+        protected override string DBF_W2V => DataOutPath("w2v_en.db");
+        protected override string DBF_RESULT => DataOutPath("AclImdb_proc.db");
+        protected override LangLabel LANG => LangLabel.en;
 
         public FastTextRoutinesEn(ITestOutputHelper output) : base(output) { }
 
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("Process", "Load PreTrained FastText Database")]
-        public void ProcCreateDbEn()
-        {
-            ProcCreateDb(DBF_W2V_EN);
-            ProcAppendDb("cc.en.300.vec", DBF_W2V_EN, LangLabel.en);
-        }
-
-        #region AclImdb processing tasks
         [Fact]
         [Trait("Task", "AclImdb")]
         [Trait("Process", "Append Train Data (Processing Full)")]
@@ -38,8 +32,8 @@ namespace FastTextProcess.Tests
             ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "train/neg/");
             path = DataArcPath("aclImdb/train/pos/");
             ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "train/pos/");
-            SubProcFillEmptyVectDictEn();
-            SubProcAclImdbResultDictEn();
+            SubProcFillEmptyVectDict(FTF_MODEL, DBF_W2V, LANG);
+            SubProcBuildResultDict(DBF_RESULT, DBF_W2V);
             Log("Done (ProcAclImdbTrain)");
         }
 
@@ -53,16 +47,16 @@ namespace FastTextProcess.Tests
             ProcAclImdbFull(data_dir: path, proc_info: "1 0", src_id_pref: "test/neg/");
             path = DataArcPath("aclImdb/test/pos/");
             ProcAclImdbFull(data_dir: path, proc_info: "0 1", src_id_pref: "test/pos/");
-            SubProcFillEmptyVectDictEn();
-            SubProcAclImdbResultDictEn();
+            SubProcFillEmptyVectDict(FTF_MODEL, DBF_W2V, LANG);
+            SubProcBuildResultDict(DBF_RESULT, DBF_W2V);
             Log("Done (ProcAclImdbTest)");
         }
 
         void ProcAclImdbFull(string data_dir, string proc_info, string src_id_pref)
         {
-            SubProcAclImdbInsertPredefinedMacro();
+            SubProcInsertPredefinedMacro(DBF_W2V);
             using (var proc = new TextProcessor(
-                DBF_W2V_EN, DBF_AclImdb, new Axaprj.FastTextProcess.Preprocessor.CommonEn()))
+                DBF_W2V, DBF_RESULT, new Axaprj.FastTextProcess.Preprocessor.CommonEn()))
             {
                 Log($"Process samples '{src_id_pref}' ...");
                 var dir_path = DataArcPath(data_dir);
@@ -82,39 +76,6 @@ namespace FastTextProcess.Tests
                 );
             }
             Log($"Done ({src_id_pref})");
-        }
-        #endregion
-
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("Process", "Clean Processing Results")]
-        public void ProcAclImdbResultClean()
-        {
-            ProcResultClean(DBF_AclImdb, DBF_W2V_EN);
-        }
-
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Fill Empty Add-in Dictionary Vectors (via FastTest)")]
-        public void SubProcFillEmptyVectDictEn()
-        {
-            SubProcFillEmptyVectDict("cc.en.300.bin", DBF_W2V_EN, LangLabel.en);
-        }
-
-        [Fact]
-        [Trait("Task", "AclImdb")]
-        [Trait("SubProcess", "Build Result Dictionary")]
-        public void SubProcAclImdbResultDictEn()
-        {
-            SubProcBuildResultDict(DBF_AclImdb, DBF_W2V_EN);
-        }
-
-        [Fact]
-        [Trait("Task", "EN Common")]
-        [Trait("SubProcess", "Insert Predefined Vectors")]
-        public void SubProcAclImdbInsertPredefinedMacro()
-        {
-            SubProcInsertPredefinedMacro(DBF_W2V_EN);
         }
     }
 }

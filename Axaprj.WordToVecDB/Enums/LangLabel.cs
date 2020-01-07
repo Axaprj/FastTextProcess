@@ -29,6 +29,11 @@ namespace Axaprj.WordToVecDB.Enums
 
     public static class LangLabelExt
     {
+        public static string GetStdLangLabel(this LangLabel enumVal)
+        {
+            return Enum.GetName(typeof(LangLabel), enumVal);
+        }
+
         public static string GetFastTextLabel(this LangLabel enumVal)
         {
             var memInfo = typeof(LangLabel).GetMember(enumVal.ToString());

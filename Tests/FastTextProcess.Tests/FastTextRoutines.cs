@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 namespace FastTextProcess.Tests
 {
     /// <summary>
-    /// 
+    /// FastText processing base 
     /// </summary>
     public class FastTextRoutines : TestBase
     {
@@ -41,7 +41,7 @@ namespace FastTextProcess.Tests
             , bool with_insert_or_replace = false
             , Func<Dict, bool> fn_infilter_predicat = null)
         {
-            var fvec = DataArcPath(ft_vec_fn);
+            var fvec = FastTextPath(ft_vec_fn);
             AssertFileExists(fvec, "FastText file of vectors");
 
             AssertFileExists(dbf_w2v_fn, "word2vect DB");
