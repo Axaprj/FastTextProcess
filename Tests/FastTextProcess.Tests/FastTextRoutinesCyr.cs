@@ -41,14 +41,14 @@ namespace FastTextProcess.Tests
         {
             ProcCreateDb(DBF_W2V_RUK);
             var cln_proc = new ServiceRoutines();
-            Func<Dict, bool> infilter = (w2v) =>
+            bool infilter(Dict w2v)
             {
                 var cln_w = cln_proc.GetLettersOnly(w2v.Word, w2v.Lang);
                 var reject = string.IsNullOrEmpty(cln_w);
                 if (reject)
                     Log($"Skip {w2v}");
                 return !reject;
-            };
+            }
             ProcAppendDb("wiki.ru.align.vec", DBF_W2V_RUK, LangLabel.ru
                 , with_insert_or_replace: true, fn_infilter_predicat: infilter);
             ProcAppendDb("wiki.uk.align.vec", DBF_W2V_RUK, LangLabel.uk
@@ -119,8 +119,8 @@ namespace FastTextProcess.Tests
 
         FastTextLauncher CreateLangDetector()
         {
-            var fmod = DataArcPath("lid.176.bin");
-            AssertFileExists(fmod, "FastText model file");
+            var fmod = FastTextPath("lid.176.bin");
+            AssertFileExists(fmod, "FastText language detector model file");
             var fexe = FastTextBin;
             AssertFileExists(fexe, "FastText executable");
             var lang_detector = FTCmd.CreateLangDetect(fexe, fmod);

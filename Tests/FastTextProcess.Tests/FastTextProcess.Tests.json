@@ -1,7 +1,8 @@
 {
   "DataArcDir": "c:/data.arc/",
   "DataOutDir": "C:/data.arc/statDb/",
-  "FastTextBin": "c:/data.arc/fasttext.exe",
+  "FastTextDir": "c:/data.ft/",
+  "FastTextBin": "c:/data.ft/fasttext.exe",
   "DataCyrConnStr": "Data Source=\"c:/data.arc/statDb/StaTransform.db\";Version=3;",
   "DataCyrSelectSQL": "SELECT AdID || ';' || GroupID AS ID, TextSrc FROM Ads_Active"
 }

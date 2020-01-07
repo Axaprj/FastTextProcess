@@ -54,6 +54,12 @@ namespace FastTextProcess.Tests
             return Path.GetFullPath(Path.Combine(dir, file_name));
         }
 
+        protected string FastTextPath(string file_name)
+        {
+            var dir = ConfRoot.GetSection("FastTextDir").Value;
+            return Path.GetFullPath(Path.Combine(dir, file_name));
+        }
+
         protected string DataOutPath(string file_name)
         {
             var dir = ConfRoot.GetSection("DataOutDir").Value;

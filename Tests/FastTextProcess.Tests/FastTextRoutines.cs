@@ -112,7 +112,7 @@ namespace FastTextProcess.Tests
                 var words = dbx.Dict(DictDbSet.DictKind.Addin).GetWordsWithEmptyVect();
                 if (words.Any())
                 {
-                    var fmod = DataArcPath(ft_bin_fn);
+                    var fmod = FastTextPath(ft_bin_fn);
                     AssertFileExists(fmod, "FastText model file");
                     var fexe = FastTextBin;
                     AssertFileExists(fexe, "FastText executable");
