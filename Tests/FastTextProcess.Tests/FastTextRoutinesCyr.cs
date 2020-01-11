@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 namespace FastTextProcess.Tests
 {
     /// <summary>
-    /// Ru Uk En texts processor
+    /// Ru Uk En texts aligned vectors processor
     /// </summary>
     public class FastTextRoutinesCyr : FastTextRoutines
     {
@@ -117,20 +117,10 @@ namespace FastTextProcess.Tests
             Log($"TEST Done");
         }
 
-        FastTextLauncher CreateLangDetector()
-        {
-            var fmod = FastTextPath("lid.176.bin");
-            AssertFileExists(fmod, "FastText language detector model file");
-            var fexe = FastTextBin;
-            AssertFileExists(fexe, "FastText executable");
-            var lang_detector = FTCmd.CreateLangDetect(fexe, fmod);
-            return lang_detector;
-        }
-
         /// <summary>
         /// Texts data source. Rewrite to connect another source.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>yield key-value pairs</returns>
         IEnumerable<KeyValuePair<string, string>> GetSrcItems(string conn_str)
         {
             using (var cn = new SQLiteConnection(conn_str))

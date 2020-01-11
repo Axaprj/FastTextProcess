@@ -232,5 +232,19 @@ namespace FastTextProcess.Tests
                 }
             }
         }
+        /// <summary>
+        /// Create Language Detector
+        /// </summary>
+        /// <param name="model_fn">language detector model file name</param>
+        /// <returns></returns>
+        protected FastTextLauncher CreateLangDetector(string model_fn = "lid.176.bin")
+        {
+            var fmod = FastTextPath(model_fn);
+            AssertFileExists(fmod, "FastText language detector model file");
+            var fexe = FastTextBin;
+            AssertFileExists(fexe, "FastText executable");
+            var lang_detector = FTCmd.CreateLangDetect(fexe, fmod);
+            return lang_detector;
+        }
     }
 }

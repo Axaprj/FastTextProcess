@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 namespace FastTextProcess.Tests
 {
     /// <summary>
-    /// FastText processing with model base 
+    /// Fasttext processing with model (base class)
     /// </summary>
     public abstract class FastTextRoutinesModel : FastTextRoutines
     {
@@ -44,6 +44,7 @@ namespace FastTextProcess.Tests
         public void ProcResultCleanTest()
         {
             ProcResultClean(DBF_RESULT, DBF_W2V);
+            SubProcInsertPredefinedMacro(DBF_W2V);
         }
 
         [Fact]

@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="FastTextProcess.Preprocessor.CommonEn">
+  <Class Name="Axaprj.FastTextProcess.Preprocessor.CommonEn">
     <Position X="1" Y="0.75" Width="2.5" />
     <Members>
       <Field Name="_resultHandler" Hidden="true" />
-      <Method Name="CleanCommonEn" Hidden="true" />
       <Field Name="rexClnCommonEn" Hidden="true" />
       <Field Name="rexClnSpaces" Hidden="true" />
       <Field Name="rexD" Hidden="true" />
@@ -17,22 +16,12 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAQQAgAAAIAAQAgIAAAAAAAAAAAAAAAAAAAgACEQ=</HashCode>
+      <HashCode>AAAAAQQAgAAAIAAQAgIAAAAAAAAAAAAAAAAACQAACEQ=</HashCode>
       <FileName>Preprocessor\CommonEn.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="FastTextProcess.Preprocessor.CommonEnCyr" Collapsed="true">
-    <Position X="1" Y="4" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAQAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAASAA=</HashCode>
-      <FileName>Preprocessor\CommonEnCyr.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="_ftLauncher" />
-    </ShowAsAssociation>
-  </Class>
-  <Class Name="FastTextProcess.Preprocessor.PreprocessItem">
+  <Class Name="Axaprj.FastTextProcess.Preprocessor.PreprocessItem">
     <Position X="6.75" Y="0.75" Width="2" />
     <Members>
       <Method Name="PreprocessItem" Hidden="true" />
@@ -47,8 +36,8 @@
       <FileName>Preprocessor\PreprocessItem.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FastTextProcess.FastTextLauncher">
-    <Position X="5.25" Y="4" Width="2.5" />
+  <Class Name="Axaprj.FastTextProcess.FastTextLauncher">
+    <Position X="7" Y="3" Width="2.5" />
     <Members>
       <Method Name="FastTextLauncher" Hidden="true" />
       <Method Name="IDisposable.Dispose" Hidden="true" />
@@ -57,12 +46,22 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAQAAQAAAAAAAAAAAAAABAgABAAAACAA=</HashCode>
+      <HashCode>AAAAAgAAAAAAAQAAQAAAAAAAAAAAAAABAgABAQAACAA=</HashCode>
       <FileName>FastTextLauncher.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="FastTextProcess.Preprocessor.ITextPreprocess">
+  <Class Name="Axaprj.FastTextProcess.Preprocessor.CommonEnCyr">
+    <Position X="1" Y="3.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAAQAASAA=</HashCode>
+      <FileName>Preprocessor\CommonEnCyr.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_ftLangDetector" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="Axaprj.FastTextProcess.Preprocessor.ITextPreprocess">
     <Position X="4.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAACAA=</HashCode>
