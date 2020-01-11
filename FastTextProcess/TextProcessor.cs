@@ -11,10 +11,12 @@ namespace Axaprj.FastTextProcess
 {
     public class TextProcessor : IDisposable
     {
-        readonly BlockingCollection<ProcessItem> QueueProcess;
         /// <summary>
-        /// Preprocessing task (null when job without preprocess)
+        /// PostProcess handler (optional)
         /// </summary>
+        public Func<ProcessItem, ProcessItem> fnPostProcess;
+
+        readonly BlockingCollection<ProcessItem> QueueProcess;
         readonly Task taskPreprocess;
 
         readonly BlockingCollection<ProcessItem> QueueWordToDict;
@@ -123,7 +125,8 @@ namespace Axaprj.FastTextProcess
                     {
                         foreach (var itm in QueueStoreResult.GetConsumingEnumerable(cancel_token))
                         {
-                            res_dbx.StoreProcessItem(itm);
+                            var store_itm = fnPostProcess == null ? itm : fnPostProcess(itm);
+                            res_dbx.StoreProcessItem(store_itm);
                         }
                         tran.Commit();
                     }

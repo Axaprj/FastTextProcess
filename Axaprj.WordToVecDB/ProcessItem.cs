@@ -24,16 +24,16 @@ namespace Axaprj.WordToVecDB.Entities
         public string[] Preprocessed;
         public long[] Embedded;
 
-        public string GetEmbeddedInxsStr() =>
-            string.Join(" ", Embedded);
-
-        public string GetPreprocessedStr() =>
-                    string.Join(" ", Preprocessed);
-
+        /// <summary>Stored SrcDictInxsStr</summary>
+        public string GetEmbeddedInxsStr() => string.Join(" ", Embedded);
+        /// <summary>Preprocessed source text</summary>
+        public string GetPreprocessedStr() => string.Join(" ", Preprocessed);
+        /// <summary>Stored SrcDbgInfo</summary>
+        public virtual string GetSrcDbgInfo() => GetPreprocessedStr();
+        /// <summary>Stored SrcProcInfo</summary>
+        public virtual string GetSrcProcInfo() => SrcProcInfo;
 
         public override string ToString() =>
-             $"FastTextProcess::ProcessItem:'{SrcOriginalId}'; info:'{SrcProcInfo}';";
-
-
+             $"WordToVecDB::ProcessItem:'{SrcOriginalId}'; info:'{SrcProcInfo}';";
     }
 }

@@ -77,6 +77,11 @@ namespace FastTextProcess.Tests
                 using (var proc = new TextProcessor(
                     DBF_W2V, DBF_RESULT, new CommonEnCyr(lang_detector)))
                 {
+                    proc.fnPostProcess = (proc_itm) =>
+                    {
+                        proc_itm.SrcProcInfo += ';' + proc_itm.Lang.GetStdLangLabel();
+                        return proc_itm;
+                    };
                     Log($"Process samples '{proc_info}' ...");
                     foreach (var keyValue in GetSrcItems(conn_str))
                     {

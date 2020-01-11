@@ -70,9 +70,9 @@ namespace Axaprj.WordToVecDB.Context
         public long StoreProcessItem(ProcessItem itm)
         {
             CmdSrcInsert.Parameters[ProcessItem.FldnSrcOriginalId].Value = itm.SrcOriginalId;
-            CmdSrcInsert.Parameters[ProcessItem.FldnSrcProcInfo].Value = itm.SrcProcInfo;
+            CmdSrcInsert.Parameters[ProcessItem.FldnSrcProcInfo].Value = itm.GetSrcProcInfo();
             CmdSrcInsert.Parameters[ProcessItem.FldnSrcDictInxsStr].Value = itm.GetEmbeddedInxsStr();
-            CmdSrcInsert.Parameters[ProcessItem.FldnSrcDbgInfo].Value = itm.GetPreprocessedStr();
+            CmdSrcInsert.Parameters[ProcessItem.FldnSrcDbgInfo].Value = itm.GetSrcDbgInfo();
             if (CmdSrcInsert.ExecuteNonQuery() != 1)
                 throw new InvalidOperationException($"StoreProcessItem failed: {itm}");
             return LastInsertRowId;
