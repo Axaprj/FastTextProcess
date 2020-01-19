@@ -23,13 +23,7 @@ namespace Axaprj.Textc.Vect.Test
             //var a_sum = "{ValidValues: ['sum'], MaxCosine: 0.5}";
             var a_sum = "sum";
             var text_proc = CreateTextProcessor($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
-            AssertFileExists(W2VDictEN);
-            var context = new VRequestContext
-            {
-                W2VDictFile = W2VDictEN,
-                LangLabel = LangLabel.en,
-                MinCosine = 0.6f
-            };
+            var context = CreateContext();
             string inputText = "sum 5 3";
             var task = text_proc.ProcessAsync(inputText, context, CancellationToken.None);
             task.Wait();
@@ -49,11 +43,47 @@ namespace Axaprj.Textc.Vect.Test
             }
         }
 
-        ITextProcessor CreateTextProcessor(string syntaxPattern, Delegate fn)
+        [Fact]
+        public void SumVWordSlideTest()
+        {
+            Func<int, int, Task<int>> sum_fn = (a, b) => Task.FromResult(a + b);
+            //var a_sum = "{ValidValues: ['sum'], MaxCosine: 0.5}";
+            var a_sum = "sum";
+            var context = CreateContext();
+            var text_proc = CreateTextProcessor($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
+            string inputText = "please make for me sum 5 3 operation";
+            var task = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
+            task.Wait();
+            try
+            {
+                context.Clear();
+                inputText = "please make for me summary 5 2 operation";
+                task = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
+                task.Wait();
+                throw new InvalidOperationException($"True Negative '{inputText}'");
+            }
+            catch (AggregateException agex)
+            {
+                agex.Handle((x) => x is MatchNotFoundException);
+            }
+        }
+
+        VRequestContext CreateContext()
+        {
+            AssertFileExists(W2VDictEN);
+            return new VRequestContext
+            {
+                W2VDictFile = W2VDictEN,
+                LangLabel = LangLabel.en,
+                MinCosine = 0.6f
+            };
+        }
+
+        SlidingTextProcessor CreateTextProcessor(string syntaxPattern, Delegate fn)
         {
             var out_proc = new DelegateOutputProcessor<int>(
                 (o, ctx) =>
-                Log($"Result: {o}"));
+                Log($"Result: {o}; op: {ctx.GetVariable("operation")}"));
             var syntax = CsdlParser.Parse(syntaxPattern);
             // Now create the command processors, to bind the methods to the syntaxes
             var cmd_proc = new DelegateCommandProcessor(
@@ -63,7 +93,8 @@ namespace Axaprj.Textc.Vect.Test
                 syntax
                 );
             // Finally, create the text processor and register all command processors
-            var text_proc = new TextProcessor(new PunctuationTextSplitter());
+            //var text_proc = new TextProcessor(new PunctuationTextSplitter());
+            var text_proc = new SlidingTextProcessor();
             text_proc.CommandProcessors.Add(cmd_proc);
             text_proc.TextPreprocessors.Add(new TrimTextPreprocessor());
 

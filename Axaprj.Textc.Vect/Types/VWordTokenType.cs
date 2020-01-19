@@ -36,15 +36,6 @@ namespace Axaprj.Textc.Vect.Types
             return vctx;
         }
 
-        protected float GetDefMinCosine(IRequestContext context) =>
-            GetVRequestCtx(context).MinCosine;
-
-        protected VectorsService GetVService(IRequestContext context) =>
-            VectorsService.Instance(GetVRequestCtx(context).W2VDictFile);
-
-        protected LangLabel GetLang(IRequestContext context) =>
-            GetVRequestCtx(context).LangLabel;
-
         protected override bool Compare(string x, string y)
         {
             return x.Equals(y, StringComparison.OrdinalIgnoreCase);
@@ -64,16 +55,15 @@ namespace Axaprj.Textc.Vect.Types
             }
             else
             {
-                var vserv = GetVService(context);
-                var lang = GetLang(context);
-                var v_dict = vserv.FindByWord(value, lang);
+                var ctx = GetVRequestCtx(context);
+                var v_dict = ctx.FindVectByWord(value);
                 if (v_dict != null)
                 {
                     var vv_dicts = validValues
-                        .Select(vv => vserv.FindByWord(vv, lang))
+                        .Select(vv => ctx.FindVectByWord(vv))
                         .Where(d => d != null);
                     var min_cosine = MinCosine == NONE_Cosine
-                        ? GetDefMinCosine(context) : MinCosine;
+                        ? ctx.MinCosine : MinCosine;
                     Dict nearest_value = v_dict.GetNearest(vv_dicts, min_cosine);
                     hasMatch = nearest_value != null;
                     if (hasMatch)

@@ -66,9 +66,10 @@ namespace Axaprj.WordToVecDB
             else
             {
                 w2v = DbFindByWord(word, lang);
-                if (!vect_dict.TryAdd(word, w2v))
-                    throw new InvalidOperationException(
-                        $"FindByWord('{word}', {lang}) cache add error");
+                vect_dict.TryAdd(word, w2v);
+                //if (!vect_dict.TryAdd(word, w2v))
+                //    throw new InvalidOperationException(
+                //        $"FindByWord('{word}', {lang}) cache add error");
             }
             return w2v;
         }
