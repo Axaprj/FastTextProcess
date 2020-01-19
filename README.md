@@ -1,6 +1,8 @@
 # FastTextProcess
-Text to embedded vectors conversion high-performance framework.
-[Facebook FastText](https://fasttext.cc) engine and dictionaries based.
+Natural Language Processing feature extraction multilingual toolset.
+- [Axaprj.FastTextProcess](https://github.com/Axaprj/FastTextProcess/tree/master/FastTextProcess) Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based).
+- [Axaprj.Textc.Vect](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect) Takenet.Textc  extension. 
+- [Axaprj.WordToVecDB](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.WordToVecDB) DB access layer of embedded vectors processing tools. 
  
 ## code
 VS 2017, .NET Core, SQLite, XUnit
@@ -37,34 +39,13 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 
 ## reference 
 ```
-[1] T. Mikolov, E. Grave, P. Bojanowski, C. Puhrsch, A. Joulin. Advances in Pre-Training Distributed Word Representations
-    @inproceedings{mikolov2018advances,
-      title={Advances in Pre-Training Distributed Word Representations},
-      author={Mikolov, Tomas and Grave, Edouard and Bojanowski, Piotr and Puhrsch, Christian and Joulin, Armand},
-      booktitle={Proceedings of the International Conference on Language Resources and Evaluation (LREC 2018)},
-      year={2018}
-    }
+[1] T. Mikolov, E. Grave, P. Bojanowski, C. Puhrsch, A. Joulin. Advances in Pre-Training Distributed Word Representations @inproceedings{mikolov2018advances, title={Advances in Pre-Training Distributed Word Representations}, author={Mikolov, Tomas and Grave, Edouard and Bojanowski, Piotr and Puhrsch, Christian and Joulin, Armand}, booktitle={Proceedings of the International Conference on Language Resources and Evaluation (LREC 2018)},      year={2018}}
 ```
 ```
-[2] A. Joulin, P. Bojanowski, T. Mikolov, H. Jegou, E. Grave, Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion
-	@InProceedings{joulin2018loss,
-	 title={Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion},
-	 author={Joulin, Armand and Bojanowski, Piotr and Mikolov, Tomas and J\'egou, Herv\'e and Grave, Edouard},
-	 year={2018},
-	 booktitle={Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing},
-	}
+[2] A. Joulin, P. Bojanowski, T. Mikolov, H. Jegou, E. Grave, Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion @InProceedings{joulin2018loss, title={Loss in Translation: Learning Bilingual Word Mapping with a Retrieval Criterion}, author={Joulin, Armand and Bojanowski, Piotr and Mikolov, Tomas and J\'egou, Herv\'e and Grave, Edouard}, booktitle={Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing}, year={2018}}
 ```
 ```
-[3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information
-	@article{bojanowski2017enriching,
-	 title={Enriching Word Vectors with Subword Information},
-	 author={Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas},
-	 journal={Transactions of the Association for Computational Linguistics},
-	 volume={5},
-	 year={2017},
-	 issn={2307-387X},
-	 pages={135--146}
-	}
+[3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information @article{bojanowski2017enriching, title={Enriching Word Vectors with Subword Information}, author={Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas}, journal={Transactions of the Association for Computational Linguistics}, volume={5}, year={2017}, issn={2307-387X}, pages={135--146}}
 ```
 ## author
-Igor Alexeev, axaprj2000@yahoo.com for https://propertyindicators.github.io/
+[Axaprj](https://github.com/Axaprj), [Igor Alexeev](axaprj2000@yahoo.com) for https://propertyindicators.github.io/

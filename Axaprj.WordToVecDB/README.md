@@ -1,5 +1,5 @@
 # Axaprj.WordToVecDB
-Text to embedded vectors conversion DB Layer. 
+DB access layer of embedded vectors processing tools. 
 A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.
  
 ## Contents
