@@ -27,7 +27,7 @@ namespace Axaprj.Textc.Vect
         public SlidingTextProcessor(ISyntaxParser syntaxParser, IExpressionScorer expressionScorer, ITextSplitter textSplitter = null)
             : base(syntaxParser, expressionScorer, textSplitter) { }
 
-        public async Task ProcessSlidingAsync(string inputText, IRequestContext context, CancellationToken cancellationToken)
+        public async Task ProcessSlidingAsync(string inputText, IRequestContext context, CancellationTokenSource cancellationSource)
         {
             if (string.IsNullOrWhiteSpace(inputText))
                 throw new ArgumentException("The input string must have a value", nameof(inputText));
@@ -36,22 +36,26 @@ namespace Axaprj.Textc.Vect
             for (int inx = 0; inx >= 0; inx = inputText.IndexOf(SplitChar, inx + 1))
             {
                 var proc_text = inx == 0 ? inputText : inputText.Substring(inx + 1);
-                tasks.Add(Task.Run(async () => 
+                tasks.Add(Task.Run(async () =>
                     {
                         try
                         {
-                            await ProcessAsync(proc_text, context, cancellationToken);
+                            await ProcessAsync(proc_text, context, cancellationSource.Token);
+                            cancellationSource.Cancel();
                             return true;
                         }
-                        catch (MatchNotFoundException)
-                        {
-                            return false;
+                        catch (TaskCanceledException)
+                        { // OK - probably pattern was found in another thread
                         }
+                        catch (MatchNotFoundException)
+                        { // not found here
+                        }
+                        return false;
                     })
                 );
             }
             await Task.WhenAll(tasks);
-            if(!tasks.Any(t=>t.Result))
+            if (!tasks.Any(t => t.Result))
                 throw new MatchNotFoundException(inputText);
         }
 

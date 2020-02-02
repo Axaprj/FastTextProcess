@@ -38,7 +38,7 @@ namespace Axaprj.Textc.Vect.Test
                 throw new InvalidOperationException($"True Negative '{inputText}'");
             }
             catch (AggregateException agex)
-            { 
+            {
                 agex.Handle((x) => x is MatchNotFoundException);
             }
         }
@@ -52,19 +52,25 @@ namespace Axaprj.Textc.Vect.Test
             var context = CreateContext();
             var text_proc = CreateTextProcessor($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
             string inputText = "please make for me sum 5 3 operation";
-            var task = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
-            task.Wait();
-            try
+            using (var cancellationSource = new CancellationTokenSource())
             {
-                context.Clear();
-                inputText = "please make for me summary 5 2 operation";
-                task = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
+                var task = text_proc.ProcessSlidingAsync(inputText, context, cancellationSource);
                 task.Wait();
-                throw new InvalidOperationException($"True Negative '{inputText}'");
             }
-            catch (AggregateException agex)
+            using (var cancellationSource = new CancellationTokenSource())
             {
-                agex.Handle((x) => x is MatchNotFoundException);
+                try
+                {
+                    context.Clear();
+                    inputText = "please make for me summary 5 2 operation";
+                    var task = text_proc.ProcessSlidingAsync(inputText, context, cancellationSource);
+                    task.Wait();
+                    throw new InvalidOperationException($"True Negative '{inputText}'");
+                }
+                catch (AggregateException agex)
+                {
+                    agex.Handle((x) => x is MatchNotFoundException);
+                }
             }
         }
 
