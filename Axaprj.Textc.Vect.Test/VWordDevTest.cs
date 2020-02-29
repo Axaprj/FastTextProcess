@@ -22,7 +22,7 @@ namespace Axaprj.Textc.Vect.Test
             Func<int, int, Task<int>> sum_fn = (a, b) => Task.FromResult(a + b);
             //var a_sum = "{ValidValues: ['sum'], MaxCosine: 0.5}";
             var a_sum = "sum";
-            var text_proc = CreateTextProcessor($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
+            var text_proc = CreateTextProcessor<int>($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
             var context = CreateContext();
             string inputText = "sum 5 3";
             var task = text_proc.ProcessAsync(inputText, context, CancellationToken.None);
@@ -50,29 +50,26 @@ namespace Axaprj.Textc.Vect.Test
             //var a_sum = "{ValidValues: ['sum'], MaxCosine: 0.5}";
             var a_sum = "sum";
             var context = CreateContext();
-            var text_proc = CreateTextProcessor($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
+            var text_proc = CreateTextProcessor<int>($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
             string inputText = "please make for me sum 5 3 operation";
-            using (var cancellationSource = new CancellationTokenSource())
+            var task1 = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
+            task1.Wait();
+            Assert.True(context.IsMatched);
+            Log($"MatchedTextSlice: '{context.MatchedTextSlice}'");
+            try
             {
-                var task = text_proc.ProcessSlidingAsync(inputText, context, cancellationSource);
-                task.Wait();
+                context.Clear();
+                inputText = "please make for me summary 5 2 operation";
+                var task2 = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
+                task2.Wait();
+                throw new InvalidOperationException($"True Negative '{inputText}'");
             }
-            using (var cancellationSource = new CancellationTokenSource())
+            catch (AggregateException agex)
             {
-                try
-                {
-                    context.Clear();
-                    inputText = "please make for me summary 5 2 operation";
-                    var task = text_proc.ProcessSlidingAsync(inputText, context, cancellationSource);
-                    task.Wait();
-                    throw new InvalidOperationException($"True Negative '{inputText}'");
-                }
-                catch (AggregateException agex)
-                {
-                    agex.Handle((x) => x is MatchNotFoundException);
-                }
+                agex.Handle((x) => x is MatchNotFoundException);
             }
         }
+
 
         VRequestContext CreateContext()
         {
@@ -85,9 +82,9 @@ namespace Axaprj.Textc.Vect.Test
             };
         }
 
-        SlidingTextProcessor CreateTextProcessor(string syntaxPattern, Delegate fn)
+        SlidingTextProcessor CreateTextProcessor<TRes>(string syntaxPattern, Delegate fn)
         {
-            var out_proc = new DelegateOutputProcessor<int>(
+            var out_proc = new DelegateOutputProcessor<TRes>(
                 (o, ctx) =>
                 Log($"Result: {o}; op: {ctx.GetVariable("operation")}"));
             var syntax = CsdlParser.Parse(syntaxPattern);
