@@ -1,14 +1,10 @@
 ﻿using Axaprj.WordToVecDB;
 using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Takenet.Textc;
 
 namespace Axaprj.Textc.Vect
 {
-    public class VRequestContext : RequestContext, ISlidingRequestContext
+    public class VRequestContext : Axaprj.Textc.Vect.RequestContext, ISlidingRequestContext
     {
         const string VNAME_MatchedTextSlice = "VRequestContext.MatchedTextSlice";
         public string W2VDictFile { get; set; }
