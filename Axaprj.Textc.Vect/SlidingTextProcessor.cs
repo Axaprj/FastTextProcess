@@ -32,34 +32,24 @@ namespace Axaprj.Textc.Vect
             if (string.IsNullOrWhiteSpace(inputText))
                 throw new ArgumentException("The input string must have a value", nameof(inputText));
             inputText = inputText.Trim(SplitChar);
-            var tasks = new List<Task<bool>>();
-            for (int inx = 0; inx >= 0; inx = inputText.IndexOf(SplitChar, inx + 1))
+            await Task.Run(() =>
             {
-                if (context.IsMatched)
-                    break;
-                var text_slice = inx == 0 ? inputText : inputText.Substring(inx + 1);
-                tasks.Add(Task.Run(async () =>
+                for (int inx = 0; inx >= 0; inx = inputText.IndexOf(SplitChar, inx + 1))
+                {
+                    var text_slice = inx == 0 ? inputText : inputText.Substring(inx + 1);
+                    try
                     {
-                        if (!context.IsMatched)
-                        {
-                            try
-                            {
-                                await ProcessAsync(text_slice, context, cancellationToken);
-                                context.MatchedTextSlice = text_slice;
-                                return true;
-                            }
-                            catch (MatchNotFoundException)
-                            { // not found here
-                            }
-                        }
-                        return false;
-                    })
-                );
-            }
-            await Task.WhenAll(tasks);
-            if (!tasks.Any(t => t.Result))
+                        ProcessAsync(text_slice, context, cancellationToken).Wait();
+                        context.MatchedTextSlice = text_slice;
+                        return;
+                    }
+                    catch (AggregateException agex)
+                    { // not found here
+                        agex.Handle((x) => x is MatchNotFoundException);
+                    }
+                }
                 throw new MatchNotFoundException(inputText);
+            }, cancellationToken);
         }
-
     }
 }
