@@ -6,7 +6,7 @@ namespace Axaprj.Textc.Vect
 {
     public class VRequestContext : Axaprj.Textc.Vect.RequestContext, ISlidingRequestContext
     {
-        const string VNAME_MatchedTextSlice = "VRequestContext.MatchedTextSlice";
+        const string VNAME_TextSlice = "VRequestContext.MatchedTextSlice";
         public string W2VDictFile { get; set; }
 
         public LangLabel LangLabel { get; set; }
@@ -19,33 +19,15 @@ namespace Axaprj.Textc.Vect
             return serv.FindByWord(word, LangLabel);
         }
 
-        readonly object MatchedTextSliceLock = new object();
-        public string MatchedTextSlice
+        public string TextSlice
         {
             get
             {
-                lock (MatchedTextSliceLock)
-                {
-                    return (string)GetVariable(VNAME_MatchedTextSlice);
-                }
+                return (string)GetVariable(VNAME_TextSlice);
             }
             set
             {
-                lock (MatchedTextSliceLock)
-                {
-
-                    if(GetVariable(VNAME_MatchedTextSlice) == null)
-                        SetVariable(VNAME_MatchedTextSlice, value);
-                }
-            }
-        }
-
-        public bool IsMatched {
-            get {
-                lock (MatchedTextSliceLock)
-                {
-                    return GetVariable(VNAME_MatchedTextSlice) != null;
-                }
+               SetVariable(VNAME_TextSlice, value);
             }
         }
     }

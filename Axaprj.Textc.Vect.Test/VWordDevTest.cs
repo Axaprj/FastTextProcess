@@ -54,8 +54,7 @@ namespace Axaprj.Textc.Vect.Test
             string inputText = "please make for me sum 5 3 operation";
             var task1 = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
             task1.Wait();
-            Assert.True(context.IsMatched);
-            Log($"MatchedTextSlice: '{context.MatchedTextSlice}'");
+            Log($"MatchedTextSlice: '{context.TextSlice}'");
             try
             {
                 context.Clear();

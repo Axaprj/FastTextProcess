@@ -39,8 +39,8 @@ namespace Axaprj.Textc.Vect
                     var text_slice = inx == 0 ? inputText : inputText.Substring(inx + 1);
                     try
                     {
+                        context.TextSlice = text_slice;
                         ProcessAsync(text_slice, context, cancellationToken).Wait();
-                        context.MatchedTextSlice = text_slice;
                         return;
                     }
                     catch (AggregateException agex)
