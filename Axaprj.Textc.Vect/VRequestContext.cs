@@ -6,7 +6,8 @@ namespace Axaprj.Textc.Vect
 {
     public class VRequestContext : Axaprj.Textc.Vect.RequestContext, ISlidingRequestContext
     {
-        const string VNAME_TextSlice = "VRequestContext.MatchedTextSlice";
+        const string VNAME_TextSlice = "VRequestContext.TextSlice";
+        const string VNAME_TextProcess = "VRequestContext.TextProcess";
         public string W2VDictFile { get; set; }
 
         public LangLabel LangLabel { get; set; }
@@ -30,5 +31,18 @@ namespace Axaprj.Textc.Vect
                SetVariable(VNAME_TextSlice, value);
             }
         }
+
+        public string TextProcess
+        {
+            get
+            {
+                return (string)GetVariable(VNAME_TextProcess);
+            }
+            set
+            {
+                SetVariable(VNAME_TextProcess, value);
+            }
+        }
+
     }
 }

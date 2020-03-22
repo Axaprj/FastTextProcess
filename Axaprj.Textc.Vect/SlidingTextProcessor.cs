@@ -27,14 +27,19 @@ namespace Axaprj.Textc.Vect
         public SlidingTextProcessor(ISyntaxParser syntaxParser, IExpressionScorer expressionScorer, ITextSplitter textSplitter = null)
             : base(syntaxParser, expressionScorer, textSplitter) { }
 
-        public async Task ProcessSlidingAsync(string inputText, ISlidingRequestContext context, CancellationToken cancellationToken)
+        public async Task ProcessSlidingAsync(string inputText
+            , ISlidingRequestContext context
+            , CancellationToken cancellationToken
+            , int startPos = 0, int stopPos = int.MaxValue)
         {
             if (string.IsNullOrWhiteSpace(inputText))
                 throw new ArgumentException("The input string must have a value", nameof(inputText));
             inputText = inputText.Trim(SplitChar);
             await Task.Run(() =>
             {
-                for (int inx = 0; inx >= 0; inx = inputText.IndexOf(SplitChar, inx + 1))
+                for (int inx = startPos
+                    ; (inx >= 0) && (inx <= stopPos)
+                    ; inx = inputText.IndexOf(SplitChar, inx + 1))
                 {
                     var text_slice = inx == 0 ? inputText : inputText.Substring(inx + 1);
                     try
