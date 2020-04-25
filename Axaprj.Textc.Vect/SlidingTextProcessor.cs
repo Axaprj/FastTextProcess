@@ -52,9 +52,14 @@ namespace Axaprj.Textc.Vect
                     { // not found here
                         agex.Handle((x) => x is MatchNotFoundException);
                     }
+                    catch(Exception)
+                    { // for debug
+                        throw;
+                    }
+
                 }
                 throw new MatchNotFoundException(inputText);
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -1,5 +1,6 @@
 # FastTextProcess
-Natural Language Processing feature extraction multilingual toolset.
+Natural Language Processing feature extraction multilingual tool set. 
+(in the development phase now)
 - [Axaprj.FastTextProcess](https://github.com/Axaprj/FastTextProcess/tree/master/FastTextProcess) Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based).
 - [Axaprj.Textc.Vect](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect) Takenet.Textc  extension. 
 - [Axaprj.WordToVecDB](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.WordToVecDB) DB access layer of embedded vectors processing tools. 
