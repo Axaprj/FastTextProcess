@@ -20,9 +20,7 @@ namespace Axaprj.Textc.Vect
 
         public RequestContext(CultureInfo culture)
         {
-            if (culture == null)
-                throw new ArgumentNullException(nameof(culture));
-            Culture = culture;
+            Culture = culture ?? throw new ArgumentNullException(nameof(culture));
             ContextVariableDictionary = new ConcurrentDictionary<string, object>();
         }
 
@@ -31,8 +29,7 @@ namespace Axaprj.Textc.Vect
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
-            object obj;
-            ContextVariableDictionary.TryRemove(name, out obj);
+            ContextVariableDictionary.TryRemove(name, out object obj);
             ContextVariableDictionary.TryAdd(name, value);
         }
 
@@ -40,8 +37,7 @@ namespace Axaprj.Textc.Vect
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
-            object value;
-            if(ContextVariableDictionary.TryGetValue(name, out value))
+            if (ContextVariableDictionary.TryGetValue(name, out object value))
                 return value;
             else
                 return null;
@@ -51,8 +47,7 @@ namespace Axaprj.Textc.Vect
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
-            object obj;
-            ContextVariableDictionary.TryRemove(name, out obj);
+            ContextVariableDictionary.TryRemove(name, out object obj);
         }
 
         public void Clear()
