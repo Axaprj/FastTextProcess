@@ -10,8 +10,8 @@ Takenet.Textc extension.
 VS 2017, .NET Core, SQLite
 
 ## VWord() textc usage example
- Uses En Ru Uk aligned vectors DB [FastTextRoutinesCyr::ProcCreateDbRuk](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
-":VWord(consumption)" matched to following [DictDbTests::TestV2W1consumption](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/DictDbTests.cs)
+- Uses En Ru Uk aligned vectors DB [FastTextRoutinesCyr::ProcCreateDbRuk](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
+- ":VWord(consumption)" matched to following [DictDbTests::TestV2W1consumption](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/DictDbTests.cs)
 
 ```
 In English
