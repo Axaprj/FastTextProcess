@@ -6,14 +6,16 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Copyright>Copyright (c) 2019 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
+    <Copyright>Copyright (c) 2020 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
     <Authors>Igor Alexeev</Authors>
     <Company>propertyindicators@gmail.com</Company>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <Version>1.0.1.0</Version>
+    <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <Version>1.0.1.1</Version>
     <Configurations>Debug;Release;net462</Configurations>
     <PackageId>FastTextProcess</PackageId>
+    <Description>Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based)</Description>
+    <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
