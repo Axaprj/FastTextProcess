@@ -3,8 +3,8 @@ using Axaprj.WordToVecDB.Context;
 using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
 using System;
-using System.Data;
 using System.Data.SQLite;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -156,13 +156,37 @@ namespace FastTextProcess.Tests
             Log("done");
         }
 
+        [Fact]
+        public void TestV2W1consumption()
+        {
+            AssertFileExists(DBF_W2V_RUK, "En-Ru-Uk w2v DB");
+
+            var vs = VectorsService.Instance(DBF_W2V_RUK);
+            var w1 = vs.FindByWord("consumption", LangLabel.en);
+            using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
+            {
+                var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
+                var w2v_en_all = dict_db.GetAll(LangLabel.en);
+                Parallel.ForEach(w2v_en_all, (w2v) => 
+                    PrintPair(w1, w2v, distance_min: 0.7f));
+                //foreach (var w2v in w2v_en_all)
+                //    PrintPair(w1, w2v, distance_min: 0.6f);
+                var w2v_ru_all = dict_db.GetAll(LangLabel.ru);
+                Parallel.ForEach(w2v_ru_all, (w2v) =>
+                    PrintPair(w1, w2v, distance_min: 0.35f));
+                //foreach (var w2v in w2v_ru_all)
+                //    PrintPair(w1, w2v, distance_min: 0.35f);
+            }
+            Log("done");
+        }
+
         void PrintPair(Dict w2v1, Dict w2v2, float distance_min = -1, bool log_err = true)
         {
             try
             {
                 var cc = w2v1.GetCosine(w2v2);
                 if (cc > distance_min)
-                    Log($"cos({w2v1.Word}, {w2v2.Word}) = {cc}");
+                    Log($"cos({w2v1.Word},{w2v2.Word})={cc}");
             }
             catch (Exception ex)
             {
