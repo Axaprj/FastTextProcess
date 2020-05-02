@@ -49,7 +49,7 @@ Rules set
     enum VFeat
     {
         [ReplaceTC(
-			SyntaxPattern = ":Word(EU5) :Word?(-) :VWord(compliant)", Lng = LangLabel.en)]
+            SyntaxPattern = ":Word(EU5) :Word?(-) :VWord(compliant)", Lng = LangLabel.en)]
         EU5compliant,
         [ReplaceNum(
             SyntaxPattern =
