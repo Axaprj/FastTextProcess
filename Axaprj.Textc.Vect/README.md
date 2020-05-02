@@ -10,8 +10,9 @@ Takenet.Textc extension.
 VS 2017, .NET Core, SQLite
 
 ## VWord() textc usage example
- Uses En Ru Uk aligned vectors DB (FastTextRoutinesCyr.cs::ProcCreateDbRuk)
-":VWord(consumption)" matched to following (FastTextProcess.Tests\DictDbTests.cs::TestV2W1consumption)
+ Uses En Ru Uk aligned vectors DB [FastTextRoutinesCyr::ProcCreateDbRuk](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
+":VWord(consumption)" matched to following [DictDbTests::TestV2W1consumption](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/DictDbTests.cs)
+
 ```
 In English
 cos(consumption,consumptive)=0.7271223 cos(consumption,overconsumption)=0.8072221 cos(consumption,consumptions)=0.9393129 cos(consumption,underconsumption)=0.7711332 cos(consumption,consumptives)=0.7006535 cos(consumption,production/consumption)=0.7023017 cos(consumption,income–consumption)=0.7680753 cos(consumption,deconsumption)=0.7769312 cos(consumption,consumption,)=0.8818358 cos(consumption,‘consumption)=0.8400897 cos(consumption,nonconsumption)=0.8223644 cos(consumption,consumption/)=0.7580206 cos(consumption,autoconsumption)=0.7710906 cos(consumption,hyperconsumption)=0.7327829 cos(consumption,#consumption)=0.838056
