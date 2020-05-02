@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Axaprj.Textc.Vect\Axaprj.Textc.Vect.csproj" />
+    <ProjectReference Include="..\FastTextProcess\Axaprj.FastTextProcess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
