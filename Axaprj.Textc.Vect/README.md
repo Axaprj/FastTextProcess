@@ -22,8 +22,8 @@ cos(consumption,потребления)=0.4010898 cos(consumption,потребл
 ```
 
 ## MacroReplace example
-- Uses En vectors DB [FastTextProcess.Tests.FastTextRoutinesEn.ProcCreateDbTest]()
-- Example	[Axaprj.Textc.Vect.Test.ReplaceDemoTest.VehiclesFeaturesTest]()
+- Uses En vectors DB [FastTextProcess.Tests.FastTextRoutinesEn.ProcCreateDbTest](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesEn.cs)
+- Example	[Axaprj.Textc.Vect.Test.ReplaceDemoTest.VehiclesFeaturesTest](https://github.com/Axaprj/FastTextProcess/blob/master/Axaprj.Textc.Vect.Test/ReplaceDemoTest.cs)
 ```
 Input:
 The EU5-compliant, 130kW/430Nm 3.0-litre turbo-diesel engine introduced in the MY16.5 MU-X(and MY17 D-MAX) continues on with the option of six-speed manual or six-speed automatic transmissions.
