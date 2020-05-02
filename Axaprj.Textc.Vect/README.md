@@ -5,14 +5,14 @@ Natural Language features extraction framework (Takenet.Textc based)
  
 ## contents
  - VWord - ValueToken based on distance metrics of embedded vectors
- - MacroReplace native language processor 
+ - MacroReplace - Easy usable and extendable NLP features extractor. 
 
 ## code
 VS 2017, .NET Core, SQLite
 
 ## VWord() textc extension usage explanation
 - Uses En Ru Uk aligned vectors DB [FastTextRoutinesCyr::ProcCreateDbRuk](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
-- ":VWord(consumption)" matched to following [DictDbTests::TestV2W1consumption](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/DictDbTests.cs)
+- **:VWord(consumption)** matched to following [DictDbTests::TestV2W1consumption](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/DictDbTests.cs)
 
 ```
 In English
@@ -49,7 +49,7 @@ Rules set
     enum VFeat
     {
         [ReplaceTC(
-        SyntaxPattern = ":Word(EU5) :Word?(-) :VWord(compliant)", Lng = LangLabel.en)]
+			SyntaxPattern = ":Word(EU5) :Word?(-) :VWord(compliant)", Lng = LangLabel.en)]
         EU5compliant,
         [ReplaceNum(
             SyntaxPattern =
