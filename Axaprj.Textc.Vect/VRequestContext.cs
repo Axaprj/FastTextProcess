@@ -11,7 +11,7 @@ namespace Axaprj.Textc.Vect
         const string VNAME_TextProcess = "VRequestContext.TextProcess";
         const string VNAME_ReplaceAttrib = "VRequestContext.ReplaceAttrib";
         const string VNAME_ReplaceEnum = "VRequestContext.ReplaceEnum";
-        
+
         public string W2VDictFile { get; set; }
 
         public LangLabel LangLabel { get; set; }
@@ -26,26 +26,14 @@ namespace Axaprj.Textc.Vect
 
         public string TextSlice
         {
-            get
-            {
-                return (string)GetVariable(VNAME_TextSlice);
-            }
-            set
-            {
-               SetVariable(VNAME_TextSlice, value);
-            }
+            get => (string)GetVariable(VNAME_TextSlice);
+            set => SetVariable(VNAME_TextSlice, value);
         }
 
         public string TextProcess
         {
-            get
-            {
-                return (string)GetVariable(VNAME_TextProcess);
-            }
-            set
-            {
-                SetVariable(VNAME_TextProcess, value);
-            }
+            get => (string)GetVariable(VNAME_TextProcess);
+            set => SetVariable(VNAME_TextProcess, value);
         }
 
         public ReplaceTextCAttribute ReplaceAttrib
@@ -74,5 +62,5 @@ namespace Axaprj.Textc.Vect
                 throw;
             }
         }
-}
+    }
 }
