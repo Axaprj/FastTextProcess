@@ -6,9 +6,9 @@ namespace Axaprj.Textc.Vect
     {
         static readonly Regex rexClnSpaces = new Regex("\\s{2,}", RegexOptions.Compiled);
         static readonly Regex rexClnCommonEn = 
-            new Regex("[^A-Za-z0-9(),.!?\'`\"/-]", RegexOptions.Compiled);
+            new Regex("[^\\$»«•A-Za-z0-9(),.!?\'`\"/-]", RegexOptions.Compiled);
         static readonly Regex rexClnCommonEnCyr = 
-            new Regex("[^A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9(),.!?\'`\"/-]", RegexOptions.Compiled);
+            new Regex("[^\\$»«•A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9(),.!?\'`\"/-]", RegexOptions.Compiled);
         static readonly Regex rexVe = new Regex("(?<lett>[A-Za-z]) ' ve", RegexOptions.Compiled);
         static readonly Regex rexRe = new Regex("(?<lett>[A-Za-z]) ' re", RegexOptions.Compiled);
         static readonly Regex rexD = new Regex("(?<lett>[A-Za-z]) ' d", RegexOptions.Compiled);
@@ -41,6 +41,10 @@ namespace Axaprj.Textc.Vect
             //str = str.ToLower();
             str = clean_rex.Replace(str, " ");
             str = str
+                .Replace("•", " - ")
+                .Replace("»", " \" ")
+                .Replace("«", " \" ")
+                .Replace("$", " $ ") // add
                 .Replace("-", " - ") // add
                 .Replace("/", " / ") // add
                 .Replace("'", " ' ") // add
