@@ -44,15 +44,24 @@ namespace Axaprj.Textc.Vect.Detectors
             return Task.Run(() => { });
         }
 
-        public bool TryDetect(ITextCursor textCursor, out IEnumerable<Expression> parsedExpr, CancellationToken cancellationToken)
+        public bool TryDetect(ITextCursor textCursor, out IEnumerable<Expression> parsedExprs, CancellationToken cancellationToken)
         {
             if (textCursor == null)
                 throw new ArgumentNullException(nameof(textCursor));
-            parsedExpr = ParseInput(textCursor, cancellationToken);
-            return parsedExpr.Any();
+            parsedExprs = ParseInput(textCursor, cancellationToken, stop_on_first: false);
+            return parsedExprs.Any();
         }
 
-        IEnumerable<Expression> ParseInput(ITextCursor textCursor, CancellationToken cancellationToken)
+        public bool TryDetect(ITextCursor textCursor, out Expression parsedExpr, CancellationToken cancellationToken)
+        {
+            if (textCursor == null)
+                throw new ArgumentNullException(nameof(textCursor));
+            var exprs = ParseInput(textCursor, cancellationToken, stop_on_first: true);
+            parsedExpr = exprs.FirstOrDefault();
+            return parsedExpr != null;
+        }
+
+        IEnumerable<Expression> ParseInput(ITextCursor textCursor, CancellationToken cancellationToken, bool stop_on_first)
         {
             IRequestContext context = textCursor.Context;
             var res = new List<Expression>();
@@ -70,7 +79,11 @@ namespace Axaprj.Textc.Vect.Detectors
                     textCursor.Reset();
 
                     if (SyntaxParser.TryParse(textCursor, syntax, context, out Expression expression))
+                    {
                         res.Add(expression);
+                        if (stop_on_first)
+                            break;
+                    }
                 }
             }
             return res;

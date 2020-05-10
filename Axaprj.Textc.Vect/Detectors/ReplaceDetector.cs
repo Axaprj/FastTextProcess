@@ -27,12 +27,11 @@ namespace Axaprj.Textc.Vect.Detectors
             textCursor.Reset();
             while (!textCursor.IsEmpty)
             {
-                if (TryDetect(textCursor, out IEnumerable<Expression> expr, cancellation))
+                if (TryDetect(textCursor, out Expression expr, cancellation))
                 {
-                    var exp = expr.First();
-                    var str_value = ReplaceAttr.GetArgument(exp);
+                    var str_value = ReplaceAttr.GetArgument(expr);
                     var macro = StringUtil.GetReplaceMacro(enum_val, ReplaceAttr, str_value);
-                    var token_cnt = exp.Tokens.Count(t => t != null);
+                    var token_cnt = expr.Tokens.Count(t => t != null);
                     textCursor.ProcessReplace(token_cnt, macro);
                 }
                 else
