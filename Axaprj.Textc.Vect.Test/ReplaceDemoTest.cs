@@ -58,21 +58,21 @@ namespace Axaprj.Textc.Vect.Test
             var ptxt = RegExUtil.RegExClean(TestPH1);
             ptxt = RegExUtil.Prepare(ptxt);
             Log(ptxt);
-            var ctx = CreateContext();
-            var cur = new VTextCursor(ptxt, ctx);
+            var cur = CreateCursor(ptxt);
             cur.ProcessReplace<VFeat>(CancellationToken.None);
             Log(cur.ToString());
         }
 
-        VRequestContext CreateContext()
+        VTextCursor CreateCursor(string txt)
         {
             AssertFileExists(W2VDictEN);
-            return new VRequestContext()
+            var ctx = new VRequestContext()
             {
                 W2VDictFile = W2VDictEN,
                 LangLabel = LangLabel.en,
                 MinCosine = 0.6f
             };
+            return new VTextCursor(txt, ctx);
         }
     }
 }

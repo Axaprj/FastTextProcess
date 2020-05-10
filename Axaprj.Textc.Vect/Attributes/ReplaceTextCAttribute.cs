@@ -1,6 +1,7 @@
 ﻿using Axaprj.Textc.Vect.Detectors;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Axaprj.Textc.Vect.Attributes
 {
@@ -21,11 +22,27 @@ namespace Axaprj.Textc.Vect.Attributes
             set => _patternsList = new List<string>(value);
         }
 
-        public abstract Delegate CreateFnResultTask();
+        public virtual string GetArgument(Takenet.Textc.Expression expr)
+            => string.Empty;
 
-        public ReplaceDetector Detector
+        protected ReplaceDetector GetDetector()
+            => _detector = _detector ?? new ReplaceDetector(this);
+
+        public int TryReplace<TReplEnum>(
+            TReplEnum enum_val, IVTextCursor textCursor, CancellationToken cancellation) =>
+            GetDetector().TryReplace<TReplEnum>(enum_val, textCursor, cancellation);
+
+        protected object GetTokenValue(string name, Takenet.Textc.Expression expr)
         {
-            get => _detector = _detector ?? new ReplaceDetector(this);
+            foreach(var token in expr.Tokens)
+            {
+                if (token != null)
+                {
+                    if (token.Type.Name == name)
+                        return token.Value;
+                }
+            }
+            return string.Empty;
         }
     }
 }

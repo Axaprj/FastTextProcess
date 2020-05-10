@@ -14,11 +14,18 @@ namespace Axaprj.Textc.Vect
     {
         public readonly char TOKEN_SEPARATOR = ' ';
 
-        private readonly string[] _tokens;
+        private string[] _tokens;
         private int _leftPos;
         private int _leftPosCheckpoint;
         private int _rightPos;
         private int _rightPosCheckpoint;
+
+        List<string> _processed;
+        int _leftPosProcessed = 0;
+        int LeftPos
+        {
+            get => _leftPos + _leftPosProcessed;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VTextCursor" /> class.
@@ -49,7 +56,7 @@ namespace Axaprj.Textc.Vect
         {
             var stringBuilder = new StringBuilder();
 
-            for (var i = _leftPos; i <= _rightPos; i++)
+            for (var i = LeftPos; i <= _rightPos; i++)
             {
                 stringBuilder.Append(_tokens[i]);
 
@@ -90,7 +97,7 @@ namespace Axaprj.Textc.Vect
             var text = ToString();
             if (RightToLeftParsing)
             {
-                _rightPos = _leftPos - 1;
+                _rightPos = LeftPos - 1;
             }
             else
             {
@@ -102,7 +109,7 @@ namespace Axaprj.Textc.Vect
         /// <summary>Saves the current cursor position to allow further rollback.</summary>
         public void SavePosition()
         {
-            _leftPosCheckpoint = _leftPos;
+            _leftPosCheckpoint = LeftPos;
             _rightPosCheckpoint = _rightPos;
         }
         /// <summary>Rollbacks the cursor to the last saved position.</summary>
@@ -118,7 +125,7 @@ namespace Axaprj.Textc.Vect
 
             if (!IsEmpty)
             {
-                var pos = RightToLeftParsing ? _rightPos : _leftPos;
+                var pos = RightToLeftParsing ? _rightPos : LeftPos;
                 token = _tokens[pos];
             }
 
@@ -137,8 +144,38 @@ namespace Axaprj.Textc.Vect
             _leftPos = _leftPosCheckpoint = 0;
             _rightPos = _rightPosCheckpoint = _tokens.Length - 1;
         }
+
+        List<string> Processed()
+            => _processed = _processed ?? new List<string>(capacity: _tokens.Length);
+        
+
+        public void ProcessNext()
+        {
+            Reset();
+            Processed().Add(_tokens[LeftPos]);
+            _leftPosProcessed++;
+        }
+
+        public void ProcessReplace(int token_count, string new_text)
+        {
+            Reset();
+            Processed().Add(new_text);
+            _leftPosProcessed += token_count;
+        }
+
+        public void ResetProcessedToInput()
+        {
+            _leftPosProcessed = 0;
+            if(_processed != null)
+            {
+                _tokens = _processed.ToArray();
+                _processed = null;
+            }
+            Reset();
+        }
+
         /// <summary>Indicates if the cursor is empty.</summary>
-        public bool IsEmpty => _leftPos > _rightPos;
+        public bool IsEmpty => LeftPos > _rightPos;
 
     }
 

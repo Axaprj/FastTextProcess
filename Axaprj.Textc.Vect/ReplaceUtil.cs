@@ -22,8 +22,7 @@ namespace Axaprj.Textc.Vect
                     else if (attr is ReplaceTextCAttribute)
                     {
                         var ra = (ReplaceTextCAttribute)attr;
-                        ra.Detector.TryReplace(txt_cursor, cancellation);
-                        //txt = context.TextProcess;
+                        ra.TryReplace<TReplEnum>(enum_val, txt_cursor, cancellation);
                     }
                     else
                         throw new InvalidOperationException(
@@ -58,8 +57,8 @@ namespace Axaprj.Textc.Vect
             return new TAttrib[] { };
         }
 
-        public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum)
-            => GetReplaceMacro<TReplEnum>(val_enum, LangLabel.NA, val_arg: null);
+        //public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum)
+        //    => GetReplaceMacro<TReplEnum>(val_enum, LangLabel.NA, val_arg: null);
 
         public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum, LangLabel lang, string val_arg)
         {
