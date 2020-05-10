@@ -1,4 +1,5 @@
 # Axaprj.Textc.Vect
+(in the deep development phase now)
 Natural Language features extraction framework (Takenet.Textc based)
 - uses own [Takenet.Textc .Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core)
 - a part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.

@@ -3,58 +3,50 @@ using Axaprj.WordToVecDB.Enums;
 using System;
 using System.Linq;
 using System.Threading;
+using Takenet.Textc;
 
 namespace Axaprj.Textc.Vect
 {
     public static class ReplaceUtil
     {
 
-        public static void ProcessRepl<TEnum>(this VRequestContext context, CancellationToken cancellation)
+        public static void ProcessReplace<TReplEnum>(this IVTextCursor textCursor, CancellationToken cancellation)
         {
-            context.TextProcess = Preprocess<TEnum>(context.TextProcess, context.LangLabel,
-                (txt, enum_val, attr) =>
+            ProcessIterator<TReplEnum>(textCursor, (txt_cursor, enum_val, attr) =>
                 {
                     if (attr is ReplaceTextAttribute)
                     {
                         var ra = (ReplaceTextAttribute)attr;
-                        txt = txt.ReplaceMacroText(ra.Txt, StringUtil.GetReplaceMacro(enum_val, ra));
-                        return txt;
+                        //txt = txt.ReplaceMacroText(ra.Txt, StringUtil.GetReplaceMacro(enum_val, ra));
                     }
                     else if (attr is ReplaceTextCAttribute)
                     {
                         var ra = (ReplaceTextCAttribute)attr;
-                        context.ReplaceAttrib = ra;
-                        context.ReplaceEnum = enum_val;
-                        ra.Detector.TryDetect(context, cancellation);
-                        txt = context.TextProcess;
-                        return txt;
+                        ra.Detector.TryReplace(txt_cursor, cancellation);
+                        //txt = context.TextProcess;
                     }
                     else
                         throw new InvalidOperationException(
-                            $"Unknown replace attribute '{attr}' in '{typeof(TEnum)}'");
+                            $"Unknown replace attribute '{attr}' in '{typeof(TReplEnum)}'");
                 });
         }
 
-        static string Preprocess<TReplEnum>(string src, LangLabel lang, Func<string, TReplEnum, ReplaceAttribute, string> fn_replace)
+        static void ProcessIterator<TReplEnum>(IVTextCursor textCursor, Action<IVTextCursor, TReplEnum, ReplaceAttribute> act_replace)
         {
-            var res = src;
-            if (!string.IsNullOrWhiteSpace(src))
+            LangLabel lang = textCursor.VContext.LangLabel;
+            var enum_vals = (TReplEnum[])Enum.GetValues(typeof(TReplEnum));
+            foreach (TReplEnum enumVal in enum_vals)
             {
-                var enum_vals = (TReplEnum[])Enum.GetValues(typeof(TReplEnum));
-                foreach (TReplEnum enumVal in enum_vals)
+                var replace_attrs = GetTextAttrib<TReplEnum, ReplaceAttribute>(enumVal)
+                    .Where(ra => ra.Lng == lang);
+                foreach (var attr in replace_attrs)
                 {
-                    var replace_attrs = GetTextAttrib<TReplEnum, ReplaceAttribute>(enumVal)
-                        .Where(ra => ra.Lng == lang);
-                    foreach (var attr in replace_attrs)
-                    {
-                        res = fn_replace(res, enumVal, attr);
-                    }
+                    act_replace(textCursor, enumVal, attr);
                 }
             }
-            return res;
         }
 
-        static TAttrib[] GetTextAttrib<TReplEnum, TAttrib>(TReplEnum enumVal) where TAttrib: Attribute
+        static TAttrib[] GetTextAttrib<TReplEnum, TAttrib>(TReplEnum enumVal) where TAttrib : Attribute
         {
             var memInfo = typeof(TReplEnum).GetMember(enumVal.ToString());
             if (memInfo.Length > 0)

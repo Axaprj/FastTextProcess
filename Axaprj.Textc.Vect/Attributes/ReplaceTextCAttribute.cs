@@ -1,4 +1,4 @@
-﻿using Axaprj.Textc.Vect.Processor;
+﻿using Axaprj.Textc.Vect.Detectors;
 using System;
 using System.Collections.Generic;
 

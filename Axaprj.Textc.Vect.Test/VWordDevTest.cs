@@ -41,35 +41,8 @@ namespace Axaprj.Textc.Vect.Test
             {
                 agex.Handle((x) => x is MatchNotFoundException);
             }
-        }
-
-        [Fact]
-        public void SumVWordSlideTest()
-        {
-            Func<int, int, Task<int>> sum_fn = (a, b) => Task.FromResult(a + b);
-            //var a_sum = "{ValidValues: ['sum'], MaxCosine: 0.5}";
-            var a_sum = "sum";
-            var context = CreateContext();
-            var text_proc = CreateTextProcessor<int>($"operation+:VWord({a_sum}) a:Integer :Word?(and) b:Integer", sum_fn);
-            string inputText = "please make for me sum 5 3 operation";
-            var task1 = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
-            task1.Wait();
-            Log($"MatchedTextSlice: '{context.TextSlice}'");
-            try
-            {
-                context.Clear();
-                inputText = "please make for me summary 5 2 operation";
-                var task2 = text_proc.ProcessSlidingAsync(inputText, context, CancellationToken.None);
-                task2.Wait();
-                throw new InvalidOperationException($"True Negative '{inputText}'");
-            }
-            catch (AggregateException agex)
-            {
-                agex.Handle((x) => x is MatchNotFoundException);
-            }
-        }
-
-
+        }         
+        
         VRequestContext CreateContext()
         {
             AssertFileExists(W2VDictEN);
