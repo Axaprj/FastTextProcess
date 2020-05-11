@@ -7,6 +7,8 @@ namespace Axaprj.Textc.Vect
     /// </summary>
     public interface IVTextCursor : ITextCursor
     {
+        /// <summary>Current tokens separator</summary>
+        char GetTokenSeparator();
         /// <summary>Textc.Vect Request Context</summary>
         IVRequestContext VContext { get; }
     }

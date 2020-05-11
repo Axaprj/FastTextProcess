@@ -9,7 +9,8 @@ namespace Axaprj.Textc.Vect
     /// </summary>
     public class VTextCursor : IVTextCursor
     {
-        readonly char TOKEN_SEPARATOR = ' ';
+        readonly char TOKEN_SEPARATOR;
+        public char GetTokenSeparator() => TOKEN_SEPARATOR;
 
         private string[] _tokens;
         private int _leftPos;
