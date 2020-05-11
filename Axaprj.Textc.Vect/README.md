@@ -71,6 +71,10 @@ Rules set
         FuelConsumption
     }
 ```
+## revision history
+2020 May 11: v1.0.2.0 MacroReplace implementation refactoring
+2020 May 02: v1.0.1.1 MacroReplace implementation
+2019 Dec 22: v0.0.1  VWord implementation
 
 ## author
-Axaprj for https://propertyindicators.github.io/
+[Axaprj](https://github.com/Axaprj), [Igor Alexeev](axaprj2000@yahoo.com) for [Property Indicators Lab](https://propertyindicators.github.io/)

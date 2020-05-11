@@ -14,12 +14,7 @@ namespace Axaprj.Textc.Vect
         {
             ProcessIterator<TReplEnum>(textCursor, (txt_cursor, enum_val, attr) =>
                 {
-                    if (attr is ReplaceTextAttribute)
-                    {
-                        var ra = (ReplaceTextAttribute)attr;
-                        //txt = txt.ReplaceMacroText(ra.Txt, StringUtil.GetReplaceMacro(enum_val, ra));
-                    }
-                    else if (attr is ReplaceTextCAttribute)
+                    if (attr is ReplaceTextCAttribute)
                     {
                         var ra = (ReplaceTextCAttribute)attr;
                         ra.TryReplace<TReplEnum>(enum_val, txt_cursor, cancellation);
@@ -30,7 +25,7 @@ namespace Axaprj.Textc.Vect
                 });
         }
 
-        static void ProcessIterator<TReplEnum>(IVReplaceTextCursor textCursor, Action<IVReplaceTextCursor, TReplEnum, ReplaceAttribute> act_replace)
+        public static void ProcessIterator<TReplEnum>(IVReplaceTextCursor textCursor, Action<IVReplaceTextCursor, TReplEnum, ReplaceAttribute> act_replace)
         {
             LangLabel lang = textCursor.VContext.LangLabel;
             var enum_vals = (TReplEnum[])Enum.GetValues(typeof(TReplEnum));
@@ -57,21 +52,22 @@ namespace Axaprj.Textc.Vect
             return new TAttrib[] { };
         }
 
+        #region obsoleted
         //public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum)
         //    => GetReplaceMacro<TReplEnum>(val_enum, LangLabel.NA, val_arg: null);
 
-        public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum, LangLabel lang, string val_arg)
-        {
-            try
-            {
-                var attr = GetTextAttrib<TReplEnum, ReplaceAttribute>(val_enum).First(v => v.Lng == lang);
-                return StringUtil.GetReplaceMacro(val_enum, attr, val_arg);
-            }
-            catch
-            { // for debug
-                throw;
-            }
-        }
-
+        //public static string GetReplaceMacro<TReplEnum>(TReplEnum val_enum, LangLabel lang, string val_arg)
+        //{
+        //    try
+        //    {
+        //        var attr = GetTextAttrib<TReplEnum, ReplaceAttribute>(val_enum).First(v => v.Lng == lang);
+        //        return StringUtil.GetReplaceMacro(val_enum, attr, val_arg);
+        //    }
+        //    catch
+        //    { // for debug
+        //        throw;
+        //    }
+        //}
+        #endregion
     }
 }

@@ -11,4 +11,4 @@ Entity-style support of the following databases:
 VS 2017, .NET Core, SQLite
 
 ## author
-Axaprj for https://propertyindicators.github.io/
+[Axaprj](https://github.com/Axaprj), [Igor Alexeev](axaprj2000@yahoo.com) for [Property Indicators Lab](https://propertyindicators.github.io/)
