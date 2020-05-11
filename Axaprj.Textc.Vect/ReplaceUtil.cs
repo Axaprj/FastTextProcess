@@ -10,7 +10,7 @@ namespace Axaprj.Textc.Vect
     public static class ReplaceUtil
     {
 
-        public static void ProcessReplace<TReplEnum>(this IVTextCursor textCursor, CancellationToken cancellation)
+        public static void ProcessReplace<TReplEnum>(this IVReplaceTextCursor textCursor, CancellationToken cancellation)
         {
             ProcessIterator<TReplEnum>(textCursor, (txt_cursor, enum_val, attr) =>
                 {
@@ -30,7 +30,7 @@ namespace Axaprj.Textc.Vect
                 });
         }
 
-        static void ProcessIterator<TReplEnum>(IVTextCursor textCursor, Action<IVTextCursor, TReplEnum, ReplaceAttribute> act_replace)
+        static void ProcessIterator<TReplEnum>(IVReplaceTextCursor textCursor, Action<IVReplaceTextCursor, TReplEnum, ReplaceAttribute> act_replace)
         {
             LangLabel lang = textCursor.VContext.LangLabel;
             var enum_vals = (TReplEnum[])Enum.GetValues(typeof(TReplEnum));

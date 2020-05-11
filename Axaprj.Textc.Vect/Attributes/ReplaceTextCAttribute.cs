@@ -29,12 +29,12 @@ namespace Axaprj.Textc.Vect.Attributes
             => _detector = _detector ?? new ReplaceDetector(this);
 
         public int TryReplace<TReplEnum>(
-            TReplEnum enum_val, IVTextCursor textCursor, CancellationToken cancellation) =>
+            TReplEnum enum_val, IVReplaceTextCursor textCursor, CancellationToken cancellation) =>
             GetDetector().TryReplace<TReplEnum>(enum_val, textCursor, cancellation);
 
         protected object GetTokenValue(string name, Takenet.Textc.Expression expr)
         {
-            foreach(var token in expr.Tokens)
+            foreach (var token in expr.Tokens)
             {
                 if (token != null)
                 {

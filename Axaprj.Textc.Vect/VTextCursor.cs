@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Takenet.Textc;
 
 namespace Axaprj.Textc.Vect
 {
     /// <summary>
-    /// Defines a cursor that extracts a token for each word in a text.
+    /// Defines a cursor with start-stop tokens range.
     /// </summary>
-    public sealed class VTextCursor : IVTextCursor
+    public class VTextCursor : IVTextCursor
     {
-        public readonly char TOKEN_SEPARATOR = ' ';
+        readonly char TOKEN_SEPARATOR = ' ';
 
         private string[] _tokens;
         private int _leftPos;
@@ -20,31 +17,55 @@ namespace Axaprj.Textc.Vect
         private int _rightPos;
         private int _rightPosCheckpoint;
 
-        List<string> _processed;
-        int _leftPosProcessed = 0;
-        int LeftPos
-        {
-            get => _leftPos + _leftPosProcessed;
-        }
+        int _posStart;
+        int _posStop;
+
+        protected int PosStart { get => _posStart; }
+        protected int PosStop { get => _posStop; }
+
+        /// <summary>Gets the <see cref="IVRequestContext"/> context via <see cref="Context"/></summary>
+        public IVRequestContext VContext => (IVRequestContext)Context;
+        /// <summary>Gets the context where the cursor was created.</summary>
+        public IRequestContext Context { get; }
+
+        protected string[] Tokens { get => _tokens; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VTextCursor" /> class.
         /// </summary>
-        /// <param name="inputText">The input text.</param>
+        /// <param name="inputTokens">The input text tokens.</param>
         /// <param name="context">The context.</param>
         /// <param name="tokenSeparator">The token separator</param>
         /// <exception cref="System.ArgumentNullException">inputText</exception>
-        public VTextCursor(string inputText, IVRequestContext context, char tokenSeparator=' ')
+        public VTextCursor(string[] inputTokens, IVRequestContext context, char tokenSeparator = ' ')
         {
-            TOKEN_SEPARATOR = tokenSeparator;
-            if (inputText == null)
-                throw new ArgumentNullException(nameof(inputText));
-            _tokens = inputText.Split(' ');
+            SetTokens(inputTokens);
             Context = context;
+            TOKEN_SEPARATOR = tokenSeparator;
             Reset();
         }
 
-        public IVRequestContext VContext => (IVRequestContext) Context;
+        protected void SetTokens(string[] tokens, int posStart = -1, int posStop = -1)
+        {
+            if (tokens == null)
+                throw new ArgumentNullException(nameof(tokens));
+            if (tokens.Length == 0)
+                throw new ArgumentOutOfRangeException(nameof(tokens));
+            _tokens = tokens;
+            SetRangePos(posStart, posStop);
+        }
+
+        protected void SetRangePos(int posStart = -1, int posStop = -1)
+        {
+            _posStart = posStart < 0 ? 0 : posStart;
+            _posStop = posStop < 0 ? _tokens.Length - 1 : posStop;
+        }
+
+        protected void IncRangePos(int posStartDelta = 0, int posStopDelta = 0)
+        {
+            _posStart += posStartDelta;
+            _posStop += posStopDelta;
+        }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -56,7 +77,7 @@ namespace Axaprj.Textc.Vect
         {
             var stringBuilder = new StringBuilder();
 
-            for (var i = LeftPos; i <= _rightPos; i++)
+            for (var i = _leftPos; i <= _rightPos; i++)
             {
                 stringBuilder.Append(_tokens[i]);
 
@@ -69,10 +90,10 @@ namespace Axaprj.Textc.Vect
             return stringBuilder.ToString();
         }
 
-        /// <summary>Gets the context where the cursor was created.</summary>
-        public IRequestContext Context { get; }
-
-        /// <summary>Extracts the current token and advances the cursor.</summary>
+        /// <summary>
+        /// Extracts the current token and advances the cursor.
+        /// </summary>
+        /// <returns></returns>
         public string Next()
         {
             var token = Peek();
@@ -91,13 +112,17 @@ namespace Axaprj.Textc.Vect
 
             return token;
         }
-        /// <summary>Gets all remaining text from the cursor.</summary>
+
+        /// <summary>
+        /// Gets all remaining text from the cursor.
+        /// </summary>
+        /// <returns></returns>
         public string All()
         {
             var text = ToString();
             if (RightToLeftParsing)
             {
-                _rightPos = LeftPos - 1;
+                _rightPos = _leftPos - 1;
             }
             else
             {
@@ -106,77 +131,67 @@ namespace Axaprj.Textc.Vect
 
             return text;
         }
-        /// <summary>Saves the current cursor position to allow further rollback.</summary>
+
+        /// <summary>
+        /// Saves the current cursor position to allow further rollback.
+        /// </summary>
         public void SavePosition()
         {
-            _leftPosCheckpoint = LeftPos;
+            _leftPosCheckpoint = _leftPos;
             _rightPosCheckpoint = _rightPos;
         }
-        /// <summary>Rollbacks the cursor to the last saved position.</summary>
+
+        /// <summary>
+        /// Rollbacks the cursor to the last saved position.
+        /// </summary>
         public void RollbackPosition()
         {
             _leftPos = _leftPosCheckpoint;
             _rightPos = _rightPosCheckpoint;
         }
-        /// <summary>Gets a preview of the next available token without advancing the cursor position.</summary>
+
+        /// <summary>
+        /// Gets a preview of the next available token without advancing the cursor position.
+        /// </summary>
+        /// <returns></returns>
         public string Peek()
         {
             string token = null;
 
             if (!IsEmpty)
             {
-                var pos = RightToLeftParsing ? _rightPos : LeftPos;
+                var pos = RightToLeftParsing ? _rightPos : _leftPos;
                 token = _tokens[pos];
             }
 
             return token;
         }
-        /// <summary>Gets the current parse direction.</summary>
+
+        /// <summary>
+        /// Gets the current parse direction.
+        /// </summary>
         public bool RightToLeftParsing { get; set; }
-        /// <summary>Inverts the cursor parse direction.</summary>
+
+        /// <summary>
+        /// Inverts the cursor parse direction.
+        /// </summary>
         public void InvertParsing()
         {
             RightToLeftParsing = !RightToLeftParsing;
         }
-        /// <summary>Returns to the initial position.</summary>
+
+        /// <summary>
+        /// Returns to the initial position.
+        /// </summary>
         public void Reset()
         {
-            _leftPos = _leftPosCheckpoint = 0;
-            _rightPos = _rightPosCheckpoint = _tokens.Length - 1;
+            _leftPos = _leftPosCheckpoint = _posStart;
+            _rightPos = _rightPosCheckpoint = _posStop;
         }
 
-        List<string> Processed()
-            => _processed = _processed ?? new List<string>(capacity: _tokens.Length);
-        
-
-        public void ProcessNext()
-        {
-            Reset();
-            Processed().Add(_tokens[LeftPos]);
-            _leftPosProcessed++;
-        }
-
-        public void ProcessReplace(int token_count, string new_text)
-        {
-            Reset();
-            Processed().Add(new_text);
-            _leftPosProcessed += token_count;
-        }
-
-        public void ResetProcessedToInput()
-        {
-            _leftPosProcessed = 0;
-            if(_processed != null)
-            {
-                _tokens = _processed.ToArray();
-                _processed = null;
-            }
-            Reset();
-        }
-
-        /// <summary>Indicates if the cursor is empty.</summary>
-        public bool IsEmpty => LeftPos > _rightPos;
-
+        /// <summary>
+        /// Indicates if the cursor is empty.
+        /// </summary>
+        public bool IsEmpty => _leftPos > _rightPos;
     }
-
 }

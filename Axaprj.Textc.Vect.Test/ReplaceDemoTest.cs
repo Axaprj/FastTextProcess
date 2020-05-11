@@ -1,4 +1,3 @@
-using Axaprj.FastTextProcess;
 using Axaprj.Textc.Vect.Attributes;
 using Axaprj.WordToVecDB.Enums;
 using System.Threading;
@@ -63,7 +62,7 @@ namespace Axaprj.Textc.Vect.Test
             Log(cur.ToString());
         }
 
-        VTextCursor CreateCursor(string txt)
+        VReplaceTextCursor CreateCursor(string txt)
         {
             AssertFileExists(W2VDictEN);
             var ctx = new VRequestContext()
@@ -72,7 +71,8 @@ namespace Axaprj.Textc.Vect.Test
                 LangLabel = LangLabel.en,
                 MinCosine = 0.6f
             };
-            return new VTextCursor(txt, ctx);
+            char sp = ' ';
+            return new VReplaceTextCursor(txt.Split(sp), ctx, tokenSeparator:sp);
         }
     }
 }
