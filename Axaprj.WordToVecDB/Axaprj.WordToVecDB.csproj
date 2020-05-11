@@ -1,16 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.1.1</Version>
+    <Version>1.0.2.0</Version>
     <Description>DB access layer of embedded vectors processing tools. 
 A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.</Description>
-    <Authors>Igor Alexeev</Authors>
-    <Company>propertyindicators@gmail.com</Company>
-    <Copyright>Copyright (c) 2020 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
+    <Authors>https://github.com/Axaprj</Authors>
+    <Company>https://propertyindicators.github.io/</Company>
+    <Copyright>Copyright (c) 2020 https://github.com/Axaprj, axaprj2000@yahoo.com</Copyright>
     <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.1.1</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +34,10 @@ A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.<
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
   </ItemGroup>
 
 </Project>

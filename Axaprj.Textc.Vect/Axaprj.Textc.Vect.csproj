@@ -1,15 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.1.1</Version>
-    <Copyright>Copyright (c) 2020 Igor Alexeev, axaprj2000@yahoo.com</Copyright>
+    <Version>1.0.2.0</Version>
+    <Copyright>Copyright (c) 2020 https://github.com/Axaprj, axaprj2000@yahoo.com</Copyright>
     <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect</PackageProjectUrl>
-    <Company>propertyindicators@gmail.com</Company>
-    <Authors>Igor Alexeev</Authors>
+    <Company>https://propertyindicators.github.io/</Company>
+    <Authors>https://github.com/Axaprj</Authors>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect</RepositoryUrl>
     <Description>Natural Language features extraction framework (Takenet.Textc based)</Description>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,4 +23,8 @@
     <ProjectReference Include="..\Axaprj.WordToVecDB\Axaprj.WordToVecDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+  </ItemGroup>
+  
 </Project>
