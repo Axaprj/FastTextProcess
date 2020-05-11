@@ -17,7 +17,6 @@
     <Description>Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based)</Description>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

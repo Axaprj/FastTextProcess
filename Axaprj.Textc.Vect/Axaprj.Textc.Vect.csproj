@@ -12,7 +12,6 @@
     <Description>Natural Language features extraction framework (Takenet.Textc based)</Description>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
     <FileVersion>1.0.2.0</FileVersion>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +25,5 @@
   <ItemGroup>
     <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
   </ItemGroup>
-  
+
 </Project>

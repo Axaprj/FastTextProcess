@@ -13,7 +13,6 @@ A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.<
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
     <FileVersion>1.0.1.1</FileVersion>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
