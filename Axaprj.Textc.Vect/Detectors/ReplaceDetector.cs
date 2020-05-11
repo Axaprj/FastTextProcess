@@ -5,6 +5,9 @@ using Takenet.Textc;
 
 namespace Axaprj.Textc.Vect.Detectors
 {
+    /// <summary>
+    /// Token detector with MacroReplace functionality
+    /// </summary>
     public class ReplaceDetector : DectectorTextC
     {
         readonly ReplaceTextCAttribute ReplaceAttr;
@@ -28,8 +31,7 @@ namespace Axaprj.Textc.Vect.Detectors
                 {
                     var str_value = ReplaceAttr.GetArgument(expr);
                     var macro = StringUtil.GetReplaceMacro(enum_val, ReplaceAttr, str_value);
-                    var token_cnt = expr.Tokens.Count(t => t != null);
-                    textCursor.GoForwardWithReplacement(token_cnt, macro);
+                    textCursor.GoForwardWithReplacement(expr.DetectedTokenCount(), macro);
                 }
                 else
                     textCursor.GoToNextToken();

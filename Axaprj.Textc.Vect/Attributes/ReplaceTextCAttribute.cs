@@ -31,18 +31,5 @@ namespace Axaprj.Textc.Vect.Attributes
         public int TryReplace<TReplEnum>(
             TReplEnum enum_val, IVReplaceTextCursor textCursor, CancellationToken cancellation) =>
             GetDetector().TryReplace<TReplEnum>(enum_val, textCursor, cancellation);
-
-        protected object GetTokenValue(string name, Takenet.Textc.Expression expr)
-        {
-            foreach (var token in expr.Tokens)
-            {
-                if (token != null)
-                {
-                    if (token.Type.Name == name)
-                        return token.Value;
-                }
-            }
-            return string.Empty;
-        }
     }
 }

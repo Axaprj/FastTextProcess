@@ -12,7 +12,7 @@ using Takenet.Textc.Scorers;
 namespace Axaprj.Textc.Vect
 {
     /// <summary>
-    /// SlidingTextProcessor
+    /// (NOT USED NOW) SlidingTextProcessor
     /// </summary>
     public class SlidingTextProcessor : TextProcessor
     {

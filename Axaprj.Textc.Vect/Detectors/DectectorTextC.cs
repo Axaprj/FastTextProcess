@@ -10,6 +10,9 @@ using Takenet.Textc.Processors;
 
 namespace Axaprj.Textc.Vect.Detectors
 {
+    /// <summary>
+    /// Token detector, Takenet.Textc lexemes based
+    /// </summary>
     public class DectectorTextC : IOutputProcessor
     {
         /// <summary>Initializes a new instance</summary>
