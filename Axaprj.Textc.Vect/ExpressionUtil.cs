@@ -22,28 +22,5 @@ namespace Axaprj.Textc.Vect
             }
             return string.Empty;
         }
-
-        /// <summary>
-        /// Get count of detected tokens in the Takenet.Textc.Expression 
-        /// </summary>
-        public static int DetectedTokenCount(this Takenet.Textc.Expression expr, IVReplaceTextCursor textCursor)
-        {
-            int cnt = 0;
-            char sep = textCursor.GetTokenSeparator();
-            foreach (var token in expr.Tokens)
-            {
-                if (token != null)
-                {
-                    if (token.Value is string)
-                    {
-                        var sval = (string)token.Value;
-                        cnt += sval.Split(sep).Count();
-                    }
-                    else
-                        cnt++;
-                }
-            }
-            return cnt;
-        }
     }
 }

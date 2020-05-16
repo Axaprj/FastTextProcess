@@ -4,7 +4,7 @@ using Axaprj.WordToVecDB.Enums;
 
 namespace Axaprj.Textc.Vect
 {
-    public class VRequestContext : Axaprj.Textc.Vect.RequestContext, IVRequestContext
+    public class VRequestContext : Takenet.Textc.RequestContext, IVRequestContext
     {
         public string W2VDictFile { get; set; }
 

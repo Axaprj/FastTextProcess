@@ -21,8 +21,8 @@ namespace Axaprj.Textc.Vect
         /// <param name="context">The context.</param>
         /// <param name="tokenSeparator">The token separator</param>
         /// <exception cref="System.ArgumentNullException">inputText</exception>
-        public VReplaceTextCursor(string[] inputTokens, IVRequestContext context, char tokenSeparator = ' ')
-            : base(inputTokens, context, tokenSeparator)
+        public VReplaceTextCursor(string inputText, IVRequestContext context, char tokenSeparator = ' ')
+            : base(inputText, context, tokenSeparator)
         {
         }
 
@@ -43,11 +43,11 @@ namespace Axaprj.Textc.Vect
             return isok;
         }
 
-        public void GoForwardWithReplacement(int token_count, string new_text)
+        public void GoForwardWithReplacement(string replacement_text, string remaining_text)
         {
             Reset();
-            ProcessedList.Add(new_text);
-            IncRangePos(posStartDelta: token_count);
+            ProcessedList.Add(replacement_text);
+            SetTokens(remaining_text);
         }
 
         public void SetupProcessedToInput()

@@ -7,7 +7,7 @@ using System.Text;
 namespace Axaprj.Textc.Vect
 {
     /// <summary>
-    /// Defines a context that uses an internal dictionary to store the variables.
+    /// (NOT USED NOW) Defines a context that uses an internal dictionary to store the variables.
     /// (tag:thread_safe)
     /// </summary>
     public class RequestContext : Takenet.Textc.IRequestContext

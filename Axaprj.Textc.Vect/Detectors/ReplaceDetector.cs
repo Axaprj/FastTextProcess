@@ -31,7 +31,7 @@ namespace Axaprj.Textc.Vect.Detectors
                 {
                     var str_value = ReplaceAttr.GetArgument(expr);
                     var macro = StringUtil.GetReplaceMacro(enum_val, ReplaceAttr, str_value);
-                    textCursor.GoForwardWithReplacement(expr.DetectedTokenCount(textCursor), macro);
+                    textCursor.GoForwardWithReplacement(macro, expr.RemainingText);
                 }
                 else
                     textCursor.GoToNextToken();

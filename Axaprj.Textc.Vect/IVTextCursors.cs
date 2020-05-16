@@ -7,8 +7,6 @@ namespace Axaprj.Textc.Vect
     /// </summary>
     public interface IVTextCursor : ITextCursor
     {
-        /// <summary>Current tokens separator</summary>
-        char GetTokenSeparator();
         /// <summary>Textc.Vect Request Context</summary>
         IVRequestContext VContext { get; }
     }
@@ -25,9 +23,7 @@ namespace Axaprj.Textc.Vect
         /// <summary>
         /// Set replacement to processed and setup start to the following token
         /// </summary>
-        /// <param name="token_count"></param>
-        /// <param name="new_text"></param>
-        void GoForwardWithReplacement(int token_count, string new_text);
+        void GoForwardWithReplacement(string replacement_text, string remaining_text);
         /// <summary>
         /// Setup processed to input tokens
         /// </summary>

@@ -10,7 +10,6 @@ namespace Axaprj.Textc.Vect
     public class VTextCursor : IVTextCursor
     {
         readonly char TOKEN_SEPARATOR;
-        public char GetTokenSeparator() => TOKEN_SEPARATOR;
 
         private string[] _tokens;
         private int _leftPos;
@@ -34,25 +33,28 @@ namespace Axaprj.Textc.Vect
         /// <summary>
         /// Initializes a new instance of the <see cref="VTextCursor" /> class.
         /// </summary>
-        /// <param name="inputTokens">The input text tokens.</param>
+        /// <param name="inputText">Preprocessed input text tokens.</param>
         /// <param name="context">The context.</param>
         /// <param name="tokenSeparator">The token separator</param>
         /// <exception cref="System.ArgumentNullException">inputText</exception>
-        public VTextCursor(string[] inputTokens, IVRequestContext context, char tokenSeparator = ' ')
+        public VTextCursor(string inputText, IVRequestContext context, char tokenSeparator = ' ')
         {
-            SetTokens(inputTokens);
-            Context = context;
             TOKEN_SEPARATOR = tokenSeparator;
+            SetTokens(inputText);
+            Context = context;
             Reset();
+        }
+
+        protected void SetTokens(string inputText, int posStart = -1, int posStop = -1)
+        {
+            if (inputText == null)
+                throw new ArgumentNullException(nameof(inputText));
+            SetTokens(inputText.Split(TOKEN_SEPARATOR), posStart, posStop);
         }
 
         protected void SetTokens(string[] tokens, int posStart = -1, int posStop = -1)
         {
-            if (tokens == null)
-                throw new ArgumentNullException(nameof(tokens));
-            if (tokens.Length == 0)
-                throw new ArgumentOutOfRangeException(nameof(tokens));
-            _tokens = tokens;
+            _tokens = tokens ?? throw new ArgumentNullException(nameof(tokens));
             SetRangePos(posStart, posStop);
         }
 

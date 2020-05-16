@@ -42,7 +42,7 @@ namespace Axaprj.Textc.Vect.Test
 
     public class ReplaceDemoTest : TestBase
     {
-        string TestPH1 =
+        readonly string TestPH1 =
             $"The EU5-compliant, 130kW/430Nm 3.0-litre turbo-diesel engine introduced in the MY16.5 MU-X(and MY17 D-MAX)"
             + $" continues on with the option of six-speed manual or six-speed automatic transmissions."
             + $"The lowest combined fuel consumption for the range is 7.9L/100km for LS-U and LS-T 4x4 autos(209 CO2 emissions),"
@@ -71,8 +71,7 @@ namespace Axaprj.Textc.Vect.Test
                 LangLabel = LangLabel.en,
                 MinCosine = 0.6f
             };
-            char sp = ' ';
-            return new VReplaceTextCursor(txt.Split(sp), ctx, tokenSeparator:sp);
+            return new VReplaceTextCursor(txt, ctx);
         }
     }
 }
