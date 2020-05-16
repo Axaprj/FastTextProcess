@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.2.0</Version>
+    <Version>1.0.2.1</Version>
     <Copyright>Copyright (c) 2020 https://github.com/Axaprj, axaprj2000@yahoo.com</Copyright>
     <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect</PackageProjectUrl>
@@ -10,8 +10,8 @@
     <Authors>https://github.com/Axaprj</Authors>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.Textc.Vect</RepositoryUrl>
     <Description>Natural Language features extraction framework (Takenet.Textc based)</Description>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.2.1</AssemblyVersion>
+    <FileVersion>1.0.2.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
   </ItemGroup>
 
 </Project>

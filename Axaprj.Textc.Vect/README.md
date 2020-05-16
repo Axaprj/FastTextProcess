@@ -72,6 +72,7 @@ Rules set
     }
 ```
 ## revision history
+2020 May 16: v1.0.2.1 VReplaceTextCursor refactoring
 2020 May 11: v1.0.2.0 MacroReplace implementation refactoring
 2020 May 02: v1.0.1.1 MacroReplace implementation
 2019 Dec 22: v0.0.1  VWord implementation
