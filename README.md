@@ -52,5 +52,6 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 ```
 [3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information @article{bojanowski2017enriching, title={Enriching Word Vectors with Subword Information}, author={Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas}, journal={Transactions of the Association for Computational Linguistics}, volume={5}, year={2017}, issn={2307-387X}, pages={135--146}}
 ```
-## author
-[Axaprj](https://github.com/Axaprj), [Igor Alexeev](axaprj2000@yahoo.com) for [Property Indicators Lab](https://propertyindicators.github.io/)
+## authors
+[Axaprj](https://github.com/Axaprj), [Igor Alexeev](mailto:axaprj2000@yahoo.com) 
+for [Property Indicators Lab](https://propertyindicators.github.io/)

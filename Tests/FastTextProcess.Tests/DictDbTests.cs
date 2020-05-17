@@ -166,16 +166,22 @@ namespace FastTextProcess.Tests
             using (var dbx = new FastTextProcessDB(DBF_W2V_RUK))
             {
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
+                Log("En min=0.7");
                 var w2v_en_all = dict_db.GetAll(LangLabel.en);
                 Parallel.ForEach(w2v_en_all, (w2v) => 
                     PrintPair(w1, w2v, distance_min: 0.7f));
                 //foreach (var w2v in w2v_en_all)
                 //    PrintPair(w1, w2v, distance_min: 0.6f);
+                Log("Ru min=0.35");
                 var w2v_ru_all = dict_db.GetAll(LangLabel.ru);
                 Parallel.ForEach(w2v_ru_all, (w2v) =>
                     PrintPair(w1, w2v, distance_min: 0.35f));
                 //foreach (var w2v in w2v_ru_all)
                 //    PrintPair(w1, w2v, distance_min: 0.35f);
+                Log("Uk min=0.35");
+                var w2v_uk_all = dict_db.GetAll(LangLabel.uk);
+                Parallel.ForEach(w2v_uk_all, (w2v) =>
+                    PrintPair(w1, w2v, distance_min: 0.35f));
             }
             Log("done");
         }
