@@ -19,14 +19,14 @@ namespace Axaprj.Textc.Vect
             if (macro.EndsWith(MACRO_END))
                 macro = macro.Substring(0, macro.Length - MACRO_END.Length);
             return string.IsNullOrWhiteSpace(macro)
-                ? string.Empty : ", " + macro;
+                ? string.Empty : "," + macro;
         }
 
         public static string MakeMacro(object obj, ReplaceAttribute attr, string val_arg = null)
         {
             var macro = attr.GetMacro(obj, val_arg);
             return string.IsNullOrWhiteSpace(macro)
-                ? string.Empty : ", " + macro;
+                ? string.Empty : "," + macro;
         }
 
         public static string GetReplaceMacro(object val_enum, ReplaceAttribute attr, string val_arg = null)
