@@ -22,6 +22,9 @@ namespace Axaprj.Textc.Vect
 
         protected int PosStart { get => _posStart; }
         protected int PosStop { get => _posStop; }
+        protected int RightPos { get => _rightPos; }
+        protected int LeftPos { get => _leftPos; }
+
 
         /// <summary>Gets the <see cref="IVRequestContext"/> context via <see cref="Context"/></summary>
         public IVRequestContext VContext => (IVRequestContext)Context;
@@ -120,9 +123,15 @@ namespace Axaprj.Textc.Vect
         /// Gets all remaining text from the cursor.
         /// </summary>
         /// <returns></returns>
-        public string All()
+        public virtual string All()
         {
             var text = ToString();
+            SetupEmptyPosition();
+            return text;
+        }
+
+        protected void SetupEmptyPosition()
+        {
             if (RightToLeftParsing)
             {
                 _rightPos = _leftPos - 1;
@@ -131,8 +140,6 @@ namespace Axaprj.Textc.Vect
             {
                 _leftPos = _rightPos + 1;
             }
-
-            return text;
         }
 
         /// <summary>
