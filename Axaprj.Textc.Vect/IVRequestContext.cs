@@ -1,5 +1,6 @@
 ﻿using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
+using System;
 using Takenet.Textc;
 
 namespace Axaprj.Textc.Vect
@@ -21,5 +22,10 @@ namespace Axaprj.Textc.Vect
         /// <param name="word"></param>
         /// <returns></returns>
         Dict FindVectByWord(string word);
+
+        /// <summary>
+        /// Debug Output handler
+        /// </summary>
+        Action<string> DbgLog { get; }
     }
 }
