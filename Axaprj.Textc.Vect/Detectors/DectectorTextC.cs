@@ -47,13 +47,13 @@ namespace Axaprj.Textc.Vect.Detectors
             return Task.Run(() => { });
         }
 
-        public bool TryDetect(ITextCursor textCursor, out IEnumerable<Expression> parsedExprs, CancellationToken cancellationToken)
-        {
-            if (textCursor == null)
-                throw new ArgumentNullException(nameof(textCursor));
-            parsedExprs = ParseInput(textCursor, cancellationToken, stop_on_first: false);
-            return parsedExprs.Any();
-        }
+        //public bool TryDetect(ITextCursor textCursor, out IEnumerable<Expression> parsedExprs, CancellationToken cancellationToken)
+        //{
+        //    if (textCursor == null)
+        //        throw new ArgumentNullException(nameof(textCursor));
+        //    parsedExprs = ParseInput(textCursor, cancellationToken, stop_on_first: false);
+        //    return parsedExprs.Any();
+        //}
 
         public bool TryDetect(ITextCursor textCursor, out Expression parsedExpr, CancellationToken cancellationToken)
         {
@@ -85,7 +85,7 @@ namespace Axaprj.Textc.Vect.Detectors
                     {
                         res.Add(expression);
                         if (stop_on_first)
-                            break;
+                            return res;
                     }
                 }
             }
