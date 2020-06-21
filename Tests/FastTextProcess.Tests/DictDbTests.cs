@@ -135,7 +135,7 @@ namespace FastTextProcess.Tests
         }
 
         [Fact]
-        public void TestCosineRUK2()
+        public void TestCosineRUK2Sum()
         {
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
 
@@ -145,13 +145,23 @@ namespace FastTextProcess.Tests
                 var sum_w2v_en = dict_db.FindByWord("sum", LangLabel.en);
                 var sum_w2v_ru = dict_db.FindByWord("сумма", LangLabel.ru);
                 PrintPair(sum_w2v_en, sum_w2v_ru);
-                foreach (var w2v in dict_db.GetAll(LangLabel.ru))
+                Log("RU dict");
+                Parallel.ForEach(dict_db.GetAll(LangLabel.ru), (w2v) =>
+                //foreach (var w2v in dict_db.GetAll(LangLabel.ru))
                 {
                     PrintPair(w2v, sum_w2v_en, distance_min: 0.3f);
                     PrintPair(w2v, sum_w2v_ru, distance_min: 0.6f);
-                }
-                foreach (var w2v in dict_db.GetAll(LangLabel.en))
-                    PrintPair(w2v, sum_w2v_en, distance_min: 0.6f);
+                });
+                //foreach (var w2v in dict_db.GetAll(LangLabel.ru))
+                //{
+                //    PrintPair(w2v, sum_w2v_en, distance_min: 0.3f);
+                //    PrintPair(w2v, sum_w2v_ru, distance_min: 0.6f);
+                //}
+                Log("EN dict");
+                Parallel.ForEach(dict_db.GetAll(LangLabel.en), (w2v) =>
+                    PrintPair(w2v, sum_w2v_en, distance_min: 0.6f));
+                //foreach (var w2v in dict_db.GetAll(LangLabel.en))
+                //    PrintPair(w2v, sum_w2v_en, distance_min: 0.6f);
             }
             Log("done");
         }
