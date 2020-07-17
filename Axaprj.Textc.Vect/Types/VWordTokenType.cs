@@ -28,11 +28,11 @@ namespace Axaprj.Textc.Vect.Types
         [TokenTypeProperty]
         public float MinCosine { get; set; }
 
-        protected VRequestContext GetVRequestCtx(IRequestContext context)
+        protected IVRequestContext GetVRequestCtx(IRequestContext context)
         {
-            var vctx = context as VRequestContext;
+            var vctx = context as IVRequestContext;
             if (vctx == null)
-                throw new InvalidOperationException($"{typeof(VRequestContext)} is required");
+                throw new InvalidOperationException($"{typeof(IVRequestContext)} is required");
             return vctx;
         }
 

@@ -23,7 +23,10 @@ namespace Axaprj.Textc.Vect
         public Dict FindVectByWord(string word)
         {
             var serv = VectorsService.Instance(W2VDictFile);
-            return serv.FindByWord(word, LangLabel);
+            var vect = serv.FindByWord(word, LangLabel);
+            if (vect == null)
+                DbgLog($"Vector for '{word}' not found");
+            return vect;
         }
 
     }
