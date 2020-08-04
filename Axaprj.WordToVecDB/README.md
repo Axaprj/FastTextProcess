@@ -12,4 +12,7 @@ VS 2017, .NET Core, SQLite
 
 ## authors
 [Axaprj](https://github.com/Axaprj), [Igor Alexeev](mailto:axaprj2000@yahoo.com) 
-for [Property Indicators Lab](https://propertyindicators.github.io/)
+
+You are welcome to [Property Indicators Lab](https://propertyindicators.github.io/)! 
+We know how to use it in real projects.
+For any questions, please contact us at email propertyindicators@gmail.com.

@@ -14,7 +14,7 @@ VS 2017, .NET Core, SQLite, XUnit
 ## toolchain and data (currently used)
 - [FastText pre-trained word vectors model](https://s3-us-west-1.amazonaws.com/fasttext-vectors/cc.en.300.bin.gz) extract into `DataArcDir`
 - [FastText pre-trained word vectors dictionary](https://s3-us-west-1.amazonaws.com/fasttext-vectors/cc.en.300.vec.gz) extract into `DataArcDir`
-- [Large Movie Review Dataset v1.0](https://www.kaggle.com/iarunava/imdb-movie-reviews-dataset) extract into `DataArcDir`
+- [Large Movie Review Dataset v1.0](https://ai.stanford.edu/~amaas/data/sentiment/) extract into `DataArcDir`
 - own [FastText VS 2017 CMake compatibility fix](https://github.com/Axaprj/fastText)
 - own [cnn-text-classification-tf preprocessed data loader](https://github.com/Axaprj/cnn-text-classification-tf/blob/master/vocab_process_ft.3.py)
 - own [Takenet.Textc .Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core)
@@ -52,6 +52,13 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 ```
 [3] P. Bojanowski*, E. Grave*, A. Joulin, T. Mikolov, Enriching Word Vectors with Subword Information @article{bojanowski2017enriching, title={Enriching Word Vectors with Subword Information}, author={Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas}, journal={Transactions of the Association for Computational Linguistics}, volume={5}, year={2017}, issn={2307-387X}, pages={135--146}}
 ```
+```
+[4] Large Movie Review Dataset v1.0 @InProceedings{maas-EtAl:2011:ACL-HLT2011,author={Maas, Andrew L. and Daly, Raymond E. and Pham, Peter T. and Huang, Dan and Ng, Andrew Y. and Potts, Christopher},title={Learning Word Vectors for Sentiment Analysis},booktitle = {Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies},month={June},year={2011},address={Portland, Oregon, USA},publisher ={Association for Computational Linguistics},pages={142--150},url={http://www.aclweb.org/anthology/P11-1015}}
+```
+
 ## authors
 [Axaprj](https://github.com/Axaprj), [Igor Alexeev](mailto:axaprj2000@yahoo.com) 
-for [Property Indicators Lab](https://propertyindicators.github.io/)
+
+You are welcome to [Property Indicators Lab](https://propertyindicators.github.io/)! 
+We know how to use it in real projects.
+For any questions, please contact us at email propertyindicators@gmail.com.
