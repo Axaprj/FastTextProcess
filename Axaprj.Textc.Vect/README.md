@@ -81,7 +81,10 @@ Rules set
  - 2020 May 11: v1.0.2.0 MacroReplace implementation refactoring
  - 2020 May 02: v1.0.1.1 MacroReplace implementation
  - 2019 Dec 22: v0.0.1  VWord implementation
-
+ 
 ## authors
 [Axaprj](https://github.com/Axaprj), [Igor Alexeev](mailto:axaprj2000@yahoo.com) 
-for [Property Indicators Lab](https://propertyindicators.github.io/)
+
+You are welcome to [Property Indicators Lab](https://propertyindicators.github.io/)! 
+We know how to use it in real projects.
+For any questions, please contact us at email propertyindicators@gmail.com.
