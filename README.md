@@ -14,10 +14,10 @@ VS 2017, .NET Core, SQLite, XUnit
 ## toolchain and data (currently used)
 - [FastText pre-trained word vectors model](https://s3-us-west-1.amazonaws.com/fasttext-vectors/cc.en.300.bin.gz) extract into `DataArcDir`
 - [FastText pre-trained word vectors dictionary](https://s3-us-west-1.amazonaws.com/fasttext-vectors/cc.en.300.vec.gz) extract into `DataArcDir`
-- [Large Movie Review Dataset v1.0](https://ai.stanford.edu/~amaas/data/sentiment/) extract into `DataArcDir`
-- own [FastText VS 2017 CMake compatibility fix](https://github.com/Axaprj/fastText)
-- own [cnn-text-classification-tf preprocessed data loader](https://github.com/Axaprj/cnn-text-classification-tf/blob/master/vocab_process_ft.3.py)
+- [Large Movie Review Dataset v1.0](https://ai.stanford.edu/~amaas/data/sentiment/) demo data, extract into `DataArcDir`
 - own [Takenet.Textc .Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core)
+- own [FastText VS 2017 CMake compatibility fix](https://github.com/Axaprj/fastText) any other valid build can be used
+- own [cnn-text-classification-tf preprocessed data loader](https://github.com/Axaprj/cnn-text-classification-tf/blob/master/vocab_process_ft.3.py) demo of chain connection to Python TensorFlow
 
 ## start of usage 
 - setup `FastTextProcess.Tests.json`
