@@ -5,7 +5,7 @@ DB access layer of embedded vectors processing tools.
 A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.
  
 ## code
-VS 2017, .NET Core, SQLite, XUnit
+VS 2017, VS 2019, .NET Core, SQLite, XUnit
 
 ## toolchain and data (currently used)
 - [FastText pre-trained word vectors model](https://s3-us-west-1.amazonaws.com/fasttext-vectors/cc.en.300.bin.gz) - cc.en.300.bin.gz extract into `FastTextDir`
