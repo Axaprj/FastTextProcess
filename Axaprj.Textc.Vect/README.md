@@ -9,7 +9,7 @@ Natural Language features extraction framework (Takenet.Textc based)
  - MacroReplace - Easy usable and extendable NLP features extractor. 
 
 ## code
-VS 2017, .NET Core, SQLite
+VS 2017, VS 2019,.NET Core, SQLite
 
 ## VWord() textc extension usage explanation
 - Uses En Ru Uk aligned vectors DB [FastTextRoutinesCyr::ProcCreateDbRuk](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
@@ -28,8 +28,10 @@ In Ukrainian
 cos(consumption,споживання)=0.4414848 cos(consumption,споживати)=0.3519385 cos(consumption,калорійність)=0.3616202
 ```
 ## MacroReplace example
-- Uses En vectors DB [FastTextProcess.Tests.FastTextRoutinesEn.ProcCreateDbTest](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesEn.cs)
-- Example	[Axaprj.Textc.Vect.Test.ReplaceDemoTest.VehiclesFeaturesTest](https://github.com/Axaprj/FastTextProcess/blob/master/Axaprj.Textc.Vect.Test/ReplaceDemoTest.cs)
+- Uses En vectors DB [FastTextProcess.Tests.AclImdbDemo.ProcCreateDbTest]
+(https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
+- Example	[Axaprj.Textc.Vect.Test.ReplaceDemoTest.VehiclesFeaturesTest]
+(https://github.com/Axaprj/FastTextProcess/blob/master/Axaprj.Textc.Vect.Test/ReplaceDemoTest.cs)
 ```
 Input:
 The EU5-compliant, 130kW/430Nm 3.0-litre turbo-diesel engine introduced in the MY16.5 MU-X(and MY17 D-MAX) continues on with the option of six-speed manual or six-speed automatic transmissions.
