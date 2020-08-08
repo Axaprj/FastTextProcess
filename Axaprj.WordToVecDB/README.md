@@ -5,7 +5,7 @@ A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.
 - Word to vector processing output database.
 
 ## word2vect (SQLite)
-Word to vector dictionary SQLite DB.
+Word to vector dictionary.
 #### Dict - pretrained dictionary
 #### DictAddins - dictionary of macros and words not found in Dict
 #### EmbedDict - Dict and DictAddins join to build a zero-based index of vectors
