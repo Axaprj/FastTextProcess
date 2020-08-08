@@ -14,13 +14,13 @@ namespace FastTextProcess.Tests
     /// <summary>
     /// AclImdb English processing
     /// </summary>
-    public class FastTextRoutinesEn : FastTextRoutinesModel
+    public class AclImdbDemo : FastTextRoutinesModel
     {
         protected override string DBF_W2V => DataOutPath("w2v_en.db");
         protected override string DBF_RESULT => DataOutPath("AclImdb_proc.db");
         protected override LangLabel LANG => LangLabel.en;
 
-        public FastTextRoutinesEn(ITestOutputHelper output) : base(output) { }
+        public AclImdbDemo(ITestOutputHelper output) : base(output) { }
 
         [Fact]
         [Trait("Task", "AclImdb")]
