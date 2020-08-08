@@ -1,19 +1,24 @@
 # Axaprj.WordToVecDB
-DB access layer of embedded vectors processing tools. 
+Entity-style DB access layer of embedded vectors processing tools. 
 A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.
- 
-## contents
-Entity-style support of the following databases:
- - word2vect - extendable the word to vector dictionary
- - vect_result - word to vector processing result database
+- Extendable the word to vector dictionary database.
+- Word to vector processing output database.
 
-## word2vect 
-Word to vector dictionary SQLite DB
-![word2vect DB structure](./images/word2vect.png)
+## word2vect (SQLite)
+Word to vector dictionary SQLite DB.
+#### Dict - pretrained dictionary
+#### DictAddins - dictionary of macros and words not found in Dict
+#### EmbedDict - Dict and DictAddins join to build a zero-based index of vectors
 
-## vect_result
-Custom text word to vector processing result SQLite DB
-![vect_result DB structure](./images/vect_result.png)
+## vect_result (SQLite)
+Custom text word to vector processing result.
+#### Dict - vectors dictionary
+- Index (zero-based)
+- Vector (text representation)
+#### Src - processed samples storage
+- OriginalId (source sample key)
+- ProcInfo (data for trainig)
+- DictInxsStr (array of Dict.Index, text representation) - text sample representation ready to process 
 
 ## code
 VS 2017, VS 2019, .NET Core, SQLite
