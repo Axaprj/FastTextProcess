@@ -32,7 +32,8 @@ ProcCreateDbEn()
 ProcAclImdbTrain()
 ProcAclImdbTest()
 ```
-- Looking for result into `$DataOutDir/AclImdb_proc.db` and `$DataOutDir/w2v_en.db` dictionary DB
+- Looking for result into `$DataOutDir/AclImdb_proc.db` - text to vector processing result
+- and `$DataOutDir/w2v_en.db` - pretrained and custom vectors dictionary db
 
 ## advanced and experimental
 FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, En texts processor. 
