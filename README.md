@@ -9,7 +9,7 @@ Natural Language features extraction framework (Takenet.Textc based)
 DB access layer of embedded vectors processing tools. 
  
 ## code
-VS 2017, .NET Core, SQLite, XUnit
+VS 2017, VS 2019, .NET Core, SQLite, XUnit
 
 ## toolchain
 - own [Takenet.Textc .Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core) compatible with Takenet.Textc original
