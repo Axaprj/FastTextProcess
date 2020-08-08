@@ -1,4 +1,4 @@
-# FastTextProcess
+# Axaprj.FastTextProcess
 Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based).
 Uses [Axaprj.WordToVecDB](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.WordToVecDB) 
 DB access layer of embedded vectors processing tools. 
