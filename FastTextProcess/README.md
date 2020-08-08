@@ -1,7 +1,8 @@
 # Axaprj.FastTextProcess
 Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based).
-Uses [Axaprj.WordToVecDB](https://github.com/Axaprj/FastTextProcess/tree/master/Axaprj.WordToVecDB) 
+Uses [Axaprj.WordToVecDB](https://github.com/Axaprj/FastTextProcess/Axaprj.WordToVecDB) 
 DB access layer of embedded vectors processing tools. 
+A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.
  
 ## code
 VS 2017, .NET Core, SQLite, XUnit
@@ -23,11 +24,11 @@ VS 2017, .NET Core, SQLite, XUnit
   "FastTextBin": "c:/data.ft/fasttext.exe"
 }
 ```
-- Create pretrained vectors DB [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
+- Create pretrained vectors DB [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
 ```c#
 ProcCreateDbEn()
 ```
-- Append Train and Tests  AclImdb Data [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
+- Append Train and Tests  AclImdb Data [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
 ```c#
 ProcAclImdbTrain()
 ProcAclImdbTest()
