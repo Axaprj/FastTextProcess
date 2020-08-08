@@ -23,16 +23,16 @@ VS 2017, .NET Core, SQLite, XUnit
   "FastTextBin": "c:/data.ft/fasttext.exe"
 }
 ```
-- Create pretrained vectors DB [FastTextProcess.Tests.FastTextRoutines](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutines.cs)
+- Create pretrained vectors DB [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
 ```c#
 ProcCreateDbEn()
 ```
-- Append Train and Tests  AclImdb Data [FastTextProcess.Tests.FastTextRoutines](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutines.cs)
+- Append Train and Tests  AclImdb Data [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
 ```c#
 ProcAclImdbTrain()
 ProcAclImdbTest()
 ```
-- Looking for result into `$DataOutDir/AclImdb_proc.db`
+- Looking for result into `$DataOutDir/AclImdb_proc.db` and `$DataOutDir/w2v_en.db` dictionary DB
 
 ## advanced and experimental
 FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, En texts processor. 
