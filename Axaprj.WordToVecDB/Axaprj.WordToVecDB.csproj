@@ -8,11 +8,12 @@ A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.<
     <Authors>https://github.com/Axaprj</Authors>
     <Company>https://propertyindicators.github.io/</Company>
     <Copyright>Copyright (c) 2020 https://github.com/Axaprj, axaprj2000@yahoo.com</Copyright>
-    <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
     <FileVersion>1.0.1.1</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,7 +37,19 @@ A part of [FastTextProcess](https://github.com/Axaprj/FastTextProcess) project.<
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

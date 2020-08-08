@@ -10,13 +10,14 @@
     <Authors>https://github.com/Axaprj</Authors>
     <Company>https://propertyindicators.github.io/</Company>
     <PackageProjectUrl>https://github.com/Axaprj/FastTextProcess</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Axaprj/FastTextProcess/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <Version>1.0.2.0</Version>
     <Configurations>Debug;Release;net462</Configurations>
     <PackageId>FastTextProcess</PackageId>
     <Description>Text to embedded vectors conversion high-performance framework ([Facebook FastText](https://fasttext.cc) engine and dictionaries based)</Description>
     <RepositoryUrl>https://github.com/Axaprj/FastTextProcess</RepositoryUrl>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -46,7 +47,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
