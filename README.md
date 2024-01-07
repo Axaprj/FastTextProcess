@@ -9,10 +9,10 @@ Natural Language features extraction framework (Takenet.Textc based)
 DB access layer of embedded vectors processing tools. 
  
 ## code
-VS 2017, VS 2019, .NET Core, SQLite, XUnit
+VS 2022, .NET Core, SQLite, XUnit
 
 ## toolchain
-- own [Takenet.Textc .Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core) compatible with Takenet.Textc original
+- own [Takenet.Textc.Net Core port](https://github.com/Axaprj/textc-csharp/tree/port2core) compatible with Takenet.Textc original
 - own [FastText VS 2017 CMake compatibility fix](https://github.com/Axaprj/fastText) any other valid build can be used
 - own [cnn-text-classification-tf preprocessed data loader](https://github.com/Axaprj/cnn-text-classification-tf/blob/master/vocab_process_ft.3.py) demo of toolchain connection to Python TensorFlow
 

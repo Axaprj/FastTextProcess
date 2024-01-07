@@ -1,4 +1,4 @@
-using Axaprj.WordToVecDB;
+ï»¿using Axaprj.WordToVecDB;
 using Axaprj.WordToVecDB.Context;
 using Axaprj.WordToVecDB.Entities;
 using Axaprj.WordToVecDB.Enums;
@@ -113,13 +113,13 @@ namespace FastTextProcess.Tests
         public void TestCosineRUK()
         {
             AssertFileExists(DBF_W2V_RUK, "Ru-Uk w2v DB");
-
+            
             var vs = VectorsService.Instance(DBF_W2V_RUK);
-            var w1u = vs.FindByWord("øêàðïåòêè", LangLabel.uk);
-            var w1r = vs.FindByWord("íîñêè", LangLabel.ru);
+            var w1u = vs.FindByWord("ÑˆÐºÐ°Ñ€Ð¿ÐµÑ‚ÐºÐ¸", LangLabel.uk);
+            var w1r = vs.FindByWord("Ð½Ð¾ÑÐºÐ¸", LangLabel.ru);
             var w1e = vs.FindByWord("socks", LangLabel.en);
-            var w2u = vs.FindByWord("êðàâàòêà", LangLabel.uk);
-            var w2r = vs.FindByWord("ãàëñòóê", LangLabel.ru);
+            var w2u = vs.FindByWord("ÐºÑ€Ð°Ð²Ð°Ñ‚ÐºÐ°", LangLabel.uk);
+            var w2r = vs.FindByWord("Ð³Ð°Ð»ÑÑ‚ÑƒÐº", LangLabel.ru);
             var w2e = vs.FindByWord("necktie", LangLabel.en);
 
             Log($"cos({w1u.Word}, {w1r.Word}) = {w1u.GetCosine(w1r)}");
@@ -143,7 +143,7 @@ namespace FastTextProcess.Tests
             {
                 var dict_db = dbx.Dict(DictDbSet.DictKind.Main);
                 var sum_w2v_en = dict_db.FindByWord("sum", LangLabel.en);
-                var sum_w2v_ru = dict_db.FindByWord("ñóììà", LangLabel.ru);
+                var sum_w2v_ru = dict_db.FindByWord("Ã±Ã³Ã¬Ã¬Ã ", LangLabel.ru);
                 PrintPair(sum_w2v_en, sum_w2v_ru);
                 Log("RU dict");
                 Parallel.ForEach(dict_db.GetAll(LangLabel.ru), (w2v) =>
