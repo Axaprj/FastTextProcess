@@ -35,4 +35,4 @@ VS 2022, .NET Core, SQLite, XUnit
 
 You are welcome to [Property Indicators Lab](https://propertyindicators.github.io/)! 
 We know how to use it in real projects.
-For any questions, please contact us at email propertyindicators@gmail.com.
+For any questions, don't hesitate to get in touch with us at email propertyindicators@gmail.com.

@@ -14,15 +14,7 @@ VS 2017, VS 2019, .NET Core, SQLite, XUnit
 - own [cnn-text-classification-tf](https://github.com/Axaprj/cnn-text-classification-tf/blob/master/vocab_process_ft.3.py) - preprocessed data loader demo of toolchain connection to Python TensorFlow
 
 ## start of usage 
-- setup `FastTextProcess.Tests.json`
-```json
-{
-  "DataArcDir": "c:/data.arc/",
-  "DataOutDir": "C:/data.arc/statDb/",
-  "FastTextDir": "c:/data.ft/",
-  "FastTextBin": "c:/data.ft/fasttext.exe"
-}
-```
+- [setup `FastTextProcess.Tests.json`](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextProcess.Tests.json)
 - Create pretrained vectors DB [FastTextProcess.Tests.AclImdbDemo](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/AclImdbDemo.cs)
 ```c#
 ProcCreateDbEn()
@@ -38,6 +30,15 @@ ProcAclImdbTest()
 ## advanced and experimental
 FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, En texts processor. 
 [Aligned word vectors](https://fasttext.cc/docs/en/aligned-vectors.html) used.
+
+### prerequisite (source data)
+- source data ($FastTextDir): wiki.ru.align.vec, wiki.uk.align.vec, wiki.en.align.vec
+- [language identification model 'lid.176.bin'](https://fasttext.cc/docs/en/language-identification.html)
+### processing chain
+[Ru Uk En texts aligned vectors processor](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
+- ProcCreateDbRuk() - load PreTrained FastText models into 'w2v_ruk.db' database
+- ProcRukBuildFull() - build work DB. Convert texts (DataCyrSelectSQL data source) to vectors 'RUK_proc.db'
+- TestLangDetector() - language detector text (DataCyrSelectSQL data source)
 
 ## reference 
 ```
@@ -58,4 +59,4 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 
 You are welcome to [Property Indicators Lab](https://propertyindicators.github.io/)! 
 We know how to use it in real projects.
-For any questions, please contact us at email propertyindicators@gmail.com.
+For any questions, don't hesitate to get in touch with us at email propertyindicators@gmail.com.

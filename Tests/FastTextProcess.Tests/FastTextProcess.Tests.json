@@ -1,8 +1,12 @@
 {
+  //Work data folder
   "DataArcDir": "c:/data.arc/",
   "DataOutDir": "C:/data.arc/statDb/",
+  //FastText models folder
   "FastTextDir": "c:/data.ft/",
   "FastTextBin": "c:/data.ft/fasttext.exe",
+  // Work data source SQLite DB
   "DataCyrConnStr": "Data Source=\"c:/data.arc/statDb/StaTransform.db\";Version=3;",
+  // Work data query: select <Id,Text>
   "DataCyrSelectSQL": "SELECT AdID || ';' || GroupID AS ID, TextSrc FROM Ads_Active"
 }
