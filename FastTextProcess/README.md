@@ -38,7 +38,7 @@ FastTextRoutinesCyr - multilingual processing: languages detection and Ru, Uk, E
 [Ru Uk En texts aligned vectors processor](https://github.com/Axaprj/FastTextProcess/blob/master/Tests/FastTextProcess.Tests/FastTextRoutinesCyr.cs)
 - ProcCreateDbRuk() - load PreTrained FastText models into 'w2v_ruk.db' database
 - ProcRukBuildFull() - build work DB. Convert texts (DataCyrSelectSQL data source) to vectors 'RUK_proc.db'
-- TestLangDetector() - language detector text (DataCyrSelectSQL data source)
+- TestLangDetector() - language detector test (DataCyrSelectSQL data source)
 
 ## reference 
 ```
